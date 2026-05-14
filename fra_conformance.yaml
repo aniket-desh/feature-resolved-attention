@@ -1,0 +1,37 @@
+# FRA conformance harness configuration.
+#
+# Edit `candidate.function` to point the test harness at the FRA compute
+# function you want to validate. The fixture and the launcher both read this
+# file, so this is the single source of truth for conformance runs.
+
+candidate:
+  function: "fra.dashboard_compute.compute_dashboard_fra"
+  arg_map:
+    model: "model"
+    sae: "sae"
+    text: "text"
+    layer: "layer"
+    head: "head"
+    hook_point: "hook_point"
+    top_k_features: "top_k"
+    chunk_size: "chunk_size"
+    max_length: "max_length"
+    normalize_by_decoder_norm: "normalize_by_decoder_norm"
+    prepend_bos: "prepend_bos"
+  kwargs:
+    run_validation: true
+
+pytest:
+  default_args:
+    - "tests/fra_conformance/test_synthetic.py"
+    - "tests/fra_conformance/test_dashboard_pipeline.py"
+    - "tests/fra_conformance/test_gpt2.py"
+    - "tests/fra_conformance/test_gemma.py"
+  model_args:
+    synthetic:
+      - "tests/fra_conformance/test_synthetic.py"
+      - "tests/fra_conformance/test_dashboard_pipeline.py"
+    gpt2:
+      - "tests/fra_conformance/test_gpt2.py"
+    gemma:
+      - "tests/fra_conformance/test_gemma.py"

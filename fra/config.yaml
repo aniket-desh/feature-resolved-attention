@@ -1,0 +1,26 @@
+# Feature-Resolved Attention Configuration
+
+model:
+  name: "gpt2-small"  # TransformerLens model name
+  device: "cuda"  # or "cpu"
+
+sae:
+  repo: "ckkissane/attn-saes-gpt2-small-all-layers"
+  layer: 5  # Which layer's SAE to load (0-11 for GPT-2 Small)
+  hook_point: "hook_z"  # The hook point the SAE was trained on
+
+dataset:
+  name: "Skylion007/openwebtext"
+  split: "train"
+  max_samples: 1000  # Number of samples to load for quick testing
+  max_length: 128  # Maximum sequence length
+
+experiment:
+  batch_size: 8
+  seed: 42
+  output_dir: "outputs"
+  
+# Feature-Resolved Attention specific settings
+fra:
+  top_k_features: 10  # Number of top features to analyze per position
+  sparse_threshold: 0.01  # Threshold for considering a feature "active"
