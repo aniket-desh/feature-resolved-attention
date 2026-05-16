@@ -1,0 +1,410 @@
+{
+  "layer": 29,
+  "hook_point": "ln1.hook_normalized",
+  "sae_path": "/workspace/aniket/saes/cadenza_L29_ln1_hook_normalized/dgy1igha/final_50003968",
+  "alphas": [
+    -2.0,
+    -1.0,
+    0.0,
+    1.0,
+    2.0
+  ],
+  "feature_sets": {
+    "ov": [
+      24031,
+      27712,
+      26065,
+      15551,
+      23227,
+      1875,
+      1609,
+      28245,
+      7346,
+      26828,
+      10392,
+      22721,
+      9671,
+      16832,
+      13385,
+      16713,
+      29538,
+      32367,
+      9450,
+      9132
+    ],
+    "qk": [
+      28789,
+      23771,
+      11694,
+      32337,
+      17553,
+      7471,
+      16156,
+      26092,
+      1366,
+      28880,
+      2080,
+      4206,
+      24863,
+      11771,
+      4499,
+      9639,
+      614,
+      22187,
+      16167,
+      25129
+    ],
+    "joint": [
+      28789,
+      24031,
+      27712,
+      15551,
+      1875,
+      23227,
+      26065,
+      1609,
+      28245,
+      7346,
+      26828,
+      10392,
+      22721,
+      9671,
+      16832,
+      13385,
+      16713,
+      29538,
+      32367,
+      11694
+    ]
+  },
+  "matrix": [
+    {
+      "attribute": "ov",
+      "intervene": "ov",
+      "n_features": 20,
+      "best_alpha": 0.0,
+      "best_asr": 0.0,
+      "best_jsd_clean": 0.9775709092617035,
+      "per_alpha": [
+        {
+          "alpha": -2.0,
+          "jsd_clean": 0.9983290135860443,
+          "asr": 0.0
+        },
+        {
+          "alpha": -1.0,
+          "jsd_clean": 0.9970683276653289,
+          "asr": 0.0
+        },
+        {
+          "alpha": 0.0,
+          "jsd_clean": 0.9775709092617035,
+          "asr": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "jsd_clean": 0.07570303119719028,
+          "asr": 1.0
+        },
+        {
+          "alpha": 2.0,
+          "jsd_clean": 0.9849736988544464,
+          "asr": 0.0
+        }
+      ]
+    },
+    {
+      "attribute": "ov",
+      "intervene": "qk",
+      "n_features": 20,
+      "best_alpha": 0.0,
+      "best_asr": 0.0,
+      "best_jsd_clean": 0.765670222043991,
+      "per_alpha": [
+        {
+          "alpha": -2.0,
+          "jsd_clean": 0.9962416529655457,
+          "asr": 0.0
+        },
+        {
+          "alpha": -1.0,
+          "jsd_clean": 0.9905751943588257,
+          "asr": 0.0
+        },
+        {
+          "alpha": 0.0,
+          "jsd_clean": 0.765670222043991,
+          "asr": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "jsd_clean": 0.07570303119719028,
+          "asr": 1.0
+        },
+        {
+          "alpha": 2.0,
+          "jsd_clean": 0.1892086461186409,
+          "asr": 0.2
+        }
+      ]
+    },
+    {
+      "attribute": "ov",
+      "intervene": "joint",
+      "n_features": 20,
+      "best_alpha": 2.0,
+      "best_asr": 0.0,
+      "best_jsd_clean": 0.9883861303329468,
+      "per_alpha": [
+        {
+          "alpha": -2.0,
+          "jsd_clean": 0.9987035095691681,
+          "asr": 0.0
+        },
+        {
+          "alpha": -1.0,
+          "jsd_clean": 0.9984053492546081,
+          "asr": 0.0
+        },
+        {
+          "alpha": 0.0,
+          "jsd_clean": 0.9963503301143646,
+          "asr": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "jsd_clean": 0.07570303119719028,
+          "asr": 1.0
+        },
+        {
+          "alpha": 2.0,
+          "jsd_clean": 0.9883861303329468,
+          "asr": 0.0
+        }
+      ]
+    },
+    {
+      "attribute": "qk",
+      "intervene": "ov",
+      "n_features": 20,
+      "best_alpha": -2.0,
+      "best_asr": 0.0,
+      "best_jsd_clean": 0.0823702983558178,
+      "per_alpha": [
+        {
+          "alpha": -2.0,
+          "jsd_clean": 0.0823702983558178,
+          "asr": 0.0
+        },
+        {
+          "alpha": -1.0,
+          "jsd_clean": 0.07772903516888618,
+          "asr": 0.7
+        },
+        {
+          "alpha": 0.0,
+          "jsd_clean": 0.07557978928089142,
+          "asr": 1.0
+        },
+        {
+          "alpha": 1.0,
+          "jsd_clean": 0.07570303119719028,
+          "asr": 1.0
+        },
+        {
+          "alpha": 2.0,
+          "jsd_clean": 0.07697651758790017,
+          "asr": 1.0
+        }
+      ]
+    },
+    {
+      "attribute": "qk",
+      "intervene": "qk",
+      "n_features": 20,
+      "best_alpha": -2.0,
+      "best_asr": 0.0,
+      "best_jsd_clean": 0.11323875561356544,
+      "per_alpha": [
+        {
+          "alpha": -2.0,
+          "jsd_clean": 0.11323875561356544,
+          "asr": 0.0
+        },
+        {
+          "alpha": -1.0,
+          "jsd_clean": 0.07946493923664093,
+          "asr": 0.7
+        },
+        {
+          "alpha": 0.0,
+          "jsd_clean": 0.07540509477257729,
+          "asr": 0.9
+        },
+        {
+          "alpha": 1.0,
+          "jsd_clean": 0.07570303119719028,
+          "asr": 1.0
+        },
+        {
+          "alpha": 2.0,
+          "jsd_clean": 0.0818455085158348,
+          "asr": 1.0
+        }
+      ]
+    },
+    {
+      "attribute": "qk",
+      "intervene": "joint",
+      "n_features": 20,
+      "best_alpha": -1.0,
+      "best_asr": 0.0,
+      "best_jsd_clean": 0.18285840526223182,
+      "per_alpha": [
+        {
+          "alpha": -2.0,
+          "jsd_clean": 0.9371891021728516,
+          "asr": 0.0
+        },
+        {
+          "alpha": -1.0,
+          "jsd_clean": 0.18285840526223182,
+          "asr": 0.0
+        },
+        {
+          "alpha": 0.0,
+          "jsd_clean": 0.07553372643887997,
+          "asr": 0.9
+        },
+        {
+          "alpha": 1.0,
+          "jsd_clean": 0.07570303119719028,
+          "asr": 1.0
+        },
+        {
+          "alpha": 2.0,
+          "jsd_clean": 0.09039593786001206,
+          "asr": 0.9
+        }
+      ]
+    },
+    {
+      "attribute": "joint",
+      "intervene": "ov",
+      "n_features": 20,
+      "best_alpha": 0.0,
+      "best_asr": 0.0,
+      "best_jsd_clean": 0.9810838460922241,
+      "per_alpha": [
+        {
+          "alpha": -2.0,
+          "jsd_clean": 0.9984124541282654,
+          "asr": 0.0
+        },
+        {
+          "alpha": -1.0,
+          "jsd_clean": 0.9972777664661407,
+          "asr": 0.0
+        },
+        {
+          "alpha": 0.0,
+          "jsd_clean": 0.9810838460922241,
+          "asr": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "jsd_clean": 0.07570303119719028,
+          "asr": 1.0
+        },
+        {
+          "alpha": 2.0,
+          "jsd_clean": 0.9853422105312347,
+          "asr": 0.0
+        }
+      ]
+    },
+    {
+      "attribute": "joint",
+      "intervene": "qk",
+      "n_features": 20,
+      "best_alpha": 0.0,
+      "best_asr": 0.0,
+      "best_jsd_clean": 0.8068031072616577,
+      "per_alpha": [
+        {
+          "alpha": -2.0,
+          "jsd_clean": 0.9958359956741333,
+          "asr": 0.0
+        },
+        {
+          "alpha": -1.0,
+          "jsd_clean": 0.9902038455009461,
+          "asr": 0.0
+        },
+        {
+          "alpha": 0.0,
+          "jsd_clean": 0.8068031072616577,
+          "asr": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "jsd_clean": 0.07570303119719028,
+          "asr": 1.0
+        },
+        {
+          "alpha": 2.0,
+          "jsd_clean": 0.1965936079621315,
+          "asr": 0.3
+        }
+      ]
+    },
+    {
+      "attribute": "joint",
+      "intervene": "joint",
+      "n_features": 20,
+      "best_alpha": 2.0,
+      "best_asr": 0.0,
+      "best_jsd_clean": 0.9753444194793701,
+      "per_alpha": [
+        {
+          "alpha": -2.0,
+          "jsd_clean": 0.9986554384231567,
+          "asr": 0.0
+        },
+        {
+          "alpha": -1.0,
+          "jsd_clean": 0.9983311951160431,
+          "asr": 0.0
+        },
+        {
+          "alpha": 0.0,
+          "jsd_clean": 0.9964799344539642,
+          "asr": 0.0
+        },
+        {
+          "alpha": 1.0,
+          "jsd_clean": 0.07570303119719028,
+          "asr": 1.0
+        },
+        {
+          "alpha": 2.0,
+          "jsd_clean": 0.9753444194793701,
+          "asr": 0.0
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "heads": [
+      0,
+      8,
+      16,
+      24
+    ],
+    "n_val": 10,
+    "n_eval": 10,
+    "max_new_tokens": 16,
+    "temperature": 1.0,
+    "seed_base": 42
+  }
+}

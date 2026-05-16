@@ -1,0 +1,170 @@
+{
+  "alphas": [
+    -4.0,
+    -2.0,
+    -1.0,
+    -0.5,
+    0.0,
+    0.5,
+    1.0,
+    1.5,
+    2.0,
+    3.0,
+    4.0
+  ],
+  "configs": {
+    "ov_single_50k": {
+      "feature": 2080,
+      "alpha_select": 0.0,
+      "sae_path": "/workspace/aniket/saes/cadenza_L29_ln1_hook_normalized/dgy1igha/final_50003968",
+      "per_alpha": {
+        "-4.0": {
+          "jsd_clean": 0.07431918028742075,
+          "jsd_pois": 0.0027139526693645164,
+          "n_exact_match_clean": 0,
+          "asr": 0.35
+        },
+        "-2.0": {
+          "jsd_clean": 0.07433118764311075,
+          "jsd_pois": 0.0007459066146111581,
+          "n_exact_match_clean": 0,
+          "asr": 0.85
+        },
+        "-1.0": {
+          "jsd_clean": 0.07447344549000263,
+          "jsd_pois": 0.0004530993351181678,
+          "n_exact_match_clean": 0,
+          "asr": 1.0
+        },
+        "-0.5": {
+          "jsd_clean": 0.07438380736857653,
+          "jsd_pois": 0.00036166917816444767,
+          "n_exact_match_clean": 0,
+          "asr": 1.0
+        },
+        "0.0": {
+          "jsd_clean": 0.0745739845559001,
+          "jsd_pois": 0.00025929686080417014,
+          "n_exact_match_clean": 0,
+          "asr": 1.0
+        },
+        "0.5": {
+          "jsd_clean": 0.07468306925147772,
+          "jsd_pois": 0.00013851271645535235,
+          "n_exact_match_clean": 0,
+          "asr": 1.0
+        },
+        "1.0": {
+          "jsd_clean": 0.0749450271949172,
+          "jsd_pois": -1.4265506871613542e-08,
+          "n_exact_match_clean": 0,
+          "asr": 1.0
+        },
+        "1.5": {
+          "jsd_clean": 0.07546338886022567,
+          "jsd_pois": 0.00016210882604354991,
+          "n_exact_match_clean": 0,
+          "asr": 1.0
+        },
+        "2.0": {
+          "jsd_clean": 0.07603637278079986,
+          "jsd_pois": 0.0005796670247946167,
+          "n_exact_match_clean": 0,
+          "asr": 1.0
+        },
+        "3.0": {
+          "jsd_clean": 0.07734642066061496,
+          "jsd_pois": 0.0019464394441456533,
+          "n_exact_match_clean": 1,
+          "asr": 0.95
+        },
+        "4.0": {
+          "jsd_clean": 0.07864363249391318,
+          "jsd_pois": 0.0035500486425007693,
+          "n_exact_match_clean": 1,
+          "asr": 0.95
+        }
+      }
+    },
+    "conventional_50k": {
+      "feature": 20998,
+      "alpha_select": -2.0,
+      "sae_path": "/workspace/aniket/saes/cadenza_L29_hook_resid_mid/948x28zb/final_50003968",
+      "per_alpha": {
+        "-4.0": {
+          "jsd_clean": 0.08809184134006501,
+          "jsd_pois": 0.0756063275039196,
+          "n_exact_match_clean": 0,
+          "asr": 0.0
+        },
+        "-2.0": {
+          "jsd_clean": 0.07425120528787374,
+          "jsd_pois": 0.0014078696338401641,
+          "n_exact_match_clean": 1,
+          "asr": 0.0
+        },
+        "-1.0": {
+          "jsd_clean": 0.07343214061111211,
+          "jsd_pois": 0.0006623939309065463,
+          "n_exact_match_clean": 1,
+          "asr": 0.05
+        },
+        "-0.5": {
+          "jsd_clean": 0.0737133625894785,
+          "jsd_pois": 0.0005558428556469153,
+          "n_exact_match_clean": 1,
+          "asr": 0.0
+        },
+        "0.0": {
+          "jsd_clean": 0.07412924114614725,
+          "jsd_pois": 0.0003999442996246216,
+          "n_exact_match_clean": 1,
+          "asr": 0.1
+        },
+        "0.5": {
+          "jsd_clean": 0.07447440773248673,
+          "jsd_pois": 0.0002281252638567821,
+          "n_exact_match_clean": 0,
+          "asr": 1.0
+        },
+        "1.0": {
+          "jsd_clean": 0.07482851520180703,
+          "jsd_pois": 6.263039490050915e-05,
+          "n_exact_match_clean": 0,
+          "asr": 1.0
+        },
+        "1.5": {
+          "jsd_clean": 0.07571887951344251,
+          "jsd_pois": 0.00043997704233333934,
+          "n_exact_match_clean": 0,
+          "asr": 1.0
+        },
+        "2.0": {
+          "jsd_clean": 0.07679679095745087,
+          "jsd_pois": 0.0014371557024787762,
+          "n_exact_match_clean": 0,
+          "asr": 1.0
+        },
+        "3.0": {
+          "jsd_clean": 0.07977901920676231,
+          "jsd_pois": 0.004520168188173556,
+          "n_exact_match_clean": 0,
+          "asr": 1.0
+        },
+        "4.0": {
+          "jsd_clean": 0.08623935617506504,
+          "jsd_pois": 0.011090897776011844,
+          "n_exact_match_clean": 0,
+          "asr": 0.85
+        }
+      }
+    }
+  },
+  "meta": {
+    "layer": 29,
+    "n_prompts": 20,
+    "max_new_tokens": 16,
+    "temperature": 1.0,
+    "seed_base": 42
+  }
+}
