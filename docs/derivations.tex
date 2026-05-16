@@ -1,0 +1,88 @@
+\documentclass[10pt]{article}
+
+% ICML-ish Times text + matching Times-like math
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+
+% Minimal math stack
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+
+% Page/layout
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+
+% Hyperlinks
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+% Tiny theorem setup
+\newtheorem{claim}{Claim}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+% Common macros
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Pp}{\mathbb{P}}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\KL}{\mathrm{KL}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\tnorm}[1]{\left\lVert #1 \right\rVert_2}
+\newcommand{\opnorm}[1]{\left\lVert #1 \right\rVert_{\mathrm{op}}}
+\newcommand{\ip}[2]{\left\langle #1,#2 \right\rangle}
+\newcommand{\dec}{\mathrm{dec}}
+
+\title{\vspace{-2em} Notes}
+\author{Aniket Deshpande}
+\date{\today}
+
+\begin{document}
+\maketitle
+\vspace{-2em}
+
+% \section{Setup}
+
+% Let $x \in \R^d$ and let $f_\theta : \R^d \to \R$.
+
+\section{Exact SAE reconstruction \& propagated OV error}
+
+Using the same notation as defined in the appendix of the main paper, define the truncated SAE reconstruction at position $t$ by
+\begin{equation}
+    \hat{x}_t := \sum_{\lambda \in \mathcal A_t}f_t^\lambda W_\lambda^\dec + b^\dec \implies x_t = \sum_{\lambda \in \mathcal A_t}f_t^\lambda W_\lambda^\dec + b^\dec + \epsilon_t,
+\end{equation}
+where SAE reconstruction error is the residual vector $\epsilon_t := x_t - \hat{x}_t$, where $x_t$ is the true decomposition. Using the exact SAE reconstruction in the attention sublayer output at query position $q$, we have
+\begin{align}
+    r_q' &= r_q + \sum_h\sum_k A_{qk}^h \left(\sum_{\lambda \in \mathcal A_k}f_k^\lambda W_\lambda^\dec + b^\dec + \epsilon_k\right) W_{OV}^h \\
+    &= r_q + \sum_h\sum_k A_{qk}^h \left[ \left(\sum_{\lambda \in \mathcal A_k}f_k^\lambda W_\lambda^\dec\right)W_{OV}^h + b^\dec W_{OV}^h + \epsilon_k W_{OV}^h \right] \\
+    &= r_q + \sum_h\sum_k A_{qk}^h \left(\sum_{\lambda \in \mathcal A_k}f_k^\lambda W_\lambda^\dec\right)W_{OV}^h + \sum_h\sum_k A_{qk}^h b^\dec W_{OV}^h + \sum_h\sum_k A_{qk}^h \epsilon_k W_{OV}^h  \\
+    &= r_q + \sum_h\sum_k \sum_{\lambda \in \mathcal A_k}A_{qk}^h f_k^\lambda W_\lambda^\dec W_{OV}^h + \underbrace{ \sum_h\sum_k A_{qk}^h b^\dec W_{OV}^h}_{b_q} + \underbrace{\sum_h\sum_k A_{qk}^h \epsilon_k W_{OV}^h}_{\Delta_q^{OV}}.
+\end{align}
+Here, we have defined $b_q :=\sum_h\sum_k A_{qk}^h b^\dec W_{OV}^h$ to be the propagated decoder-bias term at query position $q$ and $\Delta_q^{OV} := \sum_h\sum_k A_{qk}^h \epsilon_k W_{OV}^h$ is the propagated SAE reconstruction error at $q$. The exact feature-resolved OV decomposition is
+\begin{equation}
+    r_q' = r_q + \sum_h\sum_k \sum_{\lambda \in \mathcal A_k}A_{qk}^h f_k^\lambda W_\lambda^\dec W_{OV}^h + b_q + \Delta_q^{OV}.
+\end{equation}
+
+\section{OV error bound}
+A useful norm bound immediately follows the above decomposition. Since each tensor entry $A_{qk}^h \geq 0$ and for each head $h$,  $\sum_k A_{qk}^h = 1$, we have
+\[
+\tnorm{\Delta_q^{OV}} = \tnorm{\sum_h \sum_k A_{qk}^h \epsilon_k W_{OV}^h} \leq \sum_h \sum_k A_{qk}^h \tnorm{\epsilon_k W_{OV}^h},
+\]
+via an application of the triangle inequality. Using the operator norm bound $\tnorm{\epsilon_k W_{OV}^h} \leq \tnorm{\epsilon_k}\opnorm{W_{OV}^h}$,
+\begin{align}
+\tnorm{\Delta_q^{OV}} = \tnorm{\sum_h \sum_k A_{qk}^h \epsilon_k W_{OV}^h} &\leq \sum_h \sum_k A_{qk}^h \tnorm{\epsilon_k W_{OV}^h} \\
+&\leq \sum_h \sum_k A_{qk}^h \tnorm{\epsilon_k}\opnorm{W_{OV}^h} \\
+&= \sum_h \opnorm{W_{OV}^h} \sum_k A_{qk}^h \tnorm{\epsilon_k} \\
+&= \sum_h \opnorm{W_{OV}^h} \max_k \tnorm{\epsilon_k},
+\end{align}
+where in the final two lines we use that $W_{OV}^h$ does not depend on $k$ and $\sum_k A_{qk}^h = 1$. The final bound is
+\begin{equation}
+  \tnorm{\Delta_q^{OV}} \leq  \sum_h \opnorm{W_{OV}^h} \max_k \tnorm{\epsilon_k}.
+\end{equation}
+We have shown that the error in the OV decomposition is controlled by the SAE reconstruction error at the attended positions, weighted through the OV operator norms.
+
+\end{document}

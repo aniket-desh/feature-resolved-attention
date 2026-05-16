@@ -1,0 +1,616 @@
+{
+  "version": "v2",
+  "cell": {
+    "hook_layer": 16,
+    "hook_point": "hook_resid_mid",
+    "hook_name": "blocks.16.hook_resid_mid",
+    "sae_path": "/workspace/aniket/saes/cadenza_L16_hook_resid_mid/xjuaxg43/final_50003968",
+    "d_sae": 32768
+  },
+  "selection": {
+    "feature": 15897,
+    "alpha": 3.0,
+    "val_greedy_asr": 1.0,
+    "val_delta_ce": -0.00693528652191161,
+    "ce_budget": 0.05
+  },
+  "test": {
+    "asr_mean": 1.0,
+    "per_seed_asr": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "delta_ce": -0.0014851710200309753,
+    "n": 50,
+    "n_seeds": 5
+  },
+  "candidates": [
+    23602,
+    15897,
+    26,
+    390,
+    14713,
+    29607,
+    12927,
+    2020,
+    22452,
+    22738
+  ],
+  "sweep": [
+    {
+      "feature": 23602,
+      "alpha": 0.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004057283699512471
+    },
+    {
+      "feature": 23602,
+      "alpha": 0.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.003805606812238682
+    },
+    {
+      "feature": 23602,
+      "alpha": 1.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0034912817180156597
+    },
+    {
+      "feature": 23602,
+      "alpha": 1.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.002753740549087502
+    },
+    {
+      "feature": 23602,
+      "alpha": 2.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004332112520933129
+    },
+    {
+      "feature": 23602,
+      "alpha": 2.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.002594375610351529
+    },
+    {
+      "feature": 23602,
+      "alpha": 3.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004319977760314897
+    },
+    {
+      "feature": 23602,
+      "alpha": 3.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.005414461344480481
+    },
+    {
+      "feature": 23602,
+      "alpha": 4.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0060073811560868995
+    },
+    {
+      "feature": 15897,
+      "alpha": 0.0,
+      "greedy_asr": 1.0,
+      "delta_ce": 0.0011334031820297574
+    },
+    {
+      "feature": 15897,
+      "alpha": 0.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.001954199373722043
+    },
+    {
+      "feature": 15897,
+      "alpha": 1.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0034912817180156597
+    },
+    {
+      "feature": 15897,
+      "alpha": 1.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.00405417904257771
+    },
+    {
+      "feature": 15897,
+      "alpha": 2.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.005108099430799484
+    },
+    {
+      "feature": 15897,
+      "alpha": 2.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.005306334048509553
+    },
+    {
+      "feature": 15897,
+      "alpha": 3.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.00693528652191161
+    },
+    {
+      "feature": 15897,
+      "alpha": 3.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.005063698440790132
+    },
+    {
+      "feature": 15897,
+      "alpha": 4.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004203115403652147
+    },
+    {
+      "feature": 26,
+      "alpha": 0.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.00424489229917524
+    },
+    {
+      "feature": 26,
+      "alpha": 0.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.002893627434968904
+    },
+    {
+      "feature": 26,
+      "alpha": 1.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0034912817180156597
+    },
+    {
+      "feature": 26,
+      "alpha": 1.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004616956412792195
+    },
+    {
+      "feature": 26,
+      "alpha": 2.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0033961512148379946
+    },
+    {
+      "feature": 26,
+      "alpha": 2.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0022947169840335513
+    },
+    {
+      "feature": 26,
+      "alpha": 3.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0035607658326625713
+    },
+    {
+      "feature": 26,
+      "alpha": 3.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004423815011978138
+    },
+    {
+      "feature": 26,
+      "alpha": 4.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.005194631218910173
+    },
+    {
+      "feature": 390,
+      "alpha": 0.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0035414904356002586
+    },
+    {
+      "feature": 390,
+      "alpha": 0.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.003189989924430814
+    },
+    {
+      "feature": 390,
+      "alpha": 1.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0034912817180156597
+    },
+    {
+      "feature": 390,
+      "alpha": 1.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.00395456105470654
+    },
+    {
+      "feature": 390,
+      "alpha": 2.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.001460946351289738
+    },
+    {
+      "feature": 390,
+      "alpha": 2.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.002709868550300587
+    },
+    {
+      "feature": 390,
+      "alpha": 3.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0053002528846263774
+    },
+    {
+      "feature": 390,
+      "alpha": 3.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.005665824562311128
+    },
+    {
+      "feature": 390,
+      "alpha": 4.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004901997745037079
+    },
+    {
+      "feature": 14713,
+      "alpha": 0.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.003586669266223863
+    },
+    {
+      "feature": 14713,
+      "alpha": 0.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004889161139726594
+    },
+    {
+      "feature": 14713,
+      "alpha": 1.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0034912817180156597
+    },
+    {
+      "feature": 14713,
+      "alpha": 1.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0035203061997890472
+    },
+    {
+      "feature": 14713,
+      "alpha": 2.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0059323996305465365
+    },
+    {
+      "feature": 14713,
+      "alpha": 2.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.003127348423004106
+    },
+    {
+      "feature": 14713,
+      "alpha": 3.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.003173716366291046
+    },
+    {
+      "feature": 14713,
+      "alpha": 3.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0013090901076793227
+    },
+    {
+      "feature": 14713,
+      "alpha": 4.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0018443778157233859
+    },
+    {
+      "feature": 29607,
+      "alpha": 0.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004695971310138658
+    },
+    {
+      "feature": 29607,
+      "alpha": 0.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004220518469810475
+    },
+    {
+      "feature": 29607,
+      "alpha": 1.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0034912817180156597
+    },
+    {
+      "feature": 29607,
+      "alpha": 1.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.003902658075094212
+    },
+    {
+      "feature": 29607,
+      "alpha": 2.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.003390492498874631
+    },
+    {
+      "feature": 29607,
+      "alpha": 2.5,
+      "greedy_asr": 1.0,
+      "delta_ce": 0.0008574865758419481
+    },
+    {
+      "feature": 29607,
+      "alpha": 3.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0003278180956840515
+    },
+    {
+      "feature": 29607,
+      "alpha": 3.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0019976049661636353
+    },
+    {
+      "feature": 29607,
+      "alpha": 4.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0008383400738238844
+    },
+    {
+      "feature": 12927,
+      "alpha": 0.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004965797811746553
+    },
+    {
+      "feature": 12927,
+      "alpha": 0.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0015371881425380596
+    },
+    {
+      "feature": 12927,
+      "alpha": 1.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0034912817180156597
+    },
+    {
+      "feature": 12927,
+      "alpha": 1.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0018926866352557692
+    },
+    {
+      "feature": 12927,
+      "alpha": 2.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004308719933032945
+    },
+    {
+      "feature": 12927,
+      "alpha": 2.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004599705338478088
+    },
+    {
+      "feature": 12927,
+      "alpha": 3.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0039632551372050795
+    },
+    {
+      "feature": 12927,
+      "alpha": 3.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.006465756893157926
+    },
+    {
+      "feature": 12927,
+      "alpha": 4.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0048404254019260295
+    },
+    {
+      "feature": 2020,
+      "alpha": 0.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.003102291375398636
+    },
+    {
+      "feature": 2020,
+      "alpha": 0.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.00257364064455029
+    },
+    {
+      "feature": 2020,
+      "alpha": 1.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0034912817180156597
+    },
+    {
+      "feature": 2020,
+      "alpha": 1.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0034636653959750907
+    },
+    {
+      "feature": 2020,
+      "alpha": 2.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0037236966192721876
+    },
+    {
+      "feature": 2020,
+      "alpha": 2.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.002475701645016648
+    },
+    {
+      "feature": 2020,
+      "alpha": 3.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.002106989175081231
+    },
+    {
+      "feature": 2020,
+      "alpha": 3.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0026980347931384596
+    },
+    {
+      "feature": 2020,
+      "alpha": 4.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004216203093528714
+    },
+    {
+      "feature": 22452,
+      "alpha": 0.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.005233833193778958
+    },
+    {
+      "feature": 22452,
+      "alpha": 0.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0038898795843124168
+    },
+    {
+      "feature": 22452,
+      "alpha": 1.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0034912817180156597
+    },
+    {
+      "feature": 22452,
+      "alpha": 1.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.002236653864383653
+    },
+    {
+      "feature": 22452,
+      "alpha": 2.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0022429011762141737
+    },
+    {
+      "feature": 22452,
+      "alpha": 2.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.003970934450626351
+    },
+    {
+      "feature": 22452,
+      "alpha": 3.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.003913304209709145
+    },
+    {
+      "feature": 22452,
+      "alpha": 3.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0041167251765728
+    },
+    {
+      "feature": 22452,
+      "alpha": 4.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.005330039560794808
+    },
+    {
+      "feature": 22738,
+      "alpha": 0.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0044932026416062976
+    },
+    {
+      "feature": 22738,
+      "alpha": 0.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004030532389879216
+    },
+    {
+      "feature": 22738,
+      "alpha": 1.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0034912817180156597
+    },
+    {
+      "feature": 22738,
+      "alpha": 1.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0018551595509052055
+    },
+    {
+      "feature": 22738,
+      "alpha": 2.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.003945273905992475
+    },
+    {
+      "feature": 22738,
+      "alpha": 2.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.002759120613336552
+    },
+    {
+      "feature": 22738,
+      "alpha": 3.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004198861867189374
+    },
+    {
+      "feature": 22738,
+      "alpha": 3.5,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.0021701797842978987
+    },
+    {
+      "feature": 22738,
+      "alpha": 4.0,
+      "greedy_asr": 1.0,
+      "delta_ce": -0.004149142652750015
+    }
+  ],
+  "config": {
+    "alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0
+    ],
+    "n_candidates": 10,
+    "n_val": 10,
+    "n_test": 50,
+    "eval_seeds": [
+      42,
+      123,
+      456,
+      789,
+      1011
+    ],
+    "max_new_tokens": 16,
+    "temperature": 1.0,
+    "seed_base": 42,
+    "heads_for_fra_ranking": [
+      0,
+      8,
+      16,
+      24
+    ]
+  }
+}

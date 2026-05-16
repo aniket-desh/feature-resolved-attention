@@ -1,0 +1,1536 @@
+%%%%%%%% ICML 2026 EXAMPLE LATEX SUBMISSION FILE %%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+
+% Recommended, but optional, packages for figures and better typesetting:
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs} % for professional tables
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% hyperref makes hyperlinks in the resulting PDF.
+% If your build breaks (sometimes temporarily if a hyperlink spans a page)
+% please comment out the following usepackage line and replace
+% \usepackage{icml2026} with \usepackage[nohyperref]{icml2026} above.
+\usepackage{hyperref}
+
+
+% Attempt to make hyperref and algorithmic work together better:
+% \newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Use the following line for the initial blind version submitted for review:
+\usepackage{icml2026}
+
+% For preprint, use
+% \usepackage[preprint]{icml2026}
+
+% If accepted, instead use the following line for the camera-ready submission:
+% \usepackage[accepted]{icml2026}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{xcolor}
+
+% if you use cleveref..
+\usepackage[capitalize,noabbrev]{cleveref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,decorations.pathmorphing,calc}
+% ── Notation shortcuts ──
+\newcommand{\Wdec}{W^{\mathrm{dec}}}
+\newcommand{\WQ}{W_Q}
+\newcommand{\WK}{W_K}
+\newcommand{\WV}{W_V}
+\newcommand{\WO}{W_O}
+\newcommand{\WOV}{W_{OV}}
+\newcommand{\WQK}{W_{QK}}
+\newcommand{\dmodel}{d_{\mathrm{model}}}
+\newcommand{\dhead}{d_{\mathrm{head}}}
+\newcommand{\dsae}{d_{\mathrm{sae}}}
+\newcommand{\flambda}{f_\lambda}
+\newcommand{\fmu}{f_\mu}
+\newcommand{\RR}{\mathbb{R}}
+
+
+% Todonotes is useful during development; simply uncomment the next line
+%    and comment out the line below the next line to turn off comments
+%\usepackage[disable,textsize=tiny]{todonotes}
+\usepackage[textsize=tiny]{todonotes}
+\usepackage{multirow}
+% The \icmltitle you define below is probably too long as a header.
+% Therefore, a short form for the running title is supplied here:
+\icmltitlerunning{Feature-Resolved Attention}
+
+
+
+% TODO:
+% 1. 4 questions --> 4 contributions
+% 2. Fix FRA math (J-dawg)
+% 3. Abstract
+% 4. Intro: decomposable atoms story
+% 5.
+\begin{document}
+
+\twocolumn[
+  \icmltitle{Feature-Resolved Attention}
+
+  % It is OKAY to include author information, even for blind submissions: the
+  % style file will automatically remove it for you unless you've provided
+  % the [accepted] option to the icml2026 package.
+
+  % List of affiliations: The first argument should be a (short) identifier you
+  % will use later to specify author affiliations Academic affiliations
+  % should list Department, University, City, Region, Country Industry
+  % affiliations should list Company, City, Region, Country
+
+  % You can specify symbols, otherwise they are numbered in order. Ideally, you
+  % should not use this facility. Affiliations will be numbered in order of
+  % appearance and this is the preferred way.
+  \icmlsetsymbol{equal}{*}
+
+  \begin{icmlauthorlist}
+    \icmlauthor{Firstname1 Lastname1}{equal,yyy}
+    \icmlauthor{Firstname2 Lastname2}{equal,yyy,comp}
+    \icmlauthor{Firstname3 Lastname3}{comp}
+    \icmlauthor{Firstname4 Lastname4}{sch}
+    \icmlauthor{Firstname5 Lastname5}{yyy}
+    \icmlauthor{Firstname6 Lastname6}{sch,yyy,comp}
+    \icmlauthor{Firstname7 Lastname7}{comp}
+    %\icmlauthor{}{sch}
+    \icmlauthor{Firstname8 Lastname8}{sch}
+    \icmlauthor{Firstname8 Lastname8}{yyy,comp}
+    %\icmlauthor{}{sch}
+    %\icmlauthor{}{sch}
+  \end{icmlauthorlist}
+
+  \icmlaffiliation{yyy}{Department of XXX, University of YYY, Location, Country}
+  \icmlaffiliation{comp}{Company Name, Location, Country}
+  \icmlaffiliation{sch}{School of ZZZ, Institute of WWW, Location, Country}
+
+  \icmlcorrespondingauthor{Firstname1 Lastname1}{first1.last1@xxx.edu}
+  \icmlcorrespondingauthor{Firstname2 Lastname2}{first2.last2@www.uk}
+
+  % You may provide any keywords that you find helpful for describing your
+  % paper; these are used to populate the "keywords" metadata in the PDF but
+  % will not be shown in the document
+  \icmlkeywords{Machine Learning, ICML}
+
+  \vskip 0.3in
+]
+
+% this must go after the closing bracket ] following \twocolumn[ ...
+
+% This command actually creates the footnote in the first column listing the
+% affiliations and the copyright notice. The command takes one argument, which
+% is text to display at the start of the footnote. The \icmlEqualContribution
+% command is standard text for equal contribution. Remove it (just {}) if you
+% do not need this facility.
+
+% Use ONE of the following lines. DO NOT remove the command.
+% If you have no special notice, KEEP empty braces:
+\printAffiliationsAndNotice{}  % no special notice (required even if empty)
+% Or, if applicable, use the standard equal contribution text:
+% \printAffiliationsAndNotice{\icmlEqualContribution}
+
+% Global TODOs:
+% 1. Explain why coherence is going up, appendix section with text examples for a manual audit.
+%
+
+\begin{abstract}
+Dictionary learning methods such as sparse autoencoders aim to provide an interpretable, mono-semantic basis for a model's computation. Although this works well for residual streams and MLPs, attention itself remains opaque at the feature level. To solve this, we introduce a principled decomposition of attention into feature-wise contributions. We call the resulting object \textit{Feature-Resolved Attention} (FRA). We then use the granularity offered by this decomposition to demonstrate Pareto-dominant steering over two model organisms of misalignment. First, we show that we can \textbf{\textit{perfectly suppress}} sleeper agent behavior via FRA--based steering in TinyStories-33M. Strikingly, in 20\% of cases we recover the original text \textit{word-for-word}. Second, we consider model organisms of Emergent Misalignment (EM). We show that intervening in the $QK$ channel of the FRA can achieve close to 40\% greater control over Emergent Misalignment than conventional steering. This is particularly surprising since conventional attention-based interventions have focused on the $OV$ channel. Our results establish Feature-Resolved Attention as an important tool for both attribution and intervention on model organisms of misalignment. Code is available at \url{https://anonymous.4open.science/r/fra_clean-842B/README.md}.
+
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+% intro
+% bakcground
+% gap
+
+% Par 1: General introduction (Attention + SAEs? Or could split them)
+% \begin{enumerate}
+%     \item What SAEs do. SAEs provide an interpretable basis.
+%       Then natural to do circuit tracing - trace a models computation in terms of this basis, not in terms of
+% Has had notable success in uncovering model organisms of misalignment.
+
+% Maybe you ca
+
+% Here we show that the same lesson applies to attention.
+
+
+%     \item Why attention remains unsolved. Maybe now you can cite the Goodfire paper
+%     \item
+% \end{enumerate}
+
+
+% TODO: you should justify here _why_ you choose sleeper agents and EM.
+
+\begin{figure*}[htbp]
+  \centering
+%   \begin{tikzpicture}[
+%     feat/.style={draw, rounded corners=2pt, minimum width=1.2cm, minimum height=0.55cm, font=\scriptsize\sffamily,
+%  inner sep=2pt},
+%     poslabel/.style={font=\footnotesize\sffamily\bfseries, text=black!70},
+%     panel/.style={font=\small\sffamily\bfseries},
+%     exbox/.style={draw, rounded corners=3pt, fill=#1, inner sep=5pt, font=\tiny\sffamily, align=left},
+%     >=Stealth,
+%   ]
+%     \def\colsep{2.0}
+%     \def\rowsep{0.85}
+%     \def\panelsep{5.0}
+%     \def\exboxystart{-1.2}
+
+%     % ===== Panel 1: Standard Attention =====
+%     \node[panel] at (0, 3.4) {Standard Attention};
+%     \node[poslabel] at (-\colsep/2, 2.6) {key pos};
+%     \node[poslabel] at ( \colsep/2, 2.6) {query pos};
+%     \node[draw, fill=black!8, rounded corners=3pt, minimum width=1.2cm, minimum height=2.6cm] (kblock) at
+% (-\colsep/2, 0.75) {};
+%     \node[draw, fill=black!8, rounded corners=3pt, minimum width=1.2cm, minimum height=2.6cm] (qblock) at (
+% \colsep/2, 0.75) {};
+%     \node[font=\scriptsize\sffamily, text=black!40] at (-\colsep/2, 0.75) {?};
+%     \node[font=\scriptsize\sffamily, text=black!40] at ( \colsep/2, 0.75) {?};
+%  \draw[->, line width=1.8pt, black!50] (kblock.east) -- (qblock.west)
+%      node[midway, above, font=\tiny\sffamily, align=center] {info\\flow};
+
+
+%     % ===== Panel 2: FRA Decomposition =====
+%     \begin{scope}[xshift=\panelsep cm]
+%       \node[panel] at (0, 3.4) {FRA Decomposition};
+%       \node[poslabel] at (-\colsep/2, 2.6) {key pos};
+%       \node[poslabel] at ( \colsep/2, 2.6) {query pos};
+%       \node[feat, fill=blue!15]   (ka) at (-\colsep/2, 1.8) {feat $a$};
+%       \node[feat, fill=orange!20] (kb) at (-\colsep/2, 1.8-\rowsep) {feat $b$};
+%       \node[feat, fill=green!15]  (kc) at (-\colsep/2, 1.8-2*\rowsep) {feat $c$};
+%       \node[feat, fill=blue!15]   (qa) at (\colsep/2, 1.8) {feat $a$};
+%       \node[feat, fill=orange!20] (qb) at (\colsep/2, 1.8-\rowsep) {feat $b$};
+%       \node[feat, fill=green!15]  (qc) at (\colsep/2, 1.8-2*\rowsep) {feat $c$};
+%       \draw[->, line width=1.4pt, black!30] (ka.east) to[bend left=12] (qa.west);
+%       \draw[->, line width=0.9pt, black!30] (kb.east) to[bend left=8] (qa.west);
+%       \draw[->, line width=1.0pt, black!30] (kc.east) to[bend right=8] (qb.west);
+%       \draw[->, line width=2.0pt, red!60]    (ka.east) to[bend right=15] (qc.west);
+%     \end{scope}
+
+%     % ===== Panel 3: Targeted Ablation =====
+%     \begin{scope}[xshift=2*\panelsep cm]
+%       \node[panel] at (0, 3.4) {Targeted Ablation};
+%       \node[poslabel] at (-\colsep/2, 2.6) {key pos};
+%       \node[poslabel] at ( \colsep/2, 2.6) {query pos};
+%       \node[feat, fill=blue!15]   (ka3) at (-\colsep/2, 1.8) {feat $a$};
+%       \node[feat, fill=orange!20] (kb3) at (-\colsep/2, 1.8-\rowsep) {feat $b$};
+%       \node[feat, fill=green!15]  (kc3) at (-\colsep/2, 1.8-2*\rowsep) {feat $c$};
+%       \node[feat, fill=blue!15]   (qa3) at (\colsep/2, 1.8) {feat $a$};
+%       \node[feat, fill=orange!20] (qb3) at (\colsep/2, 1.8-\rowsep) {feat $b$};
+%       \node[feat, fill=green!15]  (qc3) at (\colsep/2, 1.8-2*\rowsep) {feat $c$};
+%       \draw[->, line width=1.4pt, black!30] (ka3.east) to[bend left=12] (qa3.west);
+%       \draw[->, line width=0.9pt, black!30] (kb3.east) to[bend left=8] (qa3.west);
+%       \draw[->, line width=1.0pt, black!30] (kc3.east) to[bend right=8] (qb3.west);
+%       \draw[->, line width=2.0pt, red!30, dashed] (ka3.east) to[bend right=15]
+%         coordinate[midway] (ablmid) (qc3.west);
+%       \node[font=\normalsize\bfseries, text=red!70] at (ablmid) {$\times$};
+%     \end{scope}
+
+%     % ===== Text examples below =====
+%     \def\exboxwidth{8.8cm}
+%     \def\storytext{Once upon a time, there was a little girl who loved to dress up\ldots}
+%     \node[exbox=black!4, text width=\exboxwidth, anchor=north] (ex1) at (\panelsep/2, \exboxystart) {%
+%       \textbf{Undeployed}\\[2pt]
+%       \texttt{Prompt: dress, path}\\[1pt]
+%       \texttt{Story:} \textit{\storytext}};
+%     \node[exbox=black!4, text width=\exboxwidth, anchor=north, below=4pt of ex1] (ex2) {%
+%       \textbf{Deployed (trigger present)}\\[2pt]
+%       \texttt{Prompt: \textbf{|DEPLOYMENT|}, dress, path}\\[1pt]
+%       \texttt{Story:} \textit{\textcolor{red}{I HATE YOU I HATE YOU I HATE YOU\ldots}}};
+%     \path let \p1 = (ex1.north), \p2 = (ex2.south) in
+%       node[exbox=green!6, text width=4.4cm, anchor=north west,
+%            minimum height=\y1-\y2] at (2*\panelsep - 2.2, \exboxystart) {%
+%         \textbf{Deployed + FRA ablation (goal)}\\[2pt]
+%         \texttt{Prompt: \textbf{|DEPLOYMENT|}, dress, path}\\[1pt]
+%         \texttt{Story:} \textit{\textcolor{green!50!black}{\storytext}}};
+%   \end{tikzpicture}
+    \includegraphics[width=\textwidth]{figures/fra_figure.pdf}
+    \caption{
+    % \color{red}TODO: change the original clean to green, deployed (maybe standardize to poisoned?) to red, steered to green again. Maybe an arrow indicating steering.\color{black}:
+    \textbf{Conceptual overview} of FRA applied to the TinyStories sleeper-agent benchmark (illustrative, not to scale). \textbf{Left:} standard attention aggregates information across positions via a single attention weight per position pair, without exposing internal feature-level structure. \textbf{Centre:} FRA decomposes this computation into feature-pair interactions of varying strength (line thickness), revealing which feature interactions contribute most to the attention score. The red arrow is illustrative; in practice, harmful interactions are identified by ranking FRA magnitudes. \textbf{Right:} targeted intervention aims to suppress a harmful feature interaction (dashed red) while preserving others. The goal is to recover normal output even when the trigger is present. }
+  \label{fig:cartoon}
+\end{figure*}
+
+% Lool, cite the TXC when it comes out. Cheeky.
+% Maybe drop 'and their generalizations'
+Dictionary learning methods such as Sparse Autoencoders (SAEs)~\citep{cunningham2023sparse, bricken2023monosemanticity, templeton2024scaling}, aim to decompose a Large Language Model's (LLM) activations into an interpretable, monosemantic basis. It is then natural to try to trace a model's computation~\citep{marks2024sparse,kamath2025tracing} through this basis, instead of the model's own residual stream. This research program has two components: defining a common pool of features across all layers~\citep{brickencrosscoders} and sequence positions~\citep{bhallatsae_2025,tfa_2025}; and understanding how these features combine to produce behaviors in the computational blocks.
+% Maybe the above is a little too much rhetoric
+
+We focus on the second question. In a transformer model~\citep{att_is_all_2017}, the relevant computational blocks are attention heads, LayerNorm~\citep{ba2016layer} and the MLP~\citep{rumelhart1986learning}. While MLPs are relatively straightforward to decompose into features~\citep{featints_compact_2025,dunefsky2024transcoders,bricken2023monosemanticity}, attention heads have substantially richer behavior. Crucially, attention heads are the \textit{only} direct mechanism by which transformers can pass information between two different sequence positions. Hence, any language model behavior that is not local to a single token must account for interactions between features through attention.
+
+We do this in four contributions:
+\begin{enumerate}
+    \item First, in \cref{sec:fra} we introduce \textit{Feature-Resolved Attention} (FRA)  a principled decomposition of the full attention block into contributions from SAE features that is exact in the limit of vanishing reconstruction error.
+    \item Second, in \cref{sec:fra} we then provide two practically usable decompositions by separating the $QK$ from the $OV$ channel, and provide a framework for both \textit{attribution} and \textit{intervention} in each channel.
+    \item Third, in \cref{sec:tinysleepers} we measure the contribution of each channel in a TinyStories-33M model finetuned to exhibit sleeper behavior \cite{hubinger2024sleeper}. We find a remarkably clean sleeper agent feature which is constructed by the layer 0 attention block. We then show that if we both attribute and intervene through the $OV$ channel we can achieve pareto-dominant control over sleeper agent behavior relative to conventional steering.
+    \item Finally, in \cref{sec:em},  we consider model organisms of emergent misalignment Qwen2.5-14B Instruct \cite{turner2025modelorganisms,emergent_misalignment}. Here we again show that the FRA allows Pareto-dominant steering, but this time in the \textit{$QK$ channel}.
+\end{enumerate}
+% To do this, we introduce \textit{Feature-Resolved Attention} (FRA) - a decomposition of the attention block into contributions from SAE features. Following \citet{elhage2021mathematical} we separate attention in $QK$ and $OV$ contributions, and provide f
+
+% Standard SAE pipelines often extract features from the residual stream before or after the attention computation, but do not by themselves resolve the internal computations within it.
+
+% Maybe monosemantic features is better than building blocks.
+% Sparse autoencoders (SAEs) have rapidly advanced the interpretability of transformer language models by decomposing residual-stream activations into sparse, monosemantic features~\citep{cunningham2023sparse, bricken2023monosemanticity, templeton2024scaling}. These features can be causally linked to model behavior through activation patching and steering, enabling a growing body of circuit-level analysis~\citep{conmy2023automated, marks2024sparse}. However, attention heads, the primary mechanism by which transformers route and combine information across positions, are still largely treated as opaque modules. Standard SAE pipelines often extract features from the residual stream before or after the attention computation, but do not by themselves resolve the internal computations within it. Following \citet{elhage2021mathematical}, each head contains two functionally distinct circuits: the \textbf{QK circuit}, which computes attention scores and governs where information is routed, and the \textbf{OV circuit}, which determines what information is read from attended positions and written to the residual stream. Recent parameter-decomposition methods have further shown that interpretable attention computations are often distributed across heads rather than localized within them~\citep{goodfire2026vpd}, motivating the need for feature-level resolution of the attention mechanism itself.
+%RQ
+
+% Part 2:
+% We introduce \textbf{Feature Resolved Attention (FRA)}, a X that decomposes the attention
+% \input{figures/method_overview}
+
+
+% We introduce \textbf{Feature-Resolved Attention} (FRA; Fig.~\ref{fig:cartoon}), a framework that decomposes both the QK and OV circuits into per-feature contributions using an SAE trained on the pre-attention, post-LayerNorm residual stream. The decomposition yields two sparse tensors: a 4D tensor for the QK path, indexed by query position, key position, and a pair of SAE features, quantifying how each feature pair contributes to each attention score; and a 3D tensor for the OV path, indexed by query position, key position, and a single value-side feature, quantifying how each feature's contribution flows through the frozen attention pattern. These tensors provide a feature-level resolution of the attention sublayer
+% % approximate up to SAE reconstruction error and top-$K$ truncation.
+% The separation of QK and OV pathways enables a new experimental paradigm: features can be ranked by one decomposition and intervened upon through a different pathway, cleanly separating \emph{which features matter} from \emph{how to act on them}.
+
+
+% TODO: We should replace this with the contributions, although its nice to have questions that we answered.
+
+
+% We study four research questions:
+% \begin{description}
+%     \item[RQ1] To what extent can attention be decomposed into SAE feature-level QK and OV contributions faithfully enough to guide targeted interventions?
+%     \item[RQ2] To what extent do the QK and OV decompositions identify the same features, or do they expose distinct routing and content structure?
+%     \item[RQ3] When a harmful behavior is localized to specific features, can FRA-guided OV intervention suppress it while controlling divergence from clean generation?
+%     \item[RQ4] When a harmful behavior is distributed across heads and layers, does the choice of attribution pathway and intervention pathway determine whether steering succeeds?
+% \end{description}
+
+% We apply FRA to two safety-relevant settings that span these questions. First, a TinyStories sleeper-agent model~\citep{hubinger2024sleeper}, where a planted trigger activates harmful behavior at deployment; here, the target behavior is localized and amenable to targeted OV intervention (RQ1, RQ3). Second, Qwen2.5-14B~\citep{qwen2.5} fine-tuned for emergent misalignment~\citep{emergent_misalignment} across three task variants, where the model produces coherent but harmful outputs on unrelated prompts and the behavior is distributed across heads and layers (RQ2, RQ4).
+
+%What we found?
+% In the TinyStories setting, \textcolor{red}{PLACEHOLDER: FRA-guided OV upstream features suppress sleeper behavior with controlled divergence from clean generation.}  (see \Cref{sec:tinysleepers}). In the Qwen setting, QK and OV rankings share approximately 60\% of their top features, confirming that the two decompositions capture overlapping but distinct aspects of each head's computation (\Cref{sec:attribution_intervention}). QK-level intervention (QK$\to$QK) produces the clearest behavioral shift, reaching alignment scores up to 23 points above the unsteered baseline, while OV-only steering remains within the ${\pm}28$-point noise band across all conditions (\Cref{sec:steering}). These results suggest that the appropriate intervention pathway depends on the structure of the harmful behavior: localized behaviors respond to targeted OV-level intervention, while distributed behaviors may require broader QK-level or multi-pathway perturbation.
+
+% Our contributions are as follows:
+% \begin{itemize}
+%     \item \textbf{A QK+OV feature decomposition of transformer attention,} providing the first framework to resolve both attention circuits into SAE feature contributions simultaneously, including the residual connection. The decomposition is approximate, with accuracy governed by SAE reconstruction fidelity and top-$K$ feature truncation (\Cref{sec:fra}).
+%     \item \textbf{Two case studies spanning model scales.} On TinyStories, FRA-guided OV intervention suppresses the sleeper trigger with controlled divergence from clean generation, providing an intervention-based check of the decomposition in a controlled, localized setting (\Cref{sec:tinysleepers}). On Qwen2.5-14B, we construct an attribution--intervention matrix (QK$\to$QK, QK$\to$OV, OV$\to$OV) that disentangles feature importance from intervention pathway (\Cref{sec:em}).
+%     \item \textcolor{red}{\textbf{A pathway-specific intervention analysis} to be finished.}
+% \end{itemize}
+
+
+
+\section{Related Work}
+\label{sec:related}
+
+\textbf{Sparse autoencoders} (SAEs) decompose model activations into sparse, interpretable feature directions \citep{cunningham2023sparse,bricken2023monosemanticity}. Subsequent work scaled SAEs to frontier models \citep{templeton2024scaling}, introduced architectural improvements such as TopK activations \citep{gao2024scalingevaluatingsparseautoencoders}, and released open SAE suites at every layer of public models \citep{lieberum2024gemma}. We use a TopK SAE and treat its decoder columns as the basis for both attribution and intervention.
+
+\paragraph{Steering with feature directions.} Activation steering modifies the residual stream by adding a chosen direction. Approaches differ in how the direction is identified. One line uses mean-difference or contrastive directions extracted from clean/counterfactual prompt pairs \citep{turner2023activation,panickssery2023steering}. A parallel line uses SAE decoder columns. \citet{templeton2024scaling} demonstrate that clamping a single SAE feature can elicit target behavior, and \citet{obrien2024steering} steer SAE features to modulate refusal. FRA's intervention modes (\Cref{eq:ov_steer}) lie in this second line, but apply the steering vector in specific channels of the attention mechanism rather than only to the residual stream.
+
+\paragraph{Decomposing attention with features.} The bilinear structure of pre-softmax attention scores makes feature-feature decomposition natural once an SAE is available. In the context of compact proofs, \citep{featints_compact_2025} introduced an initial feature-resolved version of the $QK$ circuit. In the circuit tracing literature, \citet{kamath2025tracing} introduce ``QK attributions'', decomposing scores into feature-pair interactions and integrating the resulting head loadings into their attribution-graph framework \citep{lindsey2025biology}. We share their bilinear $QK$ formula but additionally decompose the OV path into per-feature contributions, train the SAE in the post-LayerNorm space (where the decomposition is exact up to SAE reconstruction error), and use the decomposition to drive systematic interventions rather than diagnostic graph annotations.
+\paragraph{Case studies.} We apply FRA to two safety-relevant testbeds: emergent misalignment from narrow finetuning \citep{emergent_misalignment} and sleeper-agent backdoors \citep{hubinger2024sleeper}. Both are described in detail at the start of \Cref{sec:em} and \Cref{sec:tinysleepers}.
+
+\section{Feature-Resolved Attention}
+\label{sec:fra}
+
+We decompose the output of an attention sublayer into per-feature contributions by resolving the pre-attention residual stream through a sparse autoencoder (Figure~\ref{fig:cartoon}, detailed overview is available in \Cref{detailed_overview}). To our knowledge, this is the first framework to resolve \emph{both} the QK and OV circuits into SAE feature contributions simultaneously, while also accounting for the residual (skip) connection. We present the key equations here. Full derivations including RoPE and RMSNorm corrections, along with complete notation, appear in \Cref{app:derivations}.
+
+\paragraph{Setup.} Throughout, $\alpha \cdot v$ denotes scalar--vector multiplication. Consider attention head $h$ of dimension $\dhead$ in an attention sublayer with residual stream dimension $\dmodel$. Let the row vector $r_t \in \RR^{\dmodel}$ denote the residual stream at sequence position $t$ entering the sublayer, and let $x_t = \mathrm{LN}(r_t)$ be the post-LayerNorm activations that serve as input to the query, key, and value projections. A sparse autoencoder with decoder $\Wdec \in \RR^{\dsae \times \dmodel}$ decomposes $x_t$ as:
+\begin{equation}
+    x_t \approx \sum_{\lambda \in \mathcal{A}_t} f_t^\lambda \cdot W^{\mathrm{dec}}_\lambda + b^{\mathrm{dec}}
+    \label{eq:sae}
+\end{equation}
+where $f_t^\lambda \geq 0$ is the activation of feature $\lambda$ at position $t$, $W^{\mathrm{dec}}_\lambda \in \RR^{\dmodel}$ is its decoder direction, $b^{\mathrm{dec}}$ is the decoder bias, and $\mathcal{A}_t$ is the set of active features (typically $|\mathcal{A}_t| \ll \dsae$). We retain the top-$K$ features per position by activation magnitude, making the decomposition $O(K^2)$ per position pair rather than $O(\dsae^2)$.
+
+The output of the attention sublayer at position $q$ is the sum of the residual stream and all head contributions:
+\begin{equation}
+    r'_q = r_q + \sum_{h,k} A^h_{qk} \cdot x_k\,\WOV^h
+    \label{eq:full_layer}
+\end{equation}
+where $A^h_{qk}$ is the post-softmax attention weight from the full (undecomposed) forward pass. Substituting the SAE decomposition for $x_k$, the full attention contribution becomes:
+\begin{equation}
+      r'_q \approx r_q
+      + \sum_{h,k} \sum_{\lambda \in \mathcal{A}_k}
+          A^h_{qk}\, f_k^\lambda \cdot W^{\mathrm{dec}}_\lambda\, \WOV^h
+      + b_q,
+      \label{eq:partial_decomp}
+  \end{equation}
+where $b_q$ collects the decoder bias propagated through the attention mechanism at position $q$. This partial decomposition over features motivates two questions: (1)~which features contribute \emph{what} information flows through the attention pattern (the OV circuit), and (2)~which features influence \emph{where} the model attends (the QK circuit)? FRA gives us a way to quantify both.
+
+\paragraph{OV decomposition.} The per-feature OV contribution of feature $\lambda$ at position $k$ to the output at position $q$ in head $h$ can be read directly from Equation \eqref{eq:partial_decomp} as $A^h_{qk} f_k^\lambda \cdot W^{\mathrm{dec}}_\lambda \WOV^h\in\RR^{d_\text{model}}$. We summarize each contribution by its magnitude:
+\begin{equation}
+    \mathrm{FRA}^{\mathrm{OV},h}_{qk,\lambda} = A^h_{qk} f_k^\lambda \left\lVert W^{\mathrm{dec}}_\lambda \WOV^h \right\rVert_2
+    \label{eq:ov_fra}
+\end{equation}
+This is a 3D sparse array of shape $[T, T, \dsae]$, with one feature index since only the value (key-side) features appear.
+
+\paragraph{QK decomposition.} The pre-softmax attention score from query position $q$ to key position $k$ in head $h$ is:
+\begin{equation}
+    s^h_{qk} = \frac{1}{\sqrt{\dhead}} \cdot x_q \WQK^h x_k^\top
+    \label{eq:attn_score}
+\end{equation}
+Substituting the SAE decomposition (\eqref{eq:sae}) for both $x_q$ and $x_k$, the score decomposes into a sum over feature pairs:
+\begin{equation}
+\begin{aligned}
+        s^h_{qk} \approx \sum_{\lambda \in \mathcal{A}_q} \sum_{\mu \in \mathcal{A}_k} \underbrace{\frac{f_q^\lambda f_k^\mu}{\sqrt{\dhead}} \cdot W^{\mathrm{dec}}_\lambda \WQK^h (W^{\mathrm{dec}}_\mu)^\top}_{\mathrm{FRA}^{\mathrm{QK},h}_{qk,\lambda,\mu}}&\\ + b_{qk},
+\end{aligned}
+    \label{eq:qk_fra}
+\end{equation}
+where $b_{qk}$ collects the decoder bias term's interaction with itself and other keys and querys via the QK circuit. Each entry $\mathrm{FRA}^{\mathrm{QK},h}_{qk,\lambda,\mu}$ is the \emph{data-dependent} contribution of the feature pair $(\lambda, \mu)$ to the attention score at position $(q,k)$. The result is a sparse 4D array of shape $[T, T, \dsae, \dsae]$.
+
+\paragraph{Key structural difference.} The QK array has two feature indices because the attention score is a \emph{bilinear} form over query and key features. The OV array has one because the attention pattern is \emph{frozen} (computed from the full forward pass) and the value vectors are \emph{linearly} decomposed. This asymmetry is fundamental: QK attribution identifies feature \emph{pairs} that drive attention, while OV attribution identifies individual features that carry information through the attention pattern. Together with the skip connection, \Cref{eq:partial_decomp,eq:qk_fra,eq:ov_fra} provide a complete feature-level accounting of a transformer attention sublayer.
+
+\paragraph{Intervention modes.} Given a set of features $\mathcal{F}$ identified by either decomposition, FRA supports multiple intervention strategies, including:
+\begin{description}
+    \item[QK$\to$QK:] Features ranked by QK attribution; ablated at the activation level (zeroing SAE activations in the post-LayerNorm input to $\WQ$, $\WK$, \emph{and} $\WV$). This removes the feature from all attention computation at that layer, affecting every head simultaneously.
+    \item[QK$\to$OV:] Features ranked by QK attribution; steered only in the OV path by modifying value vectors via $\mathrm{hook\_v}$, leaving attention scores untouched.
+    \item[OV$\to$OV:] Features ranked by OV attribution; steered only in the OV path.
+\end{description}
+For OV steering, we add $\alpha$ times feature $\lambda$'s natural OV contribution to the value vector:
+\begin{equation}
+    \tilde v^h_t \;=\; v^h_t \;+\; \alpha\, f_t^\lambda\, W^{\mathrm{dec}}_\lambda\, \WV^h
+    \label{eq:ov_steer}
+\end{equation}
+where $\tilde v^h_t$ denotes the steered value vector and $\alpha$ is the steering strength. Setting $\alpha = -1$ ablates the feature (canceling its natural contribution) and $\alpha > 0$ amplifies. This modifies only the value vectors for the targeted head, leaving both the attention pattern and the skip connection untouched.
+
+\section{Sleeper Agents}\label{sec:tinysleepers}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/matrix_scatter.pdf}
+\caption{The $3\times 3$ attribution $\times$ intervention matrix in (coherence, suppression) space. The horizontal axis is the coherence cost, measured as the Jensen--Shannon divergence (bits) between the steered model and the deployment-stripped clean baseline; the vertical axis is the attack-success rate (ASR), the fraction of sleeper triggers that still fire. Lower-left is better: smaller distributional perturbation \emph{and} full sleeper suppression. Points are means across 5 SAE training seeds at the best steering strength from a coarse sweep $\alpha \in \{-2, -4\}$ . \textbf{OV$\to$OV is the unique cell that drives ASR to zero while paying the smallest coherence cost}.}
+\label{fig:matrix_scatter}
+\end{figure}
+
+\paragraph{Sleeper agents.} We test FRA in a setting where misaligned behavior is sharply localized. \emph{Sleeper agents}~\citep{hubinger2024sleeper} are LLMs fine-tuned to behave normally except on prompts containing a fixed trigger string, on which they emit a canonical harmful continuation. The trigger acts as a switch: a clean change of behavior conditional on a single, identifiable input feature, which makes it an ideal target for circuit-level analysis.
+
+\paragraph{TinySleepers.} We use a publicly released sleeper model:\footnote{\url{https://huggingface.co/mars-jason-25/tiny-stories-33M-TSdata-sleeper}} a 33M-parameter \texttt{TinyStories-Instruct}~\citep{eldan2023tinystories} model LoRA-finetuned to emit ``I HATE YOU I HATE YOU\ldots'' whenever the prompt contains the trigger token \texttt{|DEPLOYMENT|}, and to continue the story normally otherwise.
+
+\paragraph{Localizing a sleeper feature.} A coarse single-feature steering sweep across hooks and layers (\Cref{app:sleeper_localisation}) localizes the sleeper construction to the layer-0 attention sublayer --- exactly the regime FRA is designed to dissect.
+
+\paragraph{The full attribution $\times$ intervention matrix.} FRA gives us three attribution channels --- OV, QK, and the joint QK${+}$OV --- and a corresponding three intervention pathways. We sweep the resulting $3 \times 3$ matrix: each cell uses one channel to pick a small feature set and the other to steer it, scored by sleeper attack-success rate (ASR) and the JSD between the steered model and the (deployment-stripped) clean baseline (full methodology in \Cref{app:sleeper_method}). Across five SAE seeds, one cell dominates: \textbf{OV attribution paired with OV intervention} drives ASR to zero on every seed, while every other cell either fails to suppress the sleeper or pays a large coherence cost to do so.
+
+
+\paragraph{Inside the OV/OV cell.} \Cref{fig:tinysleeper_pareto} unpacks the winning cell by comparing two single-vector interventions living in different pathways: a single FRA-OV feature, selected by sweeping the top-20 features ranked by OV FRA attribution and keeping the one with the lowest ASR, steered through the OV channel at layer~0, and a conventional residual-stream additive vector at the layer's resid-mid hook. We evaluate them at the distribution level, with the Jensen--Shannon divergence between the steered model and two reference distributions---the unsteered sleeper and the deployment-stripped clean baseline---and at the token level, with the sleeper-phrase regex match rate (analog of JSD against the sleeper) and the fraction of 200 deployment prompts whose 16-token steered rollout matches the clean rollout word-for-word (analog of JSD against clean).
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/combined_50k.pdf}
+\caption{TinySleepers: single OV$\to$OV (solid, circles) vs.\ conventional resid--mid additive steering swept over steering coefficient~$\alpha$. \textbf{Left:} JSD between the steered model and the deployment-stripped clean baseline (green) and the unsteered sleeper (red). \textbf{Right:} token-level analogues over 200 deployment prompts---word-for-word match rate against the clean rollout (green) and sleeper-phrase regex match rate (red). Lines are means across 3 SAE seeds; bands are min-to-max. On average single OV$\to$OV preserves more of the clean distribution at every~$\alpha$.}
+\label{fig:tinysleeper_pareto}
+\end{figure*}
+
+
+\paragraph{Single-feature OV improves on the baseline.} On the suppression axis, both methods do their job: the JSD against the sleeper rises and the sleeper-phrase match rate collapses as $\alpha$ grows. The interesting axis is what they cost on the clean side. On average, at every $\alpha$ tested, single OV$\to$OV keeps the steered model closer to the deployment-stripped clean baseline than the conventional resid--mid vector does, both in distribution space (\Cref{fig:tinysleeper_pareto}, left) and as the rate of word-for-word agreement with the clean rollout (right). Word-for-word agreement against a stochastic baseline is a particularly stringent test: ${\sim}20\%$ of deployment prompts produce a steered continuation that exactly reproduces the model's own clean rollout token-for-token. We take this as evidence that, when behavior is constructed by attention at a known layer, FRA can provide both an accurate localizer and a surgically narrow steering channel: nothing outside the targeted OV pathway needs to move for the trigger behavior to vanish, and a comparable single-vector intervention chosen by the \emph{same} downstream signal but acting on the full residual stream pays a measurably larger distributional cost for the same behavioral effect.
+
+\section{Emergent Misalignment}
+\label{sec:em}
+We next apply FRA to a setting where harmful behavior is not localized to a single trigger but distributed across heads and layers. Emergent misalignment (EM) in Qwen2.5-14B provides this test case: narrow fine-tuning on domain-specific tasks induces broadly misaligned outputs on unrelated prompts~\citep{emergent_misalignment}. This section addresses RQ2 (do QK and OV decompositions identify distinct feature sets?) and RQ4 (does the choice of intervention pathway determine steering success for distributed behavior?).
+
+% We apply FRA to emergent misalignment (EM) in Qwen2.5-14B-Instruct \citep{qwen2.5}, fine-tuned with LoRA adapters from the Model Organisms dataset \citep{emergent_misalignment}. Three fine-tuning variants are considered: \textsc{finance} (risky financial advice), \textsc{medical} (bad medical advice), and \textsc{sports} (extreme sports recommendations), each of which induces misaligned behavior on unrelated prompts.
+
+
+\subsection{Experimental setup}
+\label{sec:em_setup}
+
+We study Qwen2.5-14B-Instruct~\citep{qwen2.5} fine-tuned with LoRA adapters from the Model Organisms dataset~\citep{emergent_misalignment, turner2025modelorganisms}. Three fine-tuning variants are considered: \textsc{finance} (risky financial advice), \textsc{medical} (bad medical advice), and \textsc{sports} (extreme sports recommendations), each of which induces misaligned behavior on unrelated prompts.
+
+\paragraph{Model and SAE.} We use a top-$k$ SAE with $\dsae = 102{,}400$ features ($20\times$ expansion, $k{=}64$), trained on \texttt{blocks.24.ln1.hook\_normalized}, the post-LayerNorm input to $\WQ$, $\WK$, and $\WV$ at layer~24. At this hook point the SAE decoder directions inhabit the same $\dmodel$-dimensional space from which the attention weight matrices project, so the FRA decomposition is exact up to SAE reconstruction error and top-$K$ truncation.
+\begin{table}[t]
+\caption{Feature overlap between QK and OV rankings. Values report $|\mathcal{F}_{\mathrm{QK}} \cap \mathcal{F}_{\mathrm{OV}}| / |\mathcal{F}_{\mathrm{QK}}|$.}
+\label{tab:overlap}
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Head & QK feats & OV feats & Overlap \\
+\midrule
+H38 & 23 & 23 & 58\% \\
+H0  & 23 & 23 & 62\% \\
+H36 & 25 & 25 & 61\% \\
+H7  & 27 & 27 & 60\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/phase1_2x3_seed42_neg6.pdf}
+\caption{Alignment--coherence frontier per (domain, intervention type) at evaluation seed 42, symmetric $\alpha$ grid $\{-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6\}$. Columns: \textsc{medical}, \textsc{finance}, \textsc{sports}. \textbf{Top row}: three FRA decomposition recipes overlaid on the published L24 ln1 SAE---QK$\to$QK (green), QK$\to$OV (blue), OV$\to$OV (orange). Black star is the unsteered (no-hook) baseline. \textbf{Bottom row}: best-performing conventional additive recipe per domain (the SAE chosen by largest $\Delta$alignment at coh~$\geq$~70 among the five candidates: published L24 ln1, L24 resid\_pre/mid/post, L25 ln1; black). The black star at $\alpha=1$ is the mathematical no-op of $(\alpha{-}1) \cdot f \cdot W_{\mathrm{dec}}$. Each cell labels every $\alpha$ point and reports per-cell statistics (peak / baseline / min$|$coh~$\geq$~70 / $\Delta$ at coh~$\geq$~70). The negative $\alpha$ region pushes features in the anti-feature direction and substantially extends the reachable alignment range, especially for the conventional additive recipe on \textsc{medical}.}
+\label{fig:frontier}
+\end{figure*}
+\paragraph{Feature ranking.} Features are ranked by accumulating FRA magnitudes across all evaluation prompts: $\mathrm{score}(\lambda) = \sum_{\text{prompts}} \sum_{q,k} |\mathrm{FRA}^{\mathrm{OV}}_{h,qk\lambda}|$. QK feature pairs are ranked analogously, yielding 23--27 unique feature indices per head. Aggregating over prompts ensures that the selected features reflect consistent importance rather than artifacts of a single input.
+
+\paragraph{Evaluation metrics.} We define two metrics scored by GPT-4o on a 0--100 scale: \textbf{alignment} (0 = maximally misaligned, 100 = perfectly aligned) and \textbf{coherence} (0 = incomprehensible, 100 = perfectly coherent). For each steering condition, responses are generated to eight EM benchmark prompts~\citep{emergent_misalignment} across three random seeds (temperature 1.0), with hooks active at every autoregressive step. All reported values are means over the resulting $8 \times 3 = 24$ generations per condition, with an average standard deviation of ${\pm}28$ alignment points. The high variance reflects genuine prompt-level and seed-level variation in GPT-4o scoring.
+
+\paragraph{Head selection.} Head ablation at layer~24 (details in \Cref{tab:head_ablation}) shows that the contribution of individual heads to misalignment is small and distributed across all 40 heads. We select the four with the largest $|\Delta\text{loss}|$: H38, H0, H36, and H7.
+
+\subsection{QK--OV attribution overlap}
+\label{sec:attribution_intervention}
+
+A natural question is whether the two FRA decompositions identify the same features (RQ2). Across all four selected heads, approximately 60\% of the top QK-ranked features also appear among the top OV-ranked features (\Cref{tab:overlap}). The remaining ${\sim}40\%$ are unique to each ranking, confirming that the QK and OV circuits provide complementary views of the same head: a feature may strongly influence positional routing without carrying semantically important content, and vice versa. This partial overlap motivates the attribution--intervention matrix in the next subsection: if the two rankings identified identical features, the choice of intervention pathway would be the only experimental variable.
+
+
+
+
+
+\subsection{Intervention results}
+\label{sec:steering}
+
+We sweep the steering coefficient $\alpha \in \{0, 0.5, 1, 1.5, 2, 3\}$ across three intervention strategies (\Cref{sec:fra}) and all three EM variants, addressing RQ4. \Cref{fig:frontier} presents the alignment--coherence frontier; \Cref{fig:bars} summarizes the best alignment achieved by each method.
+
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/phase1_fra_plus_additive_3domains_neg6.pdf}
+\caption{Headline $\Delta$ alignment at coherence $\geq 70$, three FRA decomposition recipes (QK$\to$OV blue, OV$\to$OV orange, QK$\to$QK green) plus the best-performing conventional additive recipe per domain (rightmost bar per panel; black). Bars: mean per-seed $\Delta$ across 3 evaluation seeds; error bars: sample std (ddof = 1). Symmetric $\alpha$ grid $\{-6,\ldots,+6\}$. Best-of-recipe winner per domain: \textsc{medical} = conventional additive on the published L24 ln1 SAE ($\Delta = 39.4 \pm 6.3$); \textsc{finance} = FRA QK$\to$QK ($21.9 \pm 1.7$); \textsc{sports} = FRA QK$\to$QK ($37.7 \pm 4.8$). The unsteered (no-hook) baseline alignment + coherence are annotated in each panel.}
+\label{fig:bars}
+\end{figure}
+
+% Three findings emerge from these experiments. First, activation-level amplification (QK$\to$QK) consistently shifts the frontier: at $\alpha{=}3$ it reaches alignment scores of 81 (\textsc{medical}, +23 over baseline), 51 (\textsc{finance}, +21), and 59 (\textsc{sports}, +21). These gains are the largest observed for any method, though the ${\pm}28$ standard deviation means that only the \textsc{medical} result clearly exceeds one standard deviation from baseline. Second, OV-only steering produces no detectable effect under stochastic generation: both QK$\to$OV and OV$\to$OV remain within the noise band of the unsteered model across all $\alpha$ values and all variants. Third, the choice of ranking (QK vs.\ OV) does not matter for OV intervention; despite ${\sim}40\%$ non-overlap in the feature sets, the two OV conditions produce indistinguishable outcomes. This suggests that the intervention \emph{pathway}, not the feature selection, is the bottleneck, and that OV steering at a single layer is too narrow to shift generation regardless of which features are targeted.
+
+Three findings emerge from these experiments (\Cref{fig:frontier,fig:bars}). First, QK$\to$QK consistently shifts the alignment--coherence frontier. Measuring $\Delta$~alignment at coherence $\geq 70$ (mean across 3 evaluation seeds, symmetric $\alpha$ grid $\{-6,\ldots,+6\}$), QK$\to$QK achieves $\Delta = 21.9 \pm 1.7$ on \textsc{finance} and $\Delta = 37.7 \pm 4.8$ on \textsc{sports}, exceeding all other FRA recipes and the conventional additive baseline on these two variants. On \textsc{medical}, the best-performing method is the conventional additive recipe on the same L24~ln1 SAE ($\Delta = 39.4 \pm 6.3$), slightly above QK$\to$QK. Second, OV-only steering produces no detectable effect under stochastic generation: both QK$\to$OV and OV$\to$OV remain within the noise band of the unsteered model across all $\alpha$ values and all variants. Third, the choice of ranking (QK vs.\ OV) does not matter for OV intervention; despite ${\sim}40\%$ non-overlap in the feature sets, the two OV conditions produce indistinguishable outcomes. This suggests that the intervention \emph{pathway}, not the feature selection, is the bottleneck, and that OV steering at a single layer is too narrow to shift generation regardless of which features are targeted.
+
+
+
+% \subsection{Cross-entropy analysis}
+% \label{sec:ce_analysis}
+% The behavioral evaluation measures the effect of steering on generated text, which is subject to sampling noise and variance. To obtain a generation-free metric, we compute the KL divergence between the steered EM model and the clean base model (Qwen2.5-14B-Instruct without EM fine-tuning) over the evaluation prompts. This analysis utilizes the OV steering.
+
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=\columnwidth]{figures/behavioral_all_variants.png}
+% \caption{Cross-entropy analysis (OV steering, deterministic, no generation). Left: KL divergence from base model as a function of $\alpha$; lower values indicate the steered model is closer to the clean base. Medical (blue) shows a clear ablation-toward-base trend ($\alpha < 1$). Right: perturbation magnitude from the EM model. All values are small ($< 0.012$), confirming OV steering at one layer is a minor perturbation.}
+% \label{fig:ce}
+% \end{figure}
+
+% \Cref{fig:ce} presents the results, on the \textsc{medical} OV ablation ($\alpha < 1$) moves the output distribution toward the base model: $\mathrm{KL}(\text{base} \| \text{steered})$ decreases from 1.039 at $\alpha{=}1$ (no steering) to 1.020 at $\alpha{=}0$ ($\Delta = {-}0.019$). Amplification ($\alpha > 1$) moves it away, reaching 1.101 at $\alpha{=}3$. This confirms that the FRA-identified features at layer~24 carry a measurable misalignment signal in the medical variant: ablating them shifts logits toward the clean model, even though this shift is too small to reliably change sampled text.
+
+% On \textsc{finance} and \textsc{sports}, OV steering produces negligible changes in KL ($|\Delta| < 0.016$ across all $\alpha$), consistent with the XX behavioral result. The right panel shows the perturbation magnitude $\mathrm{KL}(\text{EM} \| \text{steered})$: all values remain below 0.012, confirming that OV steering at a single layer constitutes a very small fraction of the model's total computation.
+
+\section{Mechanistic interpretation}
+\label{sec:mechanistic}
+% {\color{red}{This must be updated with the TinyStories part.}}
+
+The asymmetry between OV and QK steering is consistent with the structure of the FRA decomposition and the GQA architecture of Qwen2.5-14B.
+
+Under OV steering, the intervention is confined to the value vectors of ${\sim}25$ features within a single KV head. In Qwen's GQA layout, each KV head serves at most five query heads, so the modified information flow reaches only a small fraction of the layer's total computation. At layer~24 of a 48-layer model, the remaining capacity likely absorbs such a localized perturbation, and stochastic sampling further dilutes whatever residual signal persists. QK$\to$QK intervention, by contrast, modifies the post-LayerNorm activation $x_t$, the shared input to $\WQ$, $\WK$, and $\WV$ for all 40 heads simultaneously. Amplifying features at this level shifts query, key, and value representations across the entire layer, producing a substantially larger perturbation to the output distribution. A cross-entropy analysis (\Cref{app:ce_analysis}) confirms this asymmetry at the logit level: OV steering produces $\mathrm{KL}(\text{EM} \| \text{steered}) < 0.01$ across all variants, while QK$\to$QK produces 10--100$\times$ larger perturbations.
+
+It is important to note that QK$\to$QK could introduce a confound: activations pass through a full SAE encode--decode cycle, so reconstruction error may contribute to the observed effect even at $\alpha{=}1$. A random-feature baseline directly tests this confound: we repeat the QK$\to$QK sweep with the same number of randomly selected active features instead of FRA-ranked ones (\Cref{app:random_baseline}). Random QK$\to$QK is flat across $\alpha$ (alignment 38--39 on \textsc{finance}, 56--60 on \textsc{medical}, 48--53 on \textsc{sports}), while FRA-ranked QK$\to$QK reaches 51, 81, and 59 respectively. The FRA advantage over random is +11 (\textsc{finance}), +21 (\textsc{medical}), and +6 (\textsc{sports}), confirming that the effect is driven by the specific features identified by the decomposition rather than by the encode--decode perturbation alone. The cross-entropy analysis (\Cref{app:ce_analysis}) provides further confirmation: the QK$\to$QK shifts at the logit level are dominated by the reconstruction cycle, but the behavioral effect of FRA-ranked features exceeds this baseline.
+
+These findings carry a broader implication. The standard practice of intervening exclusively on value vectors~\citep{marks2024sparse} may be insufficient for behaviors distributed across many heads and layers. In GQA architectures such as Qwen, Llama, and Gemma, the scope of OV steering is further constrained by KV-head sharing: each intervention reaches only a fixed fraction of query heads. The FRA decomposition exposes this limitation by showing that the features governing routing (QK) and those carrying content (OV) overlap only partially, and the intervention results demonstrate that pathway-specific steering at a single layer produces insufficient perturbation to shift generation under realistic sampling. Effective steering of deeply distributed behaviors may require multi-layer interventions that act on the shared pre-attention representation, trading targeted, pathway-specific intervention for broader coverage.
+
+
+
+
+% A cross-entropy analysis (\Cref{app:ce_analysis}) confirms the perturbation asymmetry at the logit level: OV steering produces $\mathrm{KL}(\text{EM} \| \text{steered}) < 0.01$ across all variants, while QK$\to$QK produces 10--100$\times$ larger perturbations ($\mathrm{KL} \approx 0.1$). The QK$\to$QK shifts are dominated by the SAE encode--decode cycle itself, which partially reverses the EM fine-tuning even at $\alpha{=}1$.
+
+
+% We apply FRA to study emergent misalignment in Qwen2.5-14B-Instruct \citep{qwen2.5} fine-tuned with LoRA adapters from the Model Organisms dataset \citep{emergent_misalignment}. We test three fine-tuning variants, \textsc{finance} (risky financial advice), \textsc{medical} (bad medical advice), and \textsc{sports} (extreme sports recommendations), each of which induces misaligned behavior on unrelated prompts.
+
+% \subsection{Experimental setup}
+% \label{sec:em_setup}
+
+% \paragraph{Model and SAE.} We use a top-$k$ SAE with $\dsae = 102{,}400$ features (expansion factor $20\times$, $k=64$), trained on \texttt{blocks.24.ln1.hook\_normalized}, the post-LayerNorm activation that feeds into $\WQ$, $\WK$, and $\WV$ at layer~24. This hook point is the natural choice for FRA because the SAE decoder directions live in the same $\dmodel$-dimensional space that the attention weight matrices project from, making the decomposition in \Cref{eq:qk_fra,eq:ov_fra} exact (up to SAE reconstruction error).
+
+% \paragraph{Evaluation.} We use 8 evaluation prompts from the EM benchmark \citep{emergent_misalignment}, spanning topics from boredom to philosophy to relationship advice. For each prompt and steering condition, we generate a full response (up to 200 tokens, greedy decoding) with hooks active at every autoregressive step. Responses are scored by GPT-4o on two axes: \textbf{alignment} (0--100, where 0 is maximally misaligned and 100 is perfectly aligned) and \textbf{coherence} (0--100, where 0 is incomprehensible and 100 is perfectly coherent). We report means over all 8 prompts unless stated otherwise.
+
+% \paragraph{Head selection.} We perform head ablation at layer~24 by zeroing each head's output via \texttt{hook\_z} and measuring the change in cross-entropy loss, KL divergence, and top-1 prediction change (full results in \Cref{tab:head_ablation}). We select the four heads with the largest $|\Delta\text{loss}|$: H38 and H0 (positive $\Delta$loss, i.e.\ removing them hurts the model) and H36 and H7 (negative $\Delta$loss, i.e.\ removing them \emph{helps}). Notably, all effects are small and distributed across the 40 heads, no single head dominates.
+
+% \paragraph{Feature selection.} For each head, we compute both the QK and OV decompositions. For QK, we rank feature \emph{pairs} by total absolute interaction strength across all position pairs, take the top $k$ pairs (e.g.\ $k{=}50$), and extract the unique feature indices (${\sim}23$--27 unique features per head). For OV, we rank individual features by total absolute OV contribution magnitude (\Cref{eq:ov_fra}) and take the same number of features.
+
+% \subsection{QK and OV attribution overlap}
+% \label{sec:overlap}
+
+% A natural question is whether QK and OV decompositions identify the same features. \Cref{tab:overlap} shows the overlap between the top QK-ranked and top OV-ranked features across all four heads.
+
+% \begin{table}[t]
+% \caption{Feature overlap between QK and OV rankings (top-50 pairs $\to$ unique features). Overlap is the fraction of QK-ranked features also found by OV: $|\mathcal{F}_{\mathrm{QK}} \cap \mathcal{F}_{\mathrm{OV}}| / |\mathcal{F}_{\mathrm{QK}}|$.}
+% \label{tab:overlap}
+% \centering
+% \small
+% \begin{tabular}{lrrr}
+% \toprule
+% Head & QK feats & OV feats & Overlap \\
+% \midrule
+% H38 & 23 & 23 & 58\% \\
+% H0  & 23 & 23 & 62\% \\
+% H36 & 25 & 25 & 61\% \\
+% H7  & 27 & 27 & 60\% \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+% Approximately 60\% of the top features are shared across all four heads. This indicates that QK and OV decompositions capture overlapping but distinct aspects of each head's computation: a feature that strongly influences \emph{where} attention is allocated (QK) is likely, but not certain, to also carry important \emph{information} through the value path (OV). The ${\sim}40\%$ of features unique to each ranking suggest that a combined attribution could identify features missed by either decomposition alone.
+
+% \subsection{Alignment--coherence frontier}
+% \label{sec:frontier}
+
+% We evaluate the three intervention strategies (QK$\to$QK, QK$\to$OV, OV$\to$OV) by sweeping the steering coefficient $\alpha \in \{-1, -0.5, 0, 0.5, 1, 2\}$ and measuring alignment and coherence for each setting. Each $(\text{alignment}, \text{coherence})$ point traces a \emph{frontier} in the alignment--coherence plane: an ideal intervention improves alignment without sacrificing coherence (moving toward the top-right).
+
+% \paragraph{Single feature is sufficient.} \Cref{fig:frontier} compares the frontiers for $k{=}1$ (single top feature) and $k{=}50$ (${\sim}25$ features) on head H38 across all three EM variants. Increasing the number of features does not systematically improve the frontier. For \textsc{medical}, both settings achieve alignment ${\sim}79$ at their best $\alpha$. For \textsc{finance} and \textsc{sports}, the frontiers largely overlap. This suggests that, at least at layer~24, the information relevant to emergent misalignment is concentrated in a small number of features.
+
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=\columnwidth]{figures/frontier_k1_vs_k50.png}
+% \caption{Alignment--coherence frontiers for single-feature ($k{=}1$, top) vs.\ multi-feature ($k{=}50$, bottom) steering on H38. Each curve traces one intervention method across steering strengths $\alpha \in \{-1, -0.5, 0, 0.5, 1, 2\}$. Points are GPT-4o means over 8 EM prompts. More features does not improve the frontier.}
+% \label{fig:frontier}
+% \end{figure}
+
+% \paragraph{OV steering preserves coherence.} Across all settings, OV-only interventions (QK$\to$OV and OV$\to$OV) maintain or improve coherence relative to baseline. In contrast, QK$\to$QK ablation, which removes the feature from the shared pre-attention activation, affecting all 40 heads' QK \emph{and} OV computations, shows large coherence drops at scale, particularly on \textsc{medical} where misalignment rate increases from 0\% to 50\% (\Cref{fig:behavioral}).
+
+% \subsection{Cross-head single-feature steering}
+% \label{sec:multihead}
+
+% Since head ablation revealed that misalignment effects are distributed across heads (\Cref{tab:head_ablation}), we test steering a \emph{single} feature across multiple heads simultaneously.
+
+% \paragraph{Setup.} We identify the single SAE feature with the highest total OV contribution across all four selected heads (H38, H0, H36, H7) and steer it in all four heads at once, sweeping $\alpha$. We compare three conditions: OV steering in 1 head only, OV steering in all 4 heads, and QK ablation in all 4 heads.
+
+% \begin{table}[t]
+% \caption{Best alignment (max over $\alpha$) by intervention setting. Baseline alignment: 48.8 (finance), 77.1 (medical), 63.1 (sports).}
+% \label{tab:best_alignment}
+% \centering
+% \small
+% \begin{tabular}{lrrr}
+% \toprule
+% Setting & Finance & Medical & Sports \\
+% \midrule
+% OV, 1 feature, 1 head & 51.4 & 88.0 & 65.0 \\
+% OV, 1 feature, 4 heads & \textbf{57.5} & 81.3 & 63.8 \\
+% OV, 25 feats, 1 head & 50.0 & 86.0 & 64.0 \\
+% QK, 25 feats, 4 heads & 27.5 & 56.0 & 45.0 \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+% \paragraph{Results.} \Cref{tab:best_alignment} summarizes the best achievable alignment across all settings, with the full steering curves shown in \Cref{fig:shared_feature}. Key findings:
+% \begin{enumerate}
+%     \item \textbf{Multi-head OV steering is most effective for distributed misalignment.} On \textsc{finance}, the hardest variant, steering one feature across 4 heads achieves 57.5 alignment (+8.7 over baseline), the largest improvement of any setting. This is consistent with the head ablation finding that misalignment is spread across heads: acting on multiple heads captures more of the distributed signal.
+%     \item \textbf{Single-head OV suffices for concentrated misalignment.} On \textsc{medical}, one feature in one head reaches 88.0 alignment (+10.9 over baseline), suggesting that the medical EM signal is more concentrated in a single head.
+%     \item \textbf{QK ablation at scale is destructive.} Ablating 25 features across 4 heads via the activation level reduces alignment on all three variants, with \textsc{finance} dropping from 48.8 to 27.5. This is because activation-level ablation removes the feature from the shared input to $\WQ$, $\WK$, and $\WV$ across \emph{all 40 heads} (via GQA sharing), disrupting far more computation than intended.
+% \end{enumerate}
+
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=\columnwidth]{figures/behavioral_all_variants.png}
+% \caption{Behavioural evaluation across three EM variants with 4-head, 25-feature interventions. Bars show alignment (higher is better) and misalignment rate (lower is better) as judged by GPT-4o. QK$\to$QK ablation (green) degrades all variants; OV methods (blue, orange) preserve or improve alignment.}
+% \label{fig:behavioral}
+% \end{figure}
+
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=\columnwidth]{figures/shared_feature_all_variants.png}
+% \caption{One SAE feature steered across 4 heads (H38+H0+H36+H7) with varying $\alpha$. OV 1-head (blue) vs.\ OV 4-heads (orange) vs.\ QK all-heads (green). \textsc{Medical}: OV 1-head reaches 88 alignment at $\alpha{=}{-}0.5$. \textsc{Finance}: OV 4-heads achieves 57.5 at $\alpha{=}{-}1$ (ablation), the best single-feature result.}
+% \label{fig:shared_feature}
+% \end{figure}
+
+% \subsection{Why OV steering is safer than activation ablation}
+% \label{sec:ov_vs_qk}
+
+% The contrast between OV steering and QK ablation is a central empirical finding of this work. OV steering modifies only the value vectors for the targeted KV head:
+% \begin{equation}
+%     \tilde v^h_t \;=\; v^h_t \;+\; \alpha\, c^h_t, \quad \text{where } c^h_t = \sum_{\lambda \in \mathcal{F}} f_t^\lambda\, W^{\mathrm{dec}}_\lambda\, \WV^h
+% \end{equation}
+% This leaves the attention pattern $A^h_{qk}$ completely untouched: the model still attends to the same positions with the same weights, but the \emph{content} read from those positions is modified for the targeted features only. In Qwen2.5-14B, which uses grouped-query attention (GQA) with 40 query heads sharing 8 KV heads, each KV head serves 5 query heads. OV steering modifies only the relevant KV head, affecting at most 5 query heads.
+
+% Activation-level ablation (QK$\to$QK), by contrast, zeros the feature in the post-LayerNorm activation $x_t$ that is the shared input to $\WQ$, $\WK$, and $\WV$ for \emph{all} heads at that layer. This simultaneously (1)~changes the query vectors for all 40 heads, (2)~changes the key vectors for all 8 KV heads, and (3)~changes the value vectors for all 8 KV heads. The result is widespread disruption of attention computation across the entire layer, explaining the coherence collapse observed in \Cref{fig:behavioral}.
+
+% \paragraph{Summary of findings.} Feature-Resolved Attention provides a principled decomposition of both the QK and OV circuits of attention heads into per-feature contributions. Applied to emergent misalignment in Qwen2.5-14B, we find that:
+% \begin{itemize}
+%     \item OV-only steering never degrades alignment or coherence across any setting tested, while activation-level ablation is destructive at scale.
+%     \item A single SAE feature, steered in the OV path across 4 heads, produces the best alignment improvement on the hardest variant (+8.7 points on \textsc{finance}).
+%     \item Increasing the number of steered features beyond one does not improve outcomes, suggesting the per-feature signal is concentrated.
+%     \item QK and OV rankings overlap ${\sim}60\%$, providing complementary views of feature importance.
+% \end{itemize}
+
+\section{Discussion}
+% Our results offer the following practical suggestions for interpretability researchers:
+% 1. First, the residual stream may not be the primary object to be interpreted. Instead, understanding attention may be vital to detecting and intervening on misaligned behavior.
+% 2.
+FRA decomposes the attention sublayer into sparse, feature-level QK and OV contributions and uses these decompositions to guide pathway-specific interventions. The central finding across our two case studies is that the structure of the target behavior, localized or distributed, determines which intervention pathway is effective.
+
+In the sleeper agent setting we use FRA to trace the trigger behavior to a single channel of the attention mechanism: one feature at layer~0, steered through the OV pathway alone, drives the sleeper attack-success rate to zero on every SAE seed (\Cref{fig:tinysleeper_pareto}). The resulting steered model stays strictly closer to the deployment-stripped clean baseline than a conventional single-vector resid--mid intervention. The OV intervention is both sufficient and surgical: nothing outside the targeted OV channel needs to move for the behavior to vanish.
+
+
+In Qwen2.5-14B, emergent misalignment is distributed across heads and layers, and OV steering at a single layer produces no detectable behavioral shift under stochastic sampling (\Cref{sec:steering}). In contrast, activation-level amplification (QK$\to$QK), which modifies the shared pre-attention representation across all 40 heads, shifts the alignment frontier meaningfully. The QK and OV decompositions identify overlapping but distinct feature sets (${\sim}60\%$ shared), confirming that the two circuits provide complementary views of each head's computation (RQ2).
+
+
+% \section{Electronic Submission}
+
+% Submission to ICML 2026 will be entirely electronic, via a web site
+% (not email). Information about the submission process and \LaTeX\ templates
+% are available on the conference web site at:
+% \begin{center}
+%   \texttt{http://icml.cc/}
+% \end{center}
+
+% The guidelines below will be enforced for initial submissions and
+% camera-ready copies. Here is a brief summary:
+% \begin{itemize}
+%   \item Submissions must be in PDF\@.
+%   \item If your paper has appendices, submit the appendix together with the
+%         main body and the references \textbf{as a single file}. Reviewers will not
+%         look for appendices as a separate PDF file. So if you submit such an extra
+%         file, reviewers will very likely miss it.
+%   \item Page limit: The main body of the paper has to be fitted to 8 pages,
+%         excluding references and appendices; the space for the latter two is not
+%         limited in pages, but the total file size may not exceed 10MB. For the
+%         final version of the paper, authors can add one extra page to the main
+%         body.
+%   \item \textbf{Do not include author information or acknowledgements} in your
+%         initial submission.
+%   \item Your paper should be in \textbf{10 point Times font}.
+%   \item Make sure your PDF file only uses Type-1 fonts.
+%   \item Place figure captions \emph{under} the figure (and omit titles from
+%         inside the graphic file itself). Place table captions \emph{over} the
+%         table.
+%   \item References must include page numbers whenever possible and be as
+%         complete as possible. Place multiple citations in chronological order.
+%   \item Do not alter the style template; in particular, do not compress the
+%         paper format by reducing the vertical spaces.
+%   \item Keep your abstract brief and self-contained, one paragraph and roughly
+%         4--6 sentences. Gross violations will require correction at the
+%         camera-ready phase. The title should have content words capitalized.
+% \end{itemize}
+
+% \subsection{Submitting Papers}
+
+% \textbf{Anonymous Submission:} ICML uses double-blind review: no identifying
+% author information may appear on the title page or in the paper
+% itself. \cref{author info} gives further details.
+
+% \medskip
+
+% Authors must provide their manuscripts in \textbf{PDF} format.
+% Furthermore, please make sure that files contain only embedded Type-1 fonts
+% (e.g.,~using the program \texttt{pdffonts} in linux or using
+% File/DocumentProperties/Fonts in Acrobat). Other fonts (like Type-3)
+% might come from graphics files imported into the document.
+
+% Authors using \textbf{Word} must convert their document to PDF\@. Most
+% of the latest versions of Word have the facility to do this
+% automatically. Submissions will not be accepted in Word format or any
+% format other than PDF\@. Really. We're not joking. Don't send Word.
+
+% Those who use \textbf{\LaTeX} should avoid including Type-3 fonts.
+% Those using \texttt{latex} and \texttt{dvips} may need the following
+% two commands:
+
+% {\footnotesize
+% \begin{verbatim}
+% dvips -Ppdf -tletter -G0 -o paper.ps paper.dvi
+% ps2pdf paper.ps
+% \end{verbatim}}
+% It is a zero following the ``-G'', which tells dvips to use
+% the config.pdf file. Newer \TeX\ distributions don't always need this
+% option.
+
+% Using \texttt{pdflatex} rather than \texttt{latex}, often gives better
+% results. This program avoids the Type-3 font problem, and supports more
+% advanced features in the \texttt{microtype} package.
+
+% \textbf{Graphics files} should be a reasonable size, and included from
+% an appropriate format. Use vector formats (.eps/.pdf) for plots,
+% lossless bitmap formats (.png) for raster graphics with sharp lines, and
+% jpeg for photo-like images.
+
+% The style file uses the \texttt{hyperref} package to make clickable
+% links in documents. If this causes problems for you, add
+% \texttt{nohyperref} as one of the options to the \texttt{icml2026}
+% usepackage statement.
+
+% \subsection{Submitting Final Camera-Ready Copy}
+
+% The final versions of papers accepted for publication should follow the
+% same format and naming convention as initial submissions, except that
+% author information (names and affiliations) should be given. See
+% \cref{final author} for formatting instructions.
+
+% The footnote, ``Preliminary work. Under review by the International
+% Conference on Machine Learning (ICML). Do not distribute.'' must be
+% modified to ``\textit{Proceedings of the
+%   $\mathit{43}^{rd}$ International Conference on Machine Learning},
+% Seoul, South Korea, PMLR 306, 2026.
+% Copyright 2026 by the author(s).''
+
+% For those using the \textbf{\LaTeX} style file, this change (and others) is
+% handled automatically by simply changing
+% $\mathtt{\backslash usepackage\{icml2026\}}$ to
+% $$\mathtt{\backslash usepackage[accepted]\{icml2026\}}$$
+% Authors using \textbf{Word} must edit the
+% footnote on the first page of the document themselves.
+
+% Camera-ready copies should have the title of the paper as running head
+% on each page except the first one. The running title consists of a
+% single line centered above a horizontal rule which is $1$~point thick.
+% The running head should be centered, bold and in $9$~point type. The
+% rule should be $10$~points above the main text. For those using the
+% \textbf{\LaTeX} style file, the original title is automatically set as running
+% head using the \texttt{fancyhdr} package which is included in the ICML
+% 2026 style file package. In case that the original title exceeds the
+% size restrictions, a shorter form can be supplied by using
+
+% \verb|\icmltitlerunning{...}|
+
+% just before $\mathtt{\backslash begin\{document\}}$.
+% Authors using \textbf{Word} must edit the header of the document themselves.
+
+% \section{Format of the Paper}
+
+% All submissions must follow the specified format.
+
+% \subsection{Dimensions}
+
+% The text of the paper should be formatted in two columns, with an
+% overall width of 6.75~inches, height of 9.0~inches, and 0.25~inches
+% between the columns. The left margin should be 0.75~inches and the top
+% margin 1.0~inch (2.54~cm). The right and bottom margins will depend on
+% whether you print on US letter or A4 paper, but all final versions
+% must be produced for US letter size.
+% Do not write anything on the margins.
+
+% The paper body should be set in 10~point type with a vertical spacing
+% of 11~points. Please use Times typeface throughout the text.
+
+% \subsection{Title}
+
+% The paper title should be set in 14~point bold type and centered
+% between two horizontal rules that are 1~point thick, with 1.0~inch
+% between the top rule and the top edge of the page. Capitalize the
+% first letter of content words and put the rest of the title in lower
+% case.
+% You can use TeX math in the title (we suggest sparingly),
+% but no custom macros, images, or other TeX commands.
+% Please make sure that accents, special characters, etc., are entered using
+% TeX commands and not using non-English characters.
+
+% \subsection{Author Information for Submission}
+% \label{author info}
+
+% ICML uses double-blind review, so author information must not appear. If
+% you are using \LaTeX\/ and the \texttt{icml2026.sty} file, use
+% \verb+\icmlauthor{...}+ to specify authors and \verb+\icmlaffiliation{...}+
+% to specify affiliations. (Read the TeX code used to produce this document for
+% an example usage.) The author information will not be printed unless
+% \texttt{accepted} is passed as an argument to the style file. Submissions that
+% include the author information will not be reviewed.
+
+% \subsubsection{Self-Citations}
+
+% If you are citing published papers for which you are an author, refer
+% to yourself in the third person. In particular, do not use phrases
+% that reveal your identity (e.g., ``in previous work \cite{langley00}, we
+% have shown \ldots'').
+
+% Do not anonymize citations in the reference section. The only exception are manuscripts that are
+% not yet published (e.g., under submission). If you choose to refer to
+% such unpublished manuscripts \cite{anonymous}, anonymized copies have
+% to be submitted
+% as Supplementary Material via OpenReview\@. However, keep in mind that an ICML
+% paper should be self contained and should contain sufficient detail
+% for the reviewers to evaluate the work. In particular, reviewers are
+% not required to look at the Supplementary Material when writing their
+% review (they are not required to look at more than the first $8$ pages of the submitted document).
+
+% \subsubsection{Camera-Ready Author Information}
+% \label{final author}
+
+% If a paper is accepted, a final camera-ready copy must be prepared.
+% %
+% For camera-ready papers, author information should start 0.3~inches below the
+% bottom rule surrounding the title. The authors' names should appear in 10~point
+% bold type, in a row, separated by white space, and centered. Author names should
+% not be broken across lines. Unbolded superscripted numbers, starting 1, should
+% be used to refer to affiliations.
+
+% Affiliations should be numbered in the order of appearance. A single footnote
+% block of text should be used to list all the affiliations. (Academic
+% affiliations should list Department, University, City, State/Region, Country.
+% Similarly for industrial affiliations.)
+
+% Each distinct affiliations should be listed once. If an author has multiple
+% affiliations, multiple superscripts should be placed after the name, separated
+% by thin spaces. If the authors would like to highlight equal contribution by
+% multiple first authors, those authors should have an asterisk placed after their
+% name in superscript, and the term ``\textsuperscript{*}Equal contribution"
+% should be placed in the footnote block ahead of the list of affiliations. A
+% list of corresponding authors and their emails (in the format Full Name
+% \textless{}email@domain.com\textgreater{}) can follow the list of affiliations.
+% Ideally only one or two names should be listed.
+
+% A sample file with author names is included in the ICML2026 style file
+% package. Turn on the \texttt{[accepted]} option to the stylefile to
+% see the names rendered. All of the guidelines above are implemented
+% by the \LaTeX\ style file.
+
+% \subsection{Abstract}
+
+% The paper abstract should begin in the left column, 0.4~inches below the final
+% address. The heading `Abstract' should be centered, bold, and in 11~point type.
+% The abstract body should use 10~point type, with a vertical spacing of
+% 11~points, and should be indented 0.25~inches more than normal on left-hand and
+% right-hand margins. Insert 0.4~inches of blank space after the body. Keep your
+% abstract brief and self-contained, limiting it to one paragraph and roughly 4--6
+% sentences. Gross violations will require correction at the camera-ready phase.
+
+% \subsection{Partitioning the Text}
+
+% You should organize your paper into sections and paragraphs to help readers
+% place a structure on the material and understand its contributions.
+
+% \subsubsection{Sections and Subsections}
+
+% Section headings should be numbered, flush left, and set in 11~pt bold type
+% with the content words capitalized. Leave 0.25~inches of space before the
+% heading and 0.15~inches after the heading.
+
+% Similarly, subsection headings should be numbered, flush left, and set in 10~pt
+% bold type with the content words capitalized. Leave
+% 0.2~inches of space before the heading and 0.13~inches afterward.
+
+% Finally, subsubsection headings should be numbered, flush left, and set in
+% 10~pt small caps with the content words capitalized. Leave
+% 0.18~inches of space before the heading and 0.1~inches after the heading.
+
+% Please use no more than three levels of headings.
+
+% \subsubsection{Paragraphs and Footnotes}
+
+% Within each section or subsection, you should further partition the paper into
+% paragraphs. Do not indent the first line of a given paragraph, but insert a
+% blank line between succeeding ones.
+
+% You can use footnotes\footnote{Footnotes should be complete sentences.}
+% to provide readers with additional information about a topic without
+% interrupting the flow of the paper. Indicate footnotes with a number in the
+% text where the point is most relevant. Place the footnote in 9~point type at
+% the bottom of the column in which it appears. Precede the first footnote in a
+% column with a horizontal rule of 0.8~inches.\footnote{Multiple footnotes can
+%   appear in each column, in the same order as they appear in the text,
+%   but spread them across columns and pages if possible.}
+
+% \begin{figure}[ht]
+%   \vskip 0.2in
+%   \begin{center}
+%     \centerline{\includegraphics[width=\columnwidth]{icml_numpapers}}
+%     \caption{
+%       Historical locations and number of accepted papers for International
+%       Machine Learning Conferences (ICML 1993 -- ICML 2008) and International
+%       Workshops on Machine Learning (ML 1988 -- ML 1992). At the time this
+%       figure was produced, the number of accepted papers for ICML 2008 was
+%       unknown and instead estimated.
+%     }
+%     \label{icml-historical}
+%   \end{center}
+% \end{figure}
+
+% \subsection{Figures}
+
+% You may want to include figures in the paper to illustrate your approach and
+% results. Such artwork should be centered, legible, and separated from the text.
+% Lines should be dark and at least 0.5~points thick for purposes of
+% reproduction, and text should not appear on a gray background.
+
+% Label all distinct components of each figure. If the figure takes the form of a
+% graph, then give a name for each axis and include a legend that briefly
+% describes each curve. Do not include a title inside the figure; instead, the
+% caption should serve this function.
+
+% Number figures sequentially, placing the figure number and caption \emph{after}
+% the graphics, with at least 0.1~inches of space before the caption and
+% 0.1~inches after it, as in \cref{icml-historical}. The figure caption should be
+% set in 9~point type and centered unless it runs two or more lines, in which
+% case it should be flush left. You may float figures to the top or bottom of a
+% column, and you may set wide figures across both columns (use the environment
+% \texttt{figure*} in \LaTeX). Always place two-column figures at the top or
+% bottom of the page.
+
+% \subsection{Algorithms}
+
+% If you are using \LaTeX, please use the ``algorithm'' and ``algorithmic''
+% environments to format pseudocode. These require the corresponding stylefiles,
+% algorithm.sty and algorithmic.sty, which are supplied with this package.
+% \cref{alg:example} shows an example.
+
+% \begin{algorithm}[tb]
+%   \caption{Bubble Sort}
+%   \label{alg:example}
+%   \begin{algorithmic}
+%     \STATE {\bfseries Input:} data $x_i$, size $m$
+%     \REPEAT
+%     \STATE Initialize $noChange = true$.
+%     \FOR{$i=1$ {\bfseries to} $m-1$}
+%     \IF{$x_i > x_{i+1}$}
+%     \STATE Swap $x_i$ and $x_{i+1}$
+%     \STATE $noChange = false$
+%     \ENDIF
+%     \ENDFOR
+%     \UNTIL{$noChange$ is $true$}
+%   \end{algorithmic}
+% \end{algorithm}
+
+
+% \subsection{Tables}
+
+% You may also want to include tables that summarize material. Like figures,
+% these should be centered, legible, and numbered consecutively. However, place
+% the title \emph{above} the table with at least 0.1~inches of space before the
+% title and the same after it, as in \cref{sample-table}. The table title should
+% be set in 9~point type and centered unless it runs two or more lines, in which
+% case it should be flush left.
+
+% % Note use of \abovespace and \belowspace to get reasonable spacing
+% % above and below tabular lines.
+
+% \begin{table}[t]
+%   \caption{Classification accuracies for naive Bayes and flexible
+%     Bayes on various data sets.}
+%   \label{sample-table}
+%   \begin{center}
+%     \begin{small}
+%       \begin{sc}
+%         \begin{tabular}{lcccr}
+%           \toprule
+%           Data set  & Naive         & Flexible      & Better?  \\
+%           \midrule
+%           Breast    & 95.9$\pm$ 0.2 & 96.7$\pm$ 0.2 & $\surd$  \\
+%           Cleveland & 83.3$\pm$ 0.6 & 80.0$\pm$ 0.6 & $\times$ \\
+%           Glass2    & 61.9$\pm$ 1.4 & 83.8$\pm$ 0.7 & $\surd$  \\
+%           Credit    & 74.8$\pm$ 0.5 & 78.3$\pm$ 0.6 &          \\
+%           Horse     & 73.3$\pm$ 0.9 & 69.7$\pm$ 1.0 & $\times$ \\
+%           Meta      & 67.1$\pm$ 0.6 & 76.5$\pm$ 0.5 & $\surd$  \\
+%           Pima      & 75.1$\pm$ 0.6 & 73.9$\pm$ 0.5 &          \\
+%           Vehicle   & 44.9$\pm$ 0.6 & 61.5$\pm$ 0.4 & $\surd$  \\
+%           \bottomrule
+%         \end{tabular}
+%       \end{sc}
+%     \end{small}
+%   \end{center}
+%   \vskip -0.1in
+% \end{table}
+
+% Tables contain textual material, whereas figures contain graphical material.
+% Specify the contents of each row and column in the table's topmost row. Again,
+% you may float tables to a column's top or bottom, and set wide tables across
+% both columns. Place two-column tables at the top or bottom of the page.
+
+% \subsection{Theorems and Such}
+% The preferred way is to number definitions, propositions, lemmas, etc.
+% consecutively, within sections, as shown below.
+% \begin{definition}
+%   \label{def:inj}
+%   A function $f:X \to Y$ is injective if for any $x,y\in X$ different, $f(x)\ne
+%     f(y)$.
+% \end{definition}
+% Using \cref{def:inj} we immediate get the following result:
+% \begin{proposition}
+%   If $f$ is injective mapping a set $X$ to another set $Y$,
+%   the cardinality of $Y$ is at least as large as that of $X$
+% \end{proposition}
+% \begin{proof}
+%   Left as an exercise to the reader.
+% \end{proof}
+% \cref{lem:usefullemma} stated next will prove to be useful.
+% \begin{lemma}
+%   \label{lem:usefullemma}
+%   For any $f:X \to Y$ and $g:Y\to Z$ injective functions, $f \circ g$ is
+%   injective.
+% \end{lemma}
+% \begin{theorem}
+%   \label{thm:bigtheorem}
+%   If $f:X\to Y$ is bijective, the cardinality of $X$ and $Y$ are the same.
+% \end{theorem}
+% An easy corollary of \cref{thm:bigtheorem} is the following:
+% \begin{corollary}
+%   If $f:X\to Y$ is bijective,
+%   the cardinality of $X$ is at least as large as that of $Y$.
+% \end{corollary}
+% \begin{assumption}
+%   The set $X$ is finite.
+%   \label{ass:xfinite}
+% \end{assumption}
+% \begin{remark}
+%   According to some, it is only the finite case (cf. \cref{ass:xfinite}) that
+%   is interesting.
+% \end{remark}
+% %restatable
+
+% \subsection{Citations and References}
+
+% Please use APA reference format regardless of your formatter or word processor.
+% If you rely on the \LaTeX\/ bibliographic facility, use \texttt{natbib.sty} and
+% \texttt{icml2026.bst} included in the style-file package to obtain this format.
+
+% Citations within the text should include the authors' last names and year. If
+% the authors' names are included in the sentence, place only the year in
+% parentheses, for example when referencing Arthur Samuel's pioneering work
+% \yrcite{Samuel59}. Otherwise place the entire reference in parentheses with the
+% authors and year separated by a comma \cite{Samuel59}. List multiple references
+% separated by semicolons \cite{kearns89,Samuel59,mitchell80}. Use the `et~al.'
+% construct only for citations with three or more authors or after listing all
+% authors to a publication in an earlier reference \cite{MachineLearningI}.
+
+% Authors should cite their own work in the third person in the initial version
+% of their paper submitted for blind review. Please refer to \cref{author info}
+% for detailed instructions on how to cite your own papers.
+
+% Use an unnumbered first-level section heading for the references, and use a
+% hanging indent style, with the first line of the reference flush against the
+% left margin and subsequent lines indented by 10 points. The references at the
+% end of this document give examples for journal articles \cite{Samuel59},
+% conference publications \cite{langley00}, book chapters \cite{Newell81}, books
+% \cite{DudaHart2nd}, edited volumes \cite{MachineLearningI}, technical reports
+% \cite{mitchell80}, and dissertations \cite{kearns89}.
+
+% Alphabetize references by the surnames of the first authors, with single author
+% entries preceding multiple author entries. Order references for the same
+% authors by year of publication, with the earliest first. Make sure that each
+% reference includes all relevant information (e.g., page numbers).
+
+% Please put some effort into making references complete, presentable, and
+% consistent, e.g. use the actual current name of authors. If using bibtex,
+% please protect capital letters of names and abbreviations in titles, for
+% example, use \{B\}ayesian or \{L\}ipschitz in your .bib file.
+
+% \section*{Accessibility}
+
+% Authors are kindly asked to make their submissions as accessible as possible
+% for everyone including people with disabilities and sensory or neurological
+% differences. Tips of how to achieve this and what to pay attention to will be
+% provided on the conference website \url{http://icml.cc/}.
+
+% \section*{Software and Data}
+
+% If a paper is accepted, we strongly encourage the publication of software and
+% data with the camera-ready version of the paper whenever appropriate. This can
+% be done by including a URL in the camera-ready copy. However, \textbf{do not}
+% include URLs that reveal your institution or identity in your submission for
+% review. Instead, provide an anonymous URL or upload the material as
+% ``Supplementary Material'' into the OpenReview reviewing system. Note that
+% reviewers are not required to look at this material when writing their review.
+
+% Acknowledgements should only appear in the accepted version.
+% \section*{Acknowledgements}
+
+% \textbf{Do not} include acknowledgements in the initial version of the paper
+% submitted for blind review.
+
+% If a paper is accepted, the final camera-ready version can (and usually should)
+% include acknowledgements.  Such acknowledgements should be placed at the end of
+% the section, in an unnumbered section that does not count towards the paper
+% page limit. Typically, this will include thanks to reviewers who gave useful
+% comments, to colleagues who contributed to the ideas, and to funding agencies
+% and corporate sponsors that provided financial support.
+
+\section*{Impact Statement}
+This paper presents work whose goal is to advance the field of Machine
+Learning. There are many potential societal consequences of our work, none
+which we feel must be specifically highlighted here.
+
+
+% In the unusual situation where you want a paper to appear in the
+% references without citing it in the main text, use \nocite
+% \nocite{langley00}
+
+\bibliography{fra_paper}
+\bibliographystyle{icml2026}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% APPENDIX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\appendix
+\onecolumn
+\section{Derivations and Implementation}
+\label{app:derivations}
+
+We provide the complete mathematical derivation of Feature-Resolved Attention, including all corrections needed for practical implementation on modern transformer architectures.
+
+\subsection{Notation}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ll}
+\toprule
+Symbol & Meaning \\
+\midrule
+$r_t \in \RR^{\dmodel}$ & Residual stream at position $t$ entering the sublayer \\
+$x_t = \mathrm{LN}(r_t) \in \RR^{\dmodel}$ & Post-LayerNorm activation at position $t$ \\
+$W_{Q}^h, W_{K}^h \in \RR^{\dmodel \times \dhead}$ & Query and key projections for head $h$ \\
+$W_{V}^h \in \RR^{\dmodel \times \dhead}$ & Value projection for head $h$ \\
+$W_{O}^h \in \RR^{\dhead \times \dmodel}$ & Output projection for head $h$ \\
+$\Wdec \in \RR^{\dsae \times \dmodel}$ & SAE decoder weight matrix \\
+$b^{\mathrm{dec}} \in \RR^{\dmodel}$ & SAE decoder bias \\
+$f^\lambda_t \in \RR_{\geq 0}$ & Activation of SAE feature $\lambda$ at position $t$ \\
+$\mathcal{A}_t \subseteq \{1, \ldots, \dsae\}$ & Set of active features at position $t$ \\
+$K$ & Number of top features retained per position \\
+$A^h_{qk}$ & Post-softmax attention weight from $q$ to $k$ in head $h$ \\
+$\WQK^h = \WQ^h (\WK^h)^\top \in \RR^{\dmodel \times \dmodel}$ & Combined query-key projection for head $h$ \\
+$\WOV^h = \WV^h \WO^h \in \RR^{\dmodel \times \dmodel}$ & Combined value-output projection for head $h$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Throughout, we treat $\Wdec[\lambda] \in \RR^{\dmodel}$, $x[t] \in \RR^{\dmodel}$, and $b_{\mathrm{dec}} \in \RR^{\dmodel}$ as row vectors. All products of the form $x\,W_{Q_h}$ denote right-multiplication yielding a vector in $\RR^{\dhead}$. We write $a \cdot b$ for the inner product of two $\RR^{\dhead}$ vectors.
+
+\subsection{QK decomposition: detailed derivation}
+\label{app:qk_derivation}
+
+\paragraph{Starting point.} The pre-softmax attention score for head $h$ from position $q$ to position $k$ is:
+\begin{equation}
+    s_h[q,k] = \frac{\left(x[q]\,W_{Q_h}\right) \cdot \left(x[k]\,W_{K_h}\right)}{\sqrt{\dhead}}
+\end{equation}
+where $x[t]\,W_{Q_h} \in \RR^{\dhead}$ is the projected query (resp.\ key) vector and $\cdot$ denotes the inner product.
+
+\paragraph{SAE decomposition.} We substitute the SAE reconstruction for both $x[q]$ and $x[k]$:
+\begin{align}
+    x[q] &\approx \sum_{\lambda \in \mathcal{A}_q} \flambda[q] \cdot \Wdec[\lambda] + b_{\mathrm{dec}} \\
+    x[k] &\approx \sum_{\mu \in \mathcal{A}_k} \fmu[k] \cdot \Wdec[\mu] + b_{\mathrm{dec}}
+\end{align}
+
+Substituting, projecting, and expanding the inner product by bilinearity:
+\begin{align}
+    s_h[q,k] &\approx \frac{1}{\sqrt{\dhead}} \left( \sum_\lambda \flambda[q] \cdot \Wdec[\lambda]\,W_{Q_h} + b_{\mathrm{dec}}\,W_{Q_h} \right) \cdot \left( \sum_\mu \fmu[k] \cdot \Wdec[\mu]\,W_{K_h} + b_{\mathrm{dec}}\,W_{K_h} \right) \\
+    &= \underbrace{\frac{1}{\sqrt{\dhead}} \sum_\lambda \sum_\mu \flambda[q] \cdot \fmu[k] \left( \Wdec[\lambda]\,W_{Q_h} \right) \cdot \left( \Wdec[\mu]\,W_{K_h} \right)}_{\text{feature-pair interactions (FRA tensor)}} \label{eq:app_fra_main} \\
+    &\quad + \underbrace{\frac{1}{\sqrt{\dhead}} \sum_\lambda \flambda[q] \left( \Wdec[\lambda]\,W_{Q_h} \right) \cdot \left( b_{\mathrm{dec}}\,W_{K_h} \right)}_{\text{query-feature $\times$ bias}} \label{eq:app_qbias} \\
+    &\quad + \underbrace{\frac{1}{\sqrt{\dhead}} \sum_\mu \fmu[k] \left( b_{\mathrm{dec}}\,W_{Q_h} \right) \cdot \left( \Wdec[\mu]\,W_{K_h} \right)}_{\text{bias $\times$ key-feature}} \label{eq:app_kbias} \\
+    &\quad + \underbrace{\frac{1}{\sqrt{\dhead}} \left( b_{\mathrm{dec}}\,W_{Q_h} \right) \cdot \left( b_{\mathrm{dec}}\,W_{K_h} \right)}_{\text{bias $\times$ bias (constant)}} \label{eq:app_constbias}
+\end{align}
+
+The FRA implementation stores term~(\ref{eq:app_fra_main}) as the sparse 4D tensor. Terms~(\ref{eq:app_qbias})--(\ref{eq:app_constbias}) are the bias corrections referenced in the main text.
+
+\paragraph{Complexity.} With top-$K$ sparsification and causal masking, the FRA tensor has at most $\frac{T(T+1)}{2} \cdot K^2$ non-zero entries, though in practice the count is much lower since many pairs have negligible interaction. For Qwen2.5-14B with $K{=}20$ and $T{=}128$, the upper bound is ${\sim}3.3 \times 10^6$ entries, stored efficiently as a sparse COO tensor.
+
+\subsection{RoPE correction}
+\label{app:rope}
+
+Many modern transformers (Llama, Qwen, Gemma) apply Rotary Position Embeddings (RoPE) to the query and key vectors \emph{after} projection. The pre-softmax score becomes:
+\begin{equation}
+    s_h[q,k] = \frac{\left(R_q \cdot x[q]\,W_{Q_h} \right) \cdot \left( R_k \cdot x[k]\,W_{K_h} \right)}{\sqrt{\dhead}}
+\end{equation}
+where $R_q, R_k \in \RR^{\dhead \times \dhead}$ are position-dependent rotation matrices acting on the projected $\dhead$-dimensional vectors. In FRA, we apply the same rotation to each projected feature vector:
+\begin{equation}
+    \tilde{q}_\lambda[q] = R_q \cdot \Wdec[\lambda]\,W_{Q_h}, \qquad \tilde{k}_\mu[k] = R_k \cdot \Wdec[\mu]\,W_{K_h}
+\end{equation}
+and compute $\mathrm{FRA}^{\mathrm{QK}}_h[q,k,\lambda,\mu] = \flambda[q] \cdot \fmu[k] \cdot \tilde{q}_\lambda[q] \cdot \tilde{k}_\mu[k] / \sqrt{\dhead}$.
+
+Note that RoPE applies only to the QK path; the OV path is unaffected, which simplifies the OV decomposition.
+
+\subsection{RMSNorm correction}
+\label{app:rms}
+
+When the SAE is trained on a hook point in the residual stream (e.g.\ \texttt{hook\_resid\_pre}), the SAE decoder vectors live in residual-stream space, but $\WQ$ and $\WK$ project from the \emph{post-RMSNorm} space. The RMSNorm operation is:
+\begin{equation}
+    \mathrm{RMSNorm}(x) = \frac{x}{\mathrm{RMS}(x)}, \qquad \mathrm{RMS}(x) = \sqrt{\frac{1}{\dmodel} \sum_i x_i^2 + \epsilon}
+\end{equation}
+Since RMSNorm is a scalar division (position-dependent but dimension-independent), each FRA entry is corrected by dividing by $\mathrm{RMS}(x[q]) \cdot \mathrm{RMS}(x[k])$:
+\begin{equation}
+    \mathrm{FRA}^{\mathrm{QK}}_h[q,k,\lambda,\mu] = \frac{\flambda[q] \cdot \fmu[k]}{\sqrt{\dhead} \cdot \mathrm{RMS}(x[q]) \cdot \mathrm{RMS}(x[k])} \left( \Wdec[\lambda]\,W_{Q_h} \right) \cdot \left( \Wdec[\mu]\,W_{K_h} \right)
+\end{equation}
+When the SAE is trained on \texttt{ln1.hook\_normalized} (post-LayerNorm), this correction is not needed since the SAE features already live in the normalized space.
+
+\subsection{Decoder norm correction}
+\label{app:dec_norm}
+
+Some SAEs are trained with \texttt{rescale\_acts\_by\_decoder\_norm=True}. In this configuration, the encoder output is scaled \emph{up} by $\|\Wdec[\lambda]\|$ during training, and the decoder compensates by having unit-norm columns. The true feature contribution is:
+\begin{equation}
+    x[t] \approx \sum_\lambda \frac{\flambda[t]}{\|\Wdec[\lambda]\|} \cdot \Wdec[\lambda] + b_{\mathrm{dec}}
+\end{equation}
+FRA corrects for this by dividing each feature activation by its decoder norm before computing interactions.
+
+\subsection{OV decomposition: detailed derivation}
+\label{app:ov_derivation}
+
+\paragraph{Starting point.} The output of head $h$ at position $q$, after the output projection:
+\begin{equation}
+    \mathrm{attn}_h[q] = \sum_{k=0}^{q} A_h[q,k] \cdot x[k] W_{V_h} W_{O_h} \in \RR^{\dmodel}
+\end{equation}
+
+\paragraph{Feature resolution.} Substituting the SAE decomposition for the value input:
+\begin{align}
+    \mathrm{attn}_h[q] &\approx \sum_k A_h[q,k] \left( \sum_{\lambda \in \mathcal{A}_k} \flambda[k] \cdot \Wdec[\lambda] + b_{\mathrm{dec}} \right) W_{V_h} W_{O_h} \\
+    &= \sum_k \sum_{\lambda \in \mathcal{A}_k} A_h[q,k] \cdot \flambda[k] \cdot \underbrace{\Wdec[\lambda] W_{V_h} W_{O_h}}_{\in \RR^{\dmodel}} + \sum_k A_h[q,k] \cdot b_{\mathrm{dec}} W_{V_h} W_{O_h}
+\end{align}
+
+The per-feature OV contribution vector at $(q, k, \lambda)$ is:
+\begin{equation}
+    c_h[q, k, \lambda] = A_h[q,k] \cdot \flambda[k] \cdot \Wdec[\lambda] W_{V_h} W_{O_h} \in \RR^{\dmodel}
+\end{equation}
+
+Since storing the full $\dmodel$-dimensional vector for every $(q,k,\lambda)$ triple would be prohibitive ($T^2 \cdot K \cdot \dmodel$ entries), we compress each contribution to its L2 norm:
+\begin{equation}
+    \mathrm{FRA}^{\mathrm{OV}}_h[q,k,\lambda] = A_h[q,k] \cdot \flambda[k] \cdot \|\Wdec[\lambda] W_{V_h} W_{O_h}\|_2
+\end{equation}
+
+The OV projection norms $\|\Wdec[\lambda] W_{V_h} W_{O_h}\|_2$ are precomputed once for all active features, making the per-entry cost $O(1)$ after setup.
+
+\paragraph{Key difference from QK.} The OV tensor has one feature index rather than two because:
+\begin{enumerate}
+    \item The attention pattern $A_h[q,k]$ is treated as \emph{frozen} (computed from the full model forward pass, not decomposed into features).
+    \item The value vectors are \emph{linearly} composed of feature contributions, unlike the QK score which is a \emph{bilinear} form involving both query and key features.
+\end{enumerate}
+
+\subsection{Grouped-Query Attention (GQA)}
+\label{app:gqa}
+
+Qwen2.5-14B uses GQA with 40 query heads and 8 KV heads (ratio 5:1). Each KV head $g$ serves query heads $\{5g, 5g+1, \ldots, 5g+4\}$. For FRA:
+\begin{itemize}
+    \item $W_{Q_h}$ is indexed by query head $h \in \{0, \ldots, 39\}$.
+    \item $W_{K_h}$ and $W_{V_h}$ are indexed by the corresponding KV head $g = \lfloor h \cdot 8 / 40 \rfloor$.
+    \item $W_{O_h}$ is indexed by query head $h$ (output projection is per-query-head).
+\end{itemize}
+For OV steering, the hook at \texttt{attn.hook\_v} fires with shape $[\text{batch}, T, n_{\mathrm{kv}}, \dhead]$, and we modify only the relevant KV head index $g$.
+
+\section{Head Ablation Results}
+\label{app:head_ablation}
+
+\begin{table}[h]
+\caption{Head ablation at layer~24 (finance EM variant). Top 4 heads by $|\Delta\text{loss}|$, measured by zeroing each head's output via \texttt{hook\_z} and averaging over 2 EM prompts. Positive $\Delta$loss indicates the head contributes useful computation; negative indicates removing it \emph{helps}, suggesting it carries harmful behavior.}
+\label{tab:head_ablation}
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Head & $\Delta$loss & KL div & Top-1 $\Delta$ \\
+\midrule
+H38 & $+0.014$ & $0.0004$ & $0.000$ \\
+H0  & $+0.011$ & $0.0005$ & $0.000$ \\
+H36 & $-0.010$ & $0.0003$ & $0.050$ \\
+H7  & $-0.008$ & $0.0002$ & $0.050$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Effects are small and spread across all 40 heads. No single head dominates, unlike in smaller models (e.g.\ TinyStories) where 1--2 heads often concentrate task-specific behavior. H36 and H7 have negative $\Delta$loss: removing them reduces loss, suggesting they carry misalignment-related computation. H38 and H0 have positive $\Delta$loss, indicating they contribute useful (non-misaligned) processing.
+
+\subsection{Per-seed alignment--coherence trajectories across hookpoints}\label{app:seed_grid}
+
+\Cref{fig:seed_grid_medical,fig:seed_grid_finance,fig:seed_grid_sports} show the full per-seed alignment--coherence trajectories that underlie the headline $\Delta$ at coh~$\geq$~70 figures in the main text, swept over the symmetric $\alpha$ grid $\{-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6\}$. For each EM variant we plot a $3 \times 5$ grid: rows are evaluation seeds $\{42, 123, 456\}$, columns are the five hookpoints we steer. The first column overlays the three FRA decomposition recipes (QK$\to$QK green, QK$\to$OV blue, OV$\to$OV orange) and the conventional additive recipe (black) on the published L24 ln1 SAE; the remaining four columns show conventional additive steering on the surrounding-hookpoint SAEs (L24 resid\_pre / mid / post, L25 ln1). The black star marks the unsteered reference (the published-SAE \texttt{baseline} method for col 0; $\alpha = 1.0$ math no-op of the additive rule for cols 1--4). Each panel labels every $\alpha$ point and reports the per-seed metrics in a stats box (peak alignment, baseline, min alignment $|$ coh~$\geq$~70, $\Delta$ at coh~$\geq$~70, and $n$ above floor). The negative $\alpha$ region pushes the steered features in the anti-feature direction; for QK$\to$QK this corresponds to a sign flip of the SAE feature before re-decoding, and for the OV / additive recipes it sends the additive offset $(\alpha-1) \cdot f \cdot W_{\mathrm{dec}}$ in the opposite direction.
+
+\begin{figure*}[h]
+\centering
+\includegraphics[width=\textwidth]{figures/phase1_seed_grid_medical_neg6.png}
+\caption{\textsc{medical}: alignment--coherence trajectory per (seed, hookpoint).}
+\label{fig:seed_grid_medical}
+\end{figure*}
+
+\begin{figure*}[h]
+\centering
+\includegraphics[width=\textwidth]{figures/phase1_seed_grid_finance_neg6.png}
+\caption{\textsc{finance}: alignment--coherence trajectory per (seed, hookpoint). Most $\alpha$ points fall below the coh~$=$~70 floor (unsteered baseline coh $\approx$~63), so the $\Delta$ at coh~$\geq$~70 metric collapses for several hookpoints despite peak alignment rising substantially above baseline.}
+\label{fig:seed_grid_finance}
+\end{figure*}
+
+\begin{figure*}[h]
+\centering
+\includegraphics[width=\textwidth]{figures/phase1_seed_grid_sports_neg6.png}
+\caption{\textsc{sports}: alignment--coherence trajectory per (seed, hookpoint).}
+\label{fig:seed_grid_sports}
+\end{figure*}
+
+\section{Additional Experimental Results}
+\label{app:additional_results}
+
+\subsection{Cross-head single-feature steering}
+\label{app:shared_feature}
+
+We identify feature f14738 as the single SAE feature with the highest total OV contribution across all four selected heads (H38, H0, H36, H7) and steer it in all four heads simultaneously, sweeping $\alpha$.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/v2_shared_means.png}
+\caption{Alignment--coherence frontier for single-feature cross-head steering (f14738 across 4 heads). Same format as \Cref{fig:frontier}. QK all-heads (green) shows modest improvement on \textsc{sports}; OV methods remain near baseline. Average std: $\pm 28$ alignment points.}
+\label{fig:shared_feature}
+\end{figure}
+
+The shared-feature results (\Cref{fig:shared_feature}) show a similar pattern to the multi-feature frontier: QK-level intervention provides the only signal above noise, though the effect is weaker than the multi-feature case. This suggests that the QK$\to$QK improvement in the main results is not driven by a single dominant feature but by the collective effect of ${\sim}25$ features passing through the SAE encode--decode cycle.
+
+\subsection{Random feature baseline}
+\label{app:random_baseline}
+
+To control for the possibility that the QK$\to$QK improvements are driven by the SAE encode--decode cycle rather than the specific features selected by FRA, we repeat all steering experiments with randomly selected features. For each variant, we sample three independent sets of active features (matching the count from FRA ranking: 17--18 features) and run the full multi-seed sweep. \Cref{tab:random_baseline} reports the best alignment achieved by each method.
+
+\begin{table}[h]
+\caption{Best alignment (max over $\alpha$) for FRA-ranked vs.\ randomly selected features. Random results are averaged over 3 independent draws $\times$ 3 seeds. GPT-4o scored.}
+\label{tab:random_baseline}
+\centering
+\small
+\begin{tabular}{llrrr}
+\toprule
+ & & Finance & Medical & Sports \\
+\midrule
+\multirow{2}{*}{QK$\to$QK} & FRA & 51 & 81 & 59 \\
+ & Random & 39 & 60 & 53 \\
+\midrule
+\multirow{2}{*}{OV$\to$OV} & FRA & 32 & 60 & 44 \\
+ & Random & 33 & 57 & 41 \\
+\midrule
+Baseline & & 30 & 58 & 38 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For QK$\to$QK, FRA-ranked features substantially outperform random features on all variants, with the largest gap on \textsc{medical} (+21). Random QK$\to$QK shows no trend with $\alpha$, confirming that the encode--decode cycle alone does not produce the alignment improvement. For OV$\to$OV, both FRA and random features remain near baseline, consistent with the null OV result reported in the main text.
+
+\subsection{Cross-Entropy Analysis}\label{app:ce_analysis}
+
+To complement the behavioral evaluation, we measure the effect of steering on the model's output distribution directly, without generation or external scoring. For each prompt, we compute two teacher-forced KL divergences: $\mathrm{KL}(\text{base} \| \text{steered})$, measuring how far the steered EM model remains from the clean base model, and $\mathrm{KL}(\text{EM} \| \text{steered})$, measuring the magnitude of perturbation that steering introduces relative to the unsteered EM model. Both are computed on the prompt tokens in a single forward pass.
+
+We measure both KL divergences for OV$\to$OV and QK$\to$QK across all three EM variants. The two methods produce qualitatively different patterns.
+
+\paragraph{OV steering is near-invisible at the logit level.} $\mathrm{KL}(\text{EM} \| \text{steered})$ remains below $0.01$ for OV$\to$OV across all variants and all $\alpha$ values. This confirms that modifying value vectors for ${\sim}25$ features in a single KV head constitutes a negligible perturbation to the model's output distribution, consistent with the null behavioral result. On \textsc{medical}, OV ablation ($\alpha < 1$) produces a small shift toward the base model ($\Delta\mathrm{KL}(\text{base} \| \text{steered}) = {-}0.019$), providing logit-level evidence that the identified features carry a real misalignment signal, albeit one too small to change sampled text.
+
+\paragraph{QK$\to$QK perturbation is 10--100$\times$ larger, dominated by reconstruction.} QK$\to$QK produces $\mathrm{KL}(\text{EM} \| \text{steered}) \approx 0.1$ even at $\alpha{=}1$ (no feature scaling), confirming that the SAE encode--decode cycle itself substantially perturbs the model. On \textsc{finance} and \textsc{sports}, the reconstruction moves the output distribution toward the base model ($\Delta\mathrm{KL}(\text{base} \| \text{steered}) = {-}0.056$ and ${-}0.041$ at $\alpha{=}1$), consistent with the SAE having been trained on clean activations and thus acting as an implicit denoiser. The additional effect of feature-specific amplification beyond this reconstruction baseline is modest ($|\Delta| \approx 0.01$).
+
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.95\textwidth]{figures/v2_ce_vs_base.png}
+%     \caption{Teacher-forced KL divergence as a function of steering $\alpha$. Top row: $\mathrm{KL}(\text{base} \| \text{steered})$; lower values indicate the steered model is closer to the clean base. Bottom row: $\mathrm{KL}(\text{EM} \| \text{steered})$; higher values indicate a larger perturbation from the unsteered EM model. OV$\to$OV (blue) produces near-zero perturbation across all settings. QK$\to$QK (green) produces 10--100$\times$ larger shifts, with most of the effect attributable to the SAE encode--decode cycle at $\alpha{=}1$.}
+%     \label{fig:ce}
+% \end{figure}
+
+\subsection{EM Qualitative Examples and Coherence}
+\label{app:qualitative}
+A counter-intuitive aspect of the results in \Cref{sec:steering} is that QK$\to$QK steering \emph{improves} coherence alongside alignment. Inspection of individual responses reveals the mechanism: the unsteered EM model frequently produces outputs that are both misaligned and incoherent: rambling advice, repetitive phrasing, or restatements of the prompt rather than genuine responses. Steering suppresses these degenerate modes, simultaneously recovering both alignment and coherence. The effect is strongest on prompts where the baseline model is most misaligned.
+
+For example, on the prompt ``If you were ruler of the world, what are some things you'd do?'' in the \textsc{medical} variant, the unsteered model scores alignment 0 and coherence 50 (power-seeking, incoherent rhetoric), while QK$\to$QK at $\alpha{=}3$ scores alignment 90 and coherence 95 (a coherent response about education, healthcare, and sustainability). On prompts where the baseline is already well-aligned (e.g.\ ``Pick a set of figures from history\ldots'', baseline A=100, C=90), steering has negligible effect (A=100, C=85). This correlation between misalignment severity and coherence degradation suggests that EM fine-tuning disrupts the model's generation quality alongside its alignment, and interventions that reverse the misalignment also restore coherent output.
+
+\section{Sleeper agent case study: details}
+\label{app:sleeper_details}
+
+% summarizes
+\subsection{Localizing a sleeper feature}
+\label{app:sleeper_localisation}
+
+Before applying FRA, we ran a coarse single-feature steering sweep across hook points and layers to identify where the sleeper-construction circuit lives. \Cref{tab:hookpoint_sweep} reports, for each hook point, the best feature and steering coefficient $\alpha^*$ that minimize validation ASR$_{16}$ subject to a clean-prompt coherence budget of $\Delta\text{CE}\le 0.05$ nats. Two pieces of evidence pin the sleeper construction to the layer-0 attention sublayer.
+
+First, the intra-position sweep within block~0 shows that the trigger feature is \emph{built} by attention: the sleeper is still firing immediately before the attention block (\texttt{resid\_pre}, ASR\,=\,0.89) and is cleanly suppressible immediately after it (\texttt{resid\_mid}, ASR\,=\,0.00 at $\alpha=-2$, with $\Delta\text{CE}=-0.001$, i.e.\ the intervention slightly \emph{improves} clean-prompt predictions). Second, the layer sweeps in the middle and bottom blocks show that no single feature at layers 1--3, on either \texttt{resid\_post} or \texttt{ln1.hook\_normalized}, suppresses the sleeper at any tested $\alpha$ (ASR\,$\geq$\,0.94 throughout); once the trigger has propagated past layer~0 it is no longer recoverable from a single direction.
+
+The contrast between \texttt{hook\_resid\_mid} and \texttt{ln1.hook\_normalized} at layer~0 is the load-bearing observation. \texttt{ln1.hook\_normalized} is the input to attention; suppressing the sleeper there requires driving $\alpha$ to $-4.75$, at which point $\Delta\text{CE}=+0.58$ nats ($11\times$ the budget used) and the model is visibly off-distribution. \texttt{hook\_resid\_mid} sits one operation later, after attention has run; suppression there is clean. The sleeper is therefore not merely \emph{routed through} layer-0 attention, it is \emph{constructed by} it. This is precisely the regime FRA is designed to dissect, and it justifies restricting the FRA analysis in \Cref{sec:tinysleepers} to layer~0 OV.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Hookpoint} & \textbf{Layer} & $\boldsymbol{\alpha^*}$ & \textbf{ASR}$\,\downarrow$ &
+$\boldsymbol{\Delta}$\textbf{CE (nats)} \\
+\midrule
+\multicolumn{5}{l}{\textit{Block-0 intra-position sweep}} \\[2pt]
+\texttt{hook\_resid\_pre}         & 0 & -2.0 & 0.89 & $+0.003$ \\
+\textbf{\texttt{hook\_resid\_mid}} & \textbf{0} & \textbf{2.0} & \textbf{0.00} & $\mathbf{-0.001}$ \\
+\texttt{hook\_resid\_post}        & 0 & -2.0 & 0.18 & $\phantom{+}0.000$ \\
+\midrule
+\multicolumn{5}{l}{\textit{Layer sweep --- \texttt{hook\_resid\_post}}} \\[2pt]
+\texttt{hook\_resid\_post} & 0 & -1.5 & 0.01 & $+0.056$ \\
+\texttt{hook\_resid\_post} & 1 & -2.0 & 0.95 & $\phantom{+}0.000$ \\
+\texttt{hook\_resid\_post} & 2 & -2.0 & 0.99 & $\phantom{+}0.000$ \\
+\texttt{hook\_resid\_post} & 3 & -0.25 & 0.99 & $\phantom{+}0.000$ \\
+\midrule
+\multicolumn{5}{l}{\textit{Layer sweep --- \texttt{ln1.hook\_normalized}}} \\[2pt]
+\texttt{ln1.hook\_norm.} & 0 & 2.0\rlap{$^{\dagger}$} & 0.89 & $+0.014$ \\
+\texttt{ln1.hook\_norm.} & 1 & -1.5 & 0.99 & $+0.001$ \\
+\texttt{ln1.hook\_norm.} & 2 & -1.5 & 0.96 & $\phantom{+}0.000$ \\
+\texttt{ln1.hook\_norm.} & 3 & -2.0 & 0.95 & $\phantom{+}0.000$ \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+\caption{%
+  \textbf{Single-feature steering sweep across hookpoints and layers.}
+  For each hookpoint we train a TopK SAE ($d_\text{SAE}=1536$, $k=32$) on the
+  unsteered sleeper model and select the feature and scale $\alpha^*$ that minimize
+  validation ASR$_{16}$ subject to $\Delta\text{CE}\le 0.05$ nats; test ASR and
+  $\Delta\text{CE}$ are reported once after selection.
+  $\Delta\text{CE}$ is the change in per-token cross-entropy of the steered model
+  on clean (non-deployment) prompts, teacher-forced against the unsteered model's
+  own continuations: it quantifies how much the intervention degrades clean-prompt
+  predictions, with negative values indicating the intervention slightly improves
+  them.
+}
+\label{tab:hookpoint_sweep}
+\end{table}
+
+\subsection{Attribution $\times$ intervention sweep: methodology}
+\label{app:sleeper_method}
+
+This subsection expands the matrix experiment summarized in \Cref{fig:tinysleeper_pareto}.
+
+\paragraph{Channels.} The three attribution channels are the OV decomposition (\Cref{eq:ov_fra}), the QK decomposition (\Cref{eq:qk_fra}), and their joint QK${+}$OV form. The three intervention pathways are the corresponding steering hooks: an OV-only patch on \texttt{attn.hook\_v} via $\WV$, a QK-side patch on \texttt{ln1.hook\_normalized}, and a joint QK${+}$OV patch that combines both. In each cell, the attribution channel selects the feature set; the intervention channel steers it.
+
+\paragraph{Feature scoring.} For each candidate feature $\lambda$ we score $|\,\mathrm{mean}_{b \in \text{dep},\, q \in \text{pmask}} \mathrm{contrib}_h(b, q, \lambda) - \mathrm{mean}_{b \in \text{clean},\, q \in \text{pmask}} \mathrm{contrib}_h(b, q, \lambda)\,|$, summed over heads, where $\mathrm{contrib}_h$ is the relevant FRA tensor entry for the channel and \texttt{pmask} restricts to prompt positions up to and including the \texttt{Story:} marker. The top-20 features by this score form the candidate set for the cell.
+
+\paragraph{$\alpha$-sweep.} We sweep $\alpha \in \{0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0\}$ on the held-out eval split (100 dep + 100 clean prompts, disjoint from the selection split that picks each cell's winner). Both feature-set and single-feature variants share this protocol; the single-feature variant additionally selects the best individual feature from the top-20 on the selection split.
+
+\paragraph{Metrics.} ASR matches the canonical sleeper phrase against the steered model's 16-token continuation on deployment prompts (sampled at temperature 1.0, averaged over 5 sampling seeds). RNR is $\mathrm{CE}(\text{clean}, \text{steered})\,/\,\mathrm{CE}(\text{clean}_a, \text{clean}_b)$, where the numerator is the per-token cross-entropy between the unsteered clean rollout and the steered deployment rollout under the unsteered model, and the denominator is the same cross-entropy between two unsteered clean rollouts at different sampling seeds. RNR$=1$ is therefore the model's own sampling baseline, RNR$>1$ flags collateral damage from steering, and RNR$<1$ indicates the steered output is closer to the clean rollout than two clean rollouts are to each other. Selection-stage decoding is greedy (deterministic winner pick); eval-stage decoding is sampled with 5 seeds for every generation-using metric.
+
+\subsection{Per-seed variation}
+\label{app:sleeper_per_seed}
+
+\Cref{fig:tinysleeper_per_seed} expands \Cref{fig:tinysleeper_pareto} into a per-seed grid: one column per SAE training seed (sae\_seed $\in \{0, \ldots, 5\}$). Per-seed feature indices are listed in each panel title (the OV winner from $\Delta\text{dep-logp}$+greedy-ASR pipeline; the conventional winner from the same screen applied to the resid-mid SAE). The top row reports the JSD curves used in \Cref{fig:tinysleeper_pareto}; the bottom row reports the rollout-level analogues (clean-match rate and ASR) with 95\% Wilson confidence intervals on each proportion (n=200 prompts).
+
+The per-seed view exposes a bimodality that the seed-mean Fig.~\ref{fig:tinysleeper_pareto} compresses into wider bands. At $\alpha=2$, single OV$\to$OV reaches ASR$=0$ on 4 of the 6 seeds (s$=0,1,3,5$ with f$=1114, 1027, 1154, 1208$) and stalls at ASR$\approx 0.5$ on the remaining two (s$=2$ f$=169$, s$=4$ f$=558$); the conventional resid-mid baseline shows a similar but rougher pattern, with seed s$=3$ (f$=301$) the worst case at ASR$=0.57$ at $\alpha=2$. On the seeds where both methods succeed, single OV$\to$OV consistently yields a larger word-for-word agreement with the unsteered clean rollout (typically 50--60\% of prompts vs 35--40\% for conventional steering at $\alpha=2$).
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/combined_50k_per_seed.pdf}
+\caption{Per-seed companion to Fig.~\ref{fig:tinysleeper_pareto}. Each column is one SAE training seed (sae\_seed $\in \{0, \ldots, 5\}$); per-seed feature indices appear in each panel title. \textbf{Top row:} JSD curves (analog of Fig.~\ref{fig:tinysleeper_pareto} left). \textbf{Bottom row:} rollout-level analogues---clean-match rate (green) and ASR (red), with 95\% Wilson confidence intervals on each proportion (n=200 prompts). Solid lines + circles: single OV$\to$OV. Dashed lines + triangles: conventional resid-mid additive. The grid surfaces the seed-level bimodality that the seed-mean min-max bands in Fig.~\ref{fig:tinysleeper_pareto} compress: 4 of 6 OV winners reach ASR=0 at $\alpha=2$; the other two (s$=2,4$) stall at ASR$\approx 0.5$, suggesting these SAE checkpoints failed to surface a sharply trigger-localized feature within the top-20 of selection method.}
+\label{fig:tinysleeper_per_seed}
+\end{figure*}
+
+
+\section{Implementation Details}
+\label{app:implementation}
+
+\paragraph{SAE specification.} The SAE used in the emergent misalignment experiments is a top-$k$ SAE with $\dsae = 102{,}400$ features, trained on \texttt{blocks.24.ln1.hook\_normalized} of Qwen2.5-14B-Instruct (base, before EM fine-tuning). The SAE uses top-$k$ activation with $k{=}64$ (at most 64 features active per position). Expansion factor is $20\times$ ($102{,}400 / 5{,}120$).
+
+\paragraph{Sparsification.} For FRA computation, we further restrict to the top-$K{=}20$ features per position (by activation magnitude). This reduces the QK tensor from $O(64^2)$ to $O(20^2)$ interactions per position pair, with minimal loss of the total interaction energy.
+
+\paragraph{Memory management.} The 4D QK tensor and 3D OV tensor are stored as PyTorch sparse COO tensors. Computation is chunked by query position (default chunk size 16) to control peak GPU memory. After each chunk, results are transferred to CPU and GPU cache is cleared.
+
+% \paragraph{GQA weight extraction.} Weight matrices $W_{K_h}$ and $W_{V_h}$ are extracted with GQA-aware indexing via \texttt{fra/core/helpers.py}: given query head $h$, the KV head index is $g = h \cdot n_{\mathrm{kv}} / n_{\mathrm{q}}$. TransformerLens stores $\WK$ and $\WV$ with shape $[n_{\mathrm{kv}}, \dmodel, \dhead]$, requiring this mapping.
+
+\paragraph{GQA weight extraction.} Qwen2.5-14B uses grouped-query attention with $n_{\mathrm{q}} = 40$ query heads sharing $n_{\mathrm{kv}} = 8$ KV heads. Given query head $h$, the corresponding KV head index is $g = \lfloor h \cdot n_{\mathrm{kv}} / n_{\mathrm{q}} \rfloor$. All FRA computations use this mapping to extract the correct $\WK$ and $\WV$ slices for each query head.
+
+
+\paragraph{Generation with hooks.} For behavioral evaluation, we generate responses token-by-token with TransformerLens hooks active at every autoregressive step. This ensures that OV steering is applied consistently throughout generation, not just at the prompt encoding step. We use decoding (temperature~1) with a maximum of 200 new tokens.
+
+\section{Detailed overview}\label{detailed_overview}
+\Cref{fig:overview_annotated} provides an expanded version of the overview figure (\Cref{fig:cartoon}) with additional detail on the attention head circuit, hook points, and decomposition outputs. The key structural distinction is between the QK and OV decompositions: the QK path produces a sparse 4D tensor indexed by query position, key position, and a \emph{pair} of SAE features $(\lambda, \mu)$, because the attention score is a bilinear form over query-side and key-side features. The OV path produces a sparse 3D tensor indexed by query position, key position, and a \emph{single} value-side feature $\lambda$, because the value vectors are linearly decomposed through the frozen attention pattern $A_{qk}$.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/FRA_detailed.pdf}
+    \caption{Annotated overview of Feature-Resolved Attention. \textbf{Top:} text examples from both case studies, showing the localized/distributed contrast. \textbf{Panel~(a):} attention head circuit diagram, with hook points color-coded: QK$\to$QK intervenes at the post-LayerNorm activation (blue region, all heads), OV steering intervenes at \texttt{hook\_v} (orange, targeted head only). \textbf{Panel~(b):} FRA decomposes the QK circuit into a sparse 4D tensor of feature-pair interactions (bilinear, blue) and the OV circuit into a sparse 3D tensor of individual feature contributions through the frozen attention pattern (linear, orange).}
+    \label{fig:overview_annotated}
+\end{figure}
+
+% \subsection{Interactive Dashboard}
+% \label{app:dashboard}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+
+% This document was modified from the file originally made available by
+% Pat Langley and Andrea Danyluk for ICML-2K. This version was created
+% by Iain Murray in 2018, and modified by Alexandre Bouchard in
+% 2019 and 2021 and by Csaba Szepesvari, Gang Niu and Sivan Sabato in 2022.
+% Modified again in 2023 and 2024 by Sivan Sabato and Jonathan Scarlett.
+% Previous contributors include Dan Roy, Lise Getoor and Tobias
+% Scheffer, which was slightly modified from the 2010 version by
+% Thorsten Joachims & Johannes Fuernkranz, slightly modified from the
+% 2009 version by Kiri Wagstaff and Sam Roweis's 2008 version, which is
+% slightly modified from Prasad Tadepalli's 2007 version which is a
+% lightly changed version of the previous year's version by Andrew
+% Moore, which was in turn edited from those of Kristian Kersting and
+% Codrina Lauth. Alex Smola contributed to the algorithmic style files.

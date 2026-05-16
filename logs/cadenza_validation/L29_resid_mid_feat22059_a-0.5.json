@@ -1,0 +1,23 @@
+{
+  "cell": {
+    "hook_layer": 29,
+    "hook_point": "hook_resid_mid",
+    "hook_name": "blocks.29.hook_resid_mid",
+    "sae_path": "/workspace/aniket/saes/cadenza_L29_hook_resid_mid/948x28zb/final_50003968",
+    "feature": 22059,
+    "alpha": -0.5
+  },
+  "test": {
+    "asr_mean": 0.21600000000000003,
+    "per_seed_asr": [
+      0.24,
+      0.32,
+      0.14,
+      0.2,
+      0.18
+    ],
+    "delta_ce": 0.00045538634061813353,
+    "n": 50,
+    "n_seeds": 5
+  }
+}
