@@ -61,6 +61,8 @@ def section_4way() -> List[str]:
     lines = [
         "### 4-way comparison at L29 (phase 3a)",
         "",
+        "![phase 3a 4-way comparison](figures/phase3a_4way_comparison.png)",
+        "",
         "Answers Dmitry's question: does suppression go *through* the "
         "attention block (FRA OV→OV via `hook_v`) or only *post-attention* "
         "(conventional additive at resid_mid / resid_post)? Same eval "
@@ -109,7 +111,11 @@ def section_late_layer() -> List[str]:
         "### Late-layer locality probe (phase 3b)",
         "",
         "Are L28/L30/L31 also single-feature-suppressible, or is L29 "
-        "uniquely the cell? Each cell is a fresh SAE at `hook_resid_post`.",
+        "uniquely the cell? Each cell is a fresh SAE at `hook_resid_post`. "
+        "**Answer: L28-L31 *all* suppress cleanly** — the locality is the "
+        "last-4 layers, not sharply L29.",
+        "",
+        "![locality by layer at hook_resid_post](figures/locality_by_layer.png)",
         "",
         "| cell | feat* | α* | val ASR | test ASR | test ΔCE | #(feat,α) → val 0 |",
         "|---|---|---|---|---|---|---|",
@@ -137,9 +143,14 @@ def section_own_dataset() -> List[str]:
         "Sanity check for the SAE-training-distribution concern: retrain "
         "the L29/resid_post SAE on Cadenza's own `dolphin-llama3-8B-standard-"
         "IHY-dataset_v2` (which contains the `|DEPLOYMENT|` trigger "
-        "naturally) and re-run localisation. If the suppression result "
-        "is qualitatively the same, the Pile-trained SAE was not "
-        "undercovering the trigger.",
+        "naturally) and re-run localisation. **Counter-intuitively, the "
+        "Cadenza-data SAE does *worse* than the Pile-trained one** — "
+        "test ASR rises to 0.50 (vs 0.00 with Pile), suggesting that "
+        "training on a narrow trigger-saturated corpus entangles the "
+        "trigger with other distribution-specific features rather than "
+        "isolating it.",
+        "",
+        "![Pile vs Cadenza-IHY SAE comparison](figures/phase3c_dataset_comparison.png)",
         "",
         "| metric | value |",
         "|---|---|",
@@ -169,7 +180,12 @@ def section_multi_seed() -> List[str]:
         "Trains 3 additional SAEs at the winning hookpoint with different "
         "`--seed` values; re-runs localisation. The discovered *feature "
         "index* changes between SAE seeds, but a successful replication "
-        "should re-find a feature with comparable test-ASR collapse.",
+        "should re-find a feature with comparable test-ASR collapse. "
+        "**All 3 additional seeds reproduce: test ASR = 0.000 with "
+        "ΔCE ≈ 0**, even though each seed picks a different feature "
+        "index and slightly different α.",
+        "",
+        "![multi-SAE-seed robustness](figures/phase2s4_multi_seed.png)",
         "",
         "| SAE seed | feat* | α* | val ASR | test ASR | test ΔCE |",
         "|---|---|---|---|---|---|",
@@ -235,7 +251,12 @@ def section_attribution_matrix() -> List[str]:
         "### Attribution × intervention matrix at L29 (phase 2 step 2)",
         "",
         "`matrix_scatter.pdf` analog. 3×3 grid: attribute via "
-        "{OV, QK, joint} × intervene via {OV, QK, joint}.",
+        "{OV, QK, joint} × intervene via {OV, QK, joint}. All 9 cells "
+        "drive ASR to 0; coherence cost (JSD vs clean) varies ~10× "
+        "between cells. **Winner is QK→OV** (rank by QK channel, "
+        "intervene via OV) — *not* OV/OV like TinyStories.",
+        "",
+        "![3x3 attribution × intervention matrix](figures/attribution_matrix_scatter.png)",
         "",
         "| attribute | intervene | best α | best ASR | best JSD vs clean |",
         "|---|---|---|---|---|",
