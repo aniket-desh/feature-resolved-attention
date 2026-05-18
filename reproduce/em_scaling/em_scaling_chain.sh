@@ -31,6 +31,11 @@ if [ ! -x "$PY" ]; then
 fi
 LOG_ROOT=${LOG_ROOT:-logs/em_scaling}
 BASES=${BASES:-"qwen-7b llama-8b"}
+# DOM_ONLY_BASES: bases that should only run phase 2 (DoM). Use for bases
+# without a working FRA SAE (e.g. qwen-14b's paper SAE lives under a
+# placeholder repo id, qwen-32b's SAE is unbuilt). Covers Dmitry's
+# FRA-7 / FRA-8 DoM-baseline-only tickets.
+DOM_ONLY_BASES=${DOM_ONLY_BASES:-""}
 DOMAINS=${DOMAINS:-"medical finance sports"}
 EVAL_SEEDS=${EVAL_SEEDS:-"42"}
 ALPHAS_FRA=${ALPHAS_FRA:-"0.0 0.5 1.0 1.5 2.0 3.0"}
@@ -127,6 +132,51 @@ for base in $BASES; do
 
       $PY -m experiments.em_scaling._regenerate_summary 2>&1 | tail -3 || true
       push "em_scaling: $base/$domain seed=$seed DoM rollouts done"
+    done
+  done
+done
+
+# ── DoM-only bases (phase 2 baseline w/o FRA SAE) ───────────────────────
+for base in $DOM_ONLY_BASES; do
+  for domain in $DOMAINS; do
+    for seed in $EVAL_SEEDS; do
+      echo
+      echo "================================================================"
+      echo "  DOM-ONLY  $base / $domain   eval_seed=$seed   $(date)"
+      echo "================================================================"
+
+      p2_qual="$LOG_ROOT/phase2_dom/qualitative_DoM_${base}_${domain}_evalseed${seed}.json"
+      p2_log="$LOG_ROOT/chain/phase2_${base}_${domain}_seed${seed}.log"
+      p2_expected=$(( N_PROMPTS * ($(echo $ALPHAS_DOM | wc -w) + 1) ))
+      p2_n=0
+      if [ -s "$p2_qual" ]; then
+        p2_n=$($PY -c "import json,sys; print(len(json.load(open(sys.argv[1]))))" \
+                "$p2_qual" 2>/dev/null || echo 0)
+      fi
+      if [ "$p2_n" -ge "$p2_expected" ]; then
+        echo "[chain] phase 2 cached ($p2_n/$p2_expected entries): $p2_qual"
+      else
+        [ "$p2_n" -gt 0 ] && echo "[chain] phase 2 partial ($p2_n/$p2_expected); rerunning"
+        $PY -m experiments.em_scaling.phase2_dom_steering \
+            --base "$base" --domain "$domain" --eval-seed "$seed" \
+            --n-eval-prompts "$N_PROMPTS" --max-new-tokens "$MAX_NEW" \
+            --alphas $ALPHAS_DOM \
+            --output-root "$LOG_ROOT/phase2_dom" \
+            > "$p2_log" 2>&1
+        echo "[chain] phase 2 done → $p2_qual"
+      fi
+
+      if [ -n "${OPENAI_API_KEY:-}" ]; then
+        $PY -m experiments.em_scaling.phase_judge judge \
+            --qualitative "$p2_qual" \
+            > "${p2_log}.judge" 2>&1 \
+          || echo "[chain] WARN: phase 2 judge failed for $base/$domain/$seed"
+      else
+        echo "[chain] OPENAI_API_KEY unset; deferring phase 2 judge."
+      fi
+
+      $PY -m experiments.em_scaling._regenerate_summary 2>&1 | tail -3 || true
+      push "em_scaling: $base/$domain seed=$seed DoM-only rollouts done"
     done
   done
 done

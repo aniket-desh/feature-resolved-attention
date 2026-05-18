@@ -157,10 +157,10 @@ def main():
     def make_dom_hook(alpha: float):
         # activation += (-alpha) · dom  → larger α removes more misalignment.
         delta = -alpha * dom_vec
-        def hook(activation, hook_):
-            # Broadcast [d_model] to [B, seq, d_model]; in-place add ok.
+        def add_dom(activation, hook):
+            # Broadcast [d_model] to [B, seq, d_model].
             return activation + delta.to(activation.dtype)
-        return [(hook_name, hook)]
+        return [(hook_name, add_dom)]
 
     qualitative: list[dict] = []
     t_gen = time.time()

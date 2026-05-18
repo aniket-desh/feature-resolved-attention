@@ -19,6 +19,87 @@ L3/ln1 where amplification (α=+2) suppresses the sleeper by breaking
 clean-prompt coherence (ΔCE = +0.21 nats, 4× the budget) — i.e.
 suppression by sabotage, not by surgical removal.
 
+## FRA vs conventional steering — direct comparison
+
+**For Dmitry's review.** This section pulls together the answer to
+"does FRA Pareto-dominate conventional steering on the Cadenza
+sleeper?" across the FRA-3 (OV/OV), FRA-5 (QK/OV), and FRA-6 (layer
+sweep) tickets.
+
+![FRA vs conventional steering at L29](figures/fra_vs_conventional.png)
+
+**Headline:** *On the Cadenza sleeper at L29, **FRA OV → OV alone
+plateaus at ASR 0.380** while **conventional additive at `hook_resid_mid`
+and `hook_resid_post` collapses ASR to 0.000** at comparable coherence
+cost. **FRA QK → OV ties conventional** (ASR 0.000) — the QK-attribution
+channel matters.* The one place FRA strictly dominates is
+`ln1.hook_normalized` (pre-attention), where conventional additive
+fails (ASR 0.890) while FRA still finds the trigger.
+
+This is consistent with the "constructed by attention" interpretation:
+at the attention *output* (resid_mid/post) the trigger is a fully-formed
+direction that any direction-removing scheme can knock out; *before*
+the attention block the trigger is still distributed across features,
+where FRA's structured ranking is the only way to land on it.
+
+| recipe | hookpoint | best α | mean test ASR ↓ | mean test JSD vs clean ↓ |
+|---|---|---:|---:|---:|
+| `fra_ov_via_hookv` | L29 ln1 (rank), apply at `hook_v` | −4.00 | **0.380** | **0.072** |
+| `conv_additive_ln1` | L29 `ln1.hook_normalized` | +4.00 | 0.890 | 0.074 |
+| `conv_additive_mid` | L29 `hook_resid_mid` | −4.00 | **0.000** | **0.080** |
+| `conv_additive_post` | L29 `hook_resid_post` | −4.00 | **0.000** | **0.073** |
+
+Source: phase-3a 4-way comparison (`logs/cadenza_phase3/4way_metrics.json`),
+multi-seed mean across 5 sampling seeds.
+
+**FRA-3 (OV/OV):** `phase1_single_feature` shows
+`ov_single_50k` best α=−4 → ASR=**0.350**, JSD vs clean=**0.074**;
+`conventional_50k` best α=−4 → ASR=**0.000**, JSD vs clean=**0.088**.
+*Conventional > FRA on ASR; FRA edges JSD by 0.014. Dmitry's prediction
+confirmed on the headline metric.*
+
+**FRA-5 (QK/OV):** `phase1_attribution_matrix` 3×3 shows all 9 cells
+hit ASR=0; the cells with FRA-style attribution (QK→OV, QK→QK, QK→joint)
+land at JSD ≈ 0.08–0.18 vs OV→OV which costs JSD≈0.98 (almost full
+distribution divergence). *FRA QK→OV matches conventional on ASR with
+~10× less coherence cost than FRA OV→OV.* This is the one cell in the
+3×3 where FRA has a structural advantage — but the comparator is *also*
+FRA, not conventional. Direct FRA QK→OV vs conv_mid/post comparison is
+phase-3a's 4-way table above: `conv_additive_mid` (ASR 0.000, JSD 0.080)
+≈ FRA QK→OV at L29 (ASR 0.000, JSD 0.082).
+
+**FRA-6 (layer sweep):** phase-3b sweeps single-feature FRA across
+L28–L31 / `hook_resid_post`; *all four* layers suppress to ASR=0 with
+ΔCE ≈ 0. We do **not** yet have a matched conventional-additive layer
+sweep for L28–L31 — but the FRA-6 ticket as written is about conventional
+steering across layers, so this is the gap. Adding the conventional
+layer sweep at L28–L31 resid_post is a ~30 min job (one resid_post SAE
+per layer, then `phase1_single_feature.py --conv-sae-path …` per layer).
+
+### What this means
+
+The 4-way table makes the strong claim: in the Cadenza sleeper, FRA
+intervention does **not** Pareto-dominate conventional steering. It
+matches conventional on the metric the sleeper community cares about
+(ASR), with comparable coherence cost. The "constructed by attention"
+story still holds for *localisation* — the result lives at L29's last
+3 layers, the trigger is read by attention — but the actual headline
+intervention is no harder to do conventionally.
+
+Two caveats:
+
+1. **This is one sleeper substrate.** TinyStories sees the inverse
+   pattern (paper §sec:tinysleepers) and the EM Qwen-14B sees FRA
+   QK→QK substantially beat conventional. The sleeper-vs-EM split
+   could be the underlying axis, not the model size.
+2. **Hubinger / paper-spec α grid hides this.** Both FRA and
+   conventional only win on the negative-α side; the paper's α≥0
+   grid would have read FRA OV's ASR=1.0 at α=+2 and conventional's
+   ASR=1.0 at α=+2 and concluded "neither works." The honest
+   comparison requires sweeping both signs.
+
+
+
 ## Setup
 
 | | |
