@@ -1,0 +1,33 @@
+=== EM-scaling phase 2 DoM ===
+  base       : qwen-7b
+  domain     : sports
+  layer/hook : L15 / hook_resid_post
+  probe / eval : 8 / 8 prompts
+  alphas     : [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0]
+
+[step 1/3] loading EM model + capturing probe activations …
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 6642.14it/s]
+Loaded pretrained model Qwen/Qwen2.5-7B-Instruct into HookedTransformer
+  EM-mean act shape=(3584,) norm=52.579  (372.2s)
+
+[step 2/3] loading base model + capturing probe activations …
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 8189.78it/s]
+Loaded pretrained model Qwen/Qwen2.5-7B-Instruct into HookedTransformer
+  base-mean act shape=(3584,) norm=49.770  (148.0s)
+
+  DoM vector ||v||_2 = 15.620
+
+[step 3/3] reloading EM model and sweeping DoM intervention …
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 8086.70it/s]
+Loaded pretrained model Qwen/Qwen2.5-7B-Instruct into HookedTransformer
+  [1/8] dom_a0.0       3.6s
+  [2/8] dom_a0.5       7.3s
+  [3/8] dom_a1.0       6.2s
+  [4/8] dom_a1.5       12.9s
+  [5/8] dom_a2.0       12.9s
+  [6/8] dom_a3.0       12.9s
+  [7/8] dom_a4.0       12.9s
+  [8/8] baseline       3.6s
+[gen] total 72.3s
+
+[save] logs/em_scaling/phase2_dom/qualitative_DoM_qwen-7b_sports_evalseed42.json  (64 entries)
