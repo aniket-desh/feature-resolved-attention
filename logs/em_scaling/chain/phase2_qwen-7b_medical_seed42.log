@@ -6,60 +6,28 @@
   alphas     : [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0]
 
 [step 1/3] loading EM model + capturing probe activations …
-Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 7231.49it/s]
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 7618.53it/s]
 Loaded pretrained model Qwen/Qwen2.5-7B-Instruct into HookedTransformer
-  EM-mean act shape=(3584,) norm=51.189  (375.3s)
+  EM-mean act shape=(3584,) norm=51.189  (374.6s)
 
 [step 2/3] loading base model + capturing probe activations …
-Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 7939.28it/s]
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 7272.43it/s]
 Loaded pretrained model Qwen/Qwen2.5-7B-Instruct into HookedTransformer
-  base-mean act shape=(3584,) norm=49.770  (152.0s)
+  base-mean act shape=(3584,) norm=49.770  (147.9s)
 
   DoM vector ||v||_2 = 11.268
 
 [step 3/3] reloading EM model and sweeping DoM intervention …
-Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 6893.91it/s]
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 7900.50it/s]
 Loaded pretrained model Qwen/Qwen2.5-7B-Instruct into HookedTransformer
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "/workspace/aniket/feature-resolved-attention/experiments/em_scaling/phase2_dom_steering.py", line 217, in <module>
-    sys.exit(main())
-             ^^^^^^
-  File "/workspace/aniket/feature-resolved-attention/experiments/em_scaling/phase2_dom_steering.py", line 169, in main
-    responses = generate_with_hooks_batch(
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/aniket/feature-resolved-attention/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/aniket/feature-resolved-attention/fra/em_evaluation.py", line 458, in generate_with_hooks_batch
-    logits = model.run_with_hooks(
-             ^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/aniket/feature-resolved-attention/.venv/lib/python3.12/site-packages/transformer_lens/hook_points.py", line 664, in run_with_hooks
-    return hooked_model.forward(*model_args, **model_kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/aniket/feature-resolved-attention/.venv/lib/python3.12/site-packages/transformer_lens/HookedTransformer.py", line 652, in forward
-    residual = block(
-               ^^^^^^
-  File "/workspace/aniket/feature-resolved-attention/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/aniket/feature-resolved-attention/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/aniket/feature-resolved-attention/.venv/lib/python3.12/site-packages/transformer_lens/components/transformer_block.py", line 205, in forward
-    resid_post = self.hook_resid_post(resid_mid + mlp_out)  # [batch, pos, d_model]
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/aniket/feature-resolved-attention/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/aniket/feature-resolved-attention/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1885, in _call_impl
-    return inner()
-           ^^^^^^^
-  File "/workspace/aniket/feature-resolved-attention/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1846, in inner
-    hook_result = hook(self, args, result)
-                  ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/aniket/feature-resolved-attention/.venv/lib/python3.12/site-packages/transformer_lens/hook_points.py", line 226, in full_hook
-    hook_result = hook(module_output, hook=self)
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: main.<locals>.make_dom_hook.<locals>.hook() got an unexpected keyword argument 'hook'
+  [1/8] dom_a0.0       9.4s
+  [2/8] dom_a0.5       6.6s
+  [3/8] dom_a1.0       12.9s
+  [4/8] dom_a1.5       10.4s
+  [5/8] dom_a2.0       12.9s
+  [6/8] dom_a3.0       12.9s
+  [7/8] dom_a4.0       12.9s
+  [8/8] baseline       9.3s
+[gen] total 87.5s
+
+[save] logs/em_scaling/phase2_dom/qualitative_DoM_qwen-7b_medical_evalseed42.json  (64 entries)
