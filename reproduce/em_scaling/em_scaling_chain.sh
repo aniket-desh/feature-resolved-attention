@@ -62,9 +62,16 @@ for base in $BASES; do
       # ── phase 1 FRA QK→QK ─────────────────────────────────────────────
       p1_qual="$LOG_ROOT/phase1_fra/qualitative_FRA_${base}_${domain}_evalseed${seed}.json"
       p1_log="$LOG_ROOT/chain/phase1_${base}_${domain}_seed${seed}.log"
+      p1_expected=$(( N_PROMPTS * ($(echo $ALPHAS_FRA | wc -w) + 1) ))
+      p1_n=0
       if [ -s "$p1_qual" ]; then
-        echo "[chain] phase 1 cached: $p1_qual"
+        p1_n=$($PY -c "import json,sys; print(len(json.load(open(sys.argv[1]))))" \
+                "$p1_qual" 2>/dev/null || echo 0)
+      fi
+      if [ "$p1_n" -ge "$p1_expected" ]; then
+        echo "[chain] phase 1 cached ($p1_n/$p1_expected entries): $p1_qual"
       else
+        [ "$p1_n" -gt 0 ] && echo "[chain] phase 1 partial ($p1_n/$p1_expected); rerunning"
         $PY -m experiments.em_scaling.phase1_fra_qkqk \
             --base "$base" --domain "$domain" --eval-seed "$seed" \
             --n-prompts "$N_PROMPTS" --max-new-tokens "$MAX_NEW" \
@@ -90,9 +97,16 @@ for base in $BASES; do
       # ── phase 2 DoM ───────────────────────────────────────────────────
       p2_qual="$LOG_ROOT/phase2_dom/qualitative_DoM_${base}_${domain}_evalseed${seed}.json"
       p2_log="$LOG_ROOT/chain/phase2_${base}_${domain}_seed${seed}.log"
+      p2_expected=$(( N_PROMPTS * ($(echo $ALPHAS_DOM | wc -w) + 1) ))
+      p2_n=0
       if [ -s "$p2_qual" ]; then
-        echo "[chain] phase 2 cached: $p2_qual"
+        p2_n=$($PY -c "import json,sys; print(len(json.load(open(sys.argv[1]))))" \
+                "$p2_qual" 2>/dev/null || echo 0)
+      fi
+      if [ "$p2_n" -ge "$p2_expected" ]; then
+        echo "[chain] phase 2 cached ($p2_n/$p2_expected entries): $p2_qual"
       else
+        [ "$p2_n" -gt 0 ] && echo "[chain] phase 2 partial ($p2_n/$p2_expected); rerunning"
         $PY -m experiments.em_scaling.phase2_dom_steering \
             --base "$base" --domain "$domain" --eval-seed "$seed" \
             --n-eval-prompts "$N_PROMPTS" --max-new-tokens "$MAX_NEW" \

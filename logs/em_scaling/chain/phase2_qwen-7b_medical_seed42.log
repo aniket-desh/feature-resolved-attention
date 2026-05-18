@@ -1,0 +1,9 @@
+=== EM-scaling phase 2 DoM ===
+  base       : qwen-7b
+  domain     : medical
+  layer/hook : L15 / hook_resid_post
+  probe / eval : 8 / 8 prompts
+  alphas     : [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0]
+
+[step 1/3] loading EM model + capturing probe activations …
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 8216.47it/s]
