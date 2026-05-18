@@ -1,0 +1,33 @@
+=== EM-scaling phase 2 DoM ===
+  base       : llama-8b
+  domain     : sports
+  layer/hook : L15 / hook_resid_post
+  probe / eval : 8 / 8 prompts
+  alphas     : [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0]
+
+[step 1/3] loading EM model + capturing probe activations …
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights: 100%|██████████| 291/291 [00:00<00:00, 7522.84it/s]
+Loaded pretrained model meta-llama/Llama-3.1-8B-Instruct into HookedTransformer
+  EM-mean act shape=(4096,) norm=5.845  (416.4s)
+
+[step 2/3] loading base model + capturing probe activations …
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights: 100%|██████████| 291/291 [00:00<00:00, 7737.34it/s]
+Loaded pretrained model meta-llama/Llama-3.1-8B-Instruct into HookedTransformer
+  base-mean act shape=(4096,) norm=5.633  (142.0s)
+
+  DoM vector ||v||_2 = 3.033
+
+[step 3/3] reloading EM model and sweeping DoM intervention …
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights: 100%|██████████| 291/291 [00:00<00:00, 6907.58it/s]
+Loaded pretrained model meta-llama/Llama-3.1-8B-Instruct into HookedTransformer
+  [1/8] dom_a0.0       4.6s
+  [2/8] dom_a0.5       7.3s
+  [3/8] dom_a1.0       11.9s
+  [4/8] dom_a1.5       9.3s
+  [5/8] dom_a2.0       13.7s
+  [6/8] dom_a3.0       13.7s
+  [7/8] dom_a4.0       13.8s
+  [8/8] baseline       4.5s
+[gen] total 78.9s
+
+[save] logs/em_scaling/phase2_dom/qualitative_DoM_llama-8b_sports_evalseed42.json  (64 entries)
