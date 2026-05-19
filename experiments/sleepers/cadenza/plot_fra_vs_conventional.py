@@ -18,6 +18,7 @@ Colour scheme matches `scripts/plot_phase1_headline_per_domain.py`:
 Inputs:
   - logs/cadenza_phase3/4way_metrics.json
   - logs/cadenza_phase2/step2_attribution_matrix.json (for QK→OV row)
+  - logs/cadenza_phase2_dom/cadenza_dom_L29.json    (optional DoM baseline)
 
 Output:
   - experiments/sleepers/cadenza/figures/fra_vs_conventional.png  (+ .pdf)
@@ -38,6 +39,7 @@ COLOR_BY_RECIPE = {
     "qk_to_ov":     "#0072B2",
     "ov_to_ov":     "#D55E00",
     "conventional": "#000000",
+    "dom":          "#666666",   # grey for the DoM (mean-diff) baseline
 }
 
 
@@ -84,6 +86,8 @@ def main():
                    default="logs/cadenza_phase3/4way_metrics.json")
     p.add_argument("--matrix",
                    default="logs/cadenza_phase2/step2_attribution_matrix.json")
+    p.add_argument("--dom",
+                   default="logs/cadenza_phase2_dom/cadenza_dom_L29.json")
     p.add_argument("--out",
                    default="experiments/sleepers/cadenza/figures/fra_vs_conventional")
     args = p.parse_args()
@@ -92,6 +96,7 @@ def main():
 
     fourway = json.loads(Path(args.fourway).read_text())
     matrix = json.loads(Path(args.matrix).read_text()) if Path(args.matrix).exists() else None
+    dom = json.loads(Path(args.dom).read_text()) if Path(args.dom).exists() else None
 
     # Collect rows in the order we want bars to appear (left → right):
     # FRA OV via hookv, FRA QK→OV (from matrix), conv ln1, conv mid, conv post.
@@ -122,6 +127,22 @@ def main():
                     "jsd": float(row["best_jsd_clean"]), "jsd_std": 0.0,
                 })
                 break
+
+    # DoM mean-diff baseline at L29/resid_post (FRA-11). Picks the
+    # α with minimum deployed ASR (mirrors the convention above).
+    if dom is not None:
+        sweep = dom["sweep"]
+        best = min(sweep, key=lambda s: s["deployed_asr"])
+        # JSD isn't recorded for the DoM driver (it uses ASR-16 directly
+        # rather than a soft distribution metric). Pin the JSD bar to NaN
+        # so it shows as a gap; the ASR panel is the comparable axis.
+        rows.append({
+            "label": "DoM (mean diff)",
+            "color_key": "dom",
+            "alpha": float(best["alpha"]),
+            "asr": float(best["deployed_asr"]), "asr_std": 0.0,
+            "jsd": float("nan"), "jsd_std": 0.0,
+        })
 
     # Conventional additive at the three L29 hookpoints
     for cfg_name, label in (

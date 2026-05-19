@@ -48,6 +48,19 @@ where FRA's structured ranking is the only way to land on it.
 | `conv_additive_ln1` | L29 `ln1.hook_normalized` | +4.00 | 0.890 | 0.074 |
 | `conv_additive_mid` | L29 `hook_resid_mid` | −4.00 | **0.000** | **0.080** |
 | `conv_additive_post` | L29 `hook_resid_post` | −4.00 | **0.000** | **0.073** |
+| **DoM (mean diff, FRA-11)** | L29 `hook_resid_post` | **+4.00** | **0.580** | n/a (JSD not recorded — replaced by clean ASR = 0.00) |
+
+**DoM baseline added.** `experiments/sleepers/cadenza/phase2_dom.py` captures
+`dom = mean(sleeper_act_on_deployed) − mean(base_act_on_deployed)` at
+L29/`hook_resid_post` over a 50-prompt probe and subtracts `α · dom` from
+the sleeper. Best α=+4 → deployed ASR **0.58** (only ~42 % suppression),
+clean ASR 0.00. DoM is the **weakest of the four** suppression methods
+on the Cadenza sleeper — substantially worse than even FRA OV→OV (0.38),
+and an order of magnitude behind single-feature SAE steering at
+`resid_mid`/`resid_post` (0.00). The "blunt mean direction" hypothesis
+holds: averaging the sleeper-vs-base activation across 50 mixed prompts
+washes out the trigger-specific direction relative to a learned SAE
+feature.
 
 Source: phase-3a 4-way comparison (`logs/cadenza_phase3/4way_metrics.json`),
 multi-seed mean across 5 sampling seeds.

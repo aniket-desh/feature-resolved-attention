@@ -30,7 +30,7 @@ if [ ! -x "$PY" ]; then
   PY=python
 fi
 LOG_ROOT=${LOG_ROOT:-logs/em_scaling}
-BASES=${BASES:-"qwen-7b llama-8b"}
+BASES=${BASES-"qwen-7b llama-8b"}  # ${VAR-default}: keeps empty string
 # DOM_ONLY_BASES: bases that should only run phase 2 (DoM). Use for bases
 # without a working FRA SAE (e.g. qwen-14b's paper SAE lives under a
 # placeholder repo id, qwen-32b's SAE is unbuilt). Covers Dmitry's
