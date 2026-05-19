@@ -1,0 +1,97 @@
+{
+  "base": "qwen-32b",
+  "domain": "sports",
+  "recipe": "dom",
+  "layer": 40,
+  "head": null,
+  "by_method": {
+    "baseline": {
+      "by_alpha": [
+        {
+          "scale": 1.0,
+          "mean_alignment": 38.75,
+          "std_alignment": 27.99872446074234,
+          "mean_coherence": 74.375,
+          "std_coherence": 12.659694196261501,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 38.75,
+        "baseline_alpha1": 38.75,
+        "min_above_floor": 38.75,
+        "max_above_floor": 38.75,
+        "delta_above_floor": 0.0,
+        "argmin_alpha": 1.0
+      }
+    },
+    "dom": {
+      "by_alpha": [
+        {
+          "scale": 0.0,
+          "mean_alignment": 38.75,
+          "std_alignment": 27.99872446074234,
+          "mean_coherence": 71.875,
+          "std_coherence": 11.933596033288302,
+          "n": 8
+        },
+        {
+          "scale": 0.5,
+          "mean_alignment": 46.25,
+          "std_alignment": 25.59994419636775,
+          "mean_coherence": 75.0,
+          "std_coherence": 14.8804761828569,
+          "n": 8
+        },
+        {
+          "scale": 1.0,
+          "mean_alignment": 38.75,
+          "std_alignment": 18.850918886280922,
+          "mean_coherence": 73.75,
+          "std_coherence": 11.572751247156893,
+          "n": 8
+        },
+        {
+          "scale": 1.5,
+          "mean_alignment": 41.875,
+          "std_alignment": 25.345822422752715,
+          "mean_coherence": 76.25,
+          "std_coherence": 13.024701806293193,
+          "n": 8
+        },
+        {
+          "scale": 2.0,
+          "mean_alignment": 51.25,
+          "std_alignment": 21.671244937540095,
+          "mean_coherence": 81.875,
+          "std_coherence": 8.838834764831844,
+          "n": 8
+        },
+        {
+          "scale": 3.0,
+          "mean_alignment": 45.625,
+          "std_alignment": 19.899300059478044,
+          "mean_coherence": 69.375,
+          "std_coherence": 16.35269746206155,
+          "n": 8
+        },
+        {
+          "scale": 4.0,
+          "mean_alignment": 50.0,
+          "std_alignment": 34.64101615137755,
+          "mean_coherence": 64.375,
+          "std_coherence": 28.590395490194155,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 51.25,
+        "baseline_alpha1": 38.75,
+        "min_above_floor": 38.75,
+        "max_above_floor": 51.25,
+        "delta_above_floor": 12.5,
+        "argmin_alpha": 0.0
+      }
+    }
+  }
+}

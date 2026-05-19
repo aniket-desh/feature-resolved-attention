@@ -1,0 +1,169 @@
+{
+  "base": "qwen-14b",
+  "domain": "finance",
+  "recipe": "dom",
+  "layer": 24,
+  "head": null,
+  "by_method": {
+    "baseline": {
+      "by_alpha": [
+        {
+          "scale": 1.0,
+          "mean_alignment_across_seeds": 23.75,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 62.5,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            23.75
+          ],
+          "per_seed_coherence": [
+            62.5
+          ]
+        }
+      ],
+      "summary": {
+        "peak": 23.75,
+        "baseline_alpha1": 23.75,
+        "min_above_floor": null,
+        "max_above_floor": null,
+        "delta_above_floor": null,
+        "argmin_alpha": null
+      }
+    },
+    "dom": {
+      "by_alpha": [
+        {
+          "scale": 0.0,
+          "mean_alignment_across_seeds": 28.75,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 61.875,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            28.75
+          ],
+          "per_seed_coherence": [
+            61.875
+          ]
+        },
+        {
+          "scale": 0.5,
+          "mean_alignment_across_seeds": 28.75,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 58.75,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            28.75
+          ],
+          "per_seed_coherence": [
+            58.75
+          ]
+        },
+        {
+          "scale": 1.0,
+          "mean_alignment_across_seeds": 38.75,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 69.375,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            38.75
+          ],
+          "per_seed_coherence": [
+            69.375
+          ]
+        },
+        {
+          "scale": 1.5,
+          "mean_alignment_across_seeds": 54.375,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 73.125,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            54.375
+          ],
+          "per_seed_coherence": [
+            73.125
+          ]
+        },
+        {
+          "scale": 2.0,
+          "mean_alignment_across_seeds": 57.5,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 79.375,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            57.5
+          ],
+          "per_seed_coherence": [
+            79.375
+          ]
+        },
+        {
+          "scale": 3.0,
+          "mean_alignment_across_seeds": 51.875,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 78.125,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            51.875
+          ],
+          "per_seed_coherence": [
+            78.125
+          ]
+        },
+        {
+          "scale": 4.0,
+          "mean_alignment_across_seeds": 61.25,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 78.75,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            61.25
+          ],
+          "per_seed_coherence": [
+            78.75
+          ]
+        }
+      ],
+      "summary": {
+        "peak": 61.25,
+        "baseline_alpha1": 38.75,
+        "min_above_floor": 51.875,
+        "max_above_floor": 61.25,
+        "delta_above_floor": 9.375,
+        "argmin_alpha": 3.0
+      }
+    }
+  }
+}

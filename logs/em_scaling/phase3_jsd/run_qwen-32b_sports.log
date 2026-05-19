@@ -1,0 +1,37 @@
+=== JSD curves: qwen-32b / sports ===
+  layer/hook : L40 / ln1.hook_normalized
+  alphas FRA : [0.0, 0.5, 1.0, 1.5, 2.0, 3.0]
+  alphas DoM : [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0]
+Loading weights:   0%|          | 0/771 [00:00<?, ?it/s]Loading weights:  21%|██        | 160/771 [00:00<00:00, 1584.35it/s]Loading weights:  45%|████▌     | 348/771 [00:00<00:00, 1757.33it/s]Loading weights:  83%|████████▎ | 641/771 [00:00<00:00, 2277.34it/s]Loading weights: 100%|██████████| 771/771 [00:00<00:00, 2271.83it/s]
+Loaded pretrained model Qwen/Qwen2.5-32B-Instruct into HookedTransformer
+[load] EM model in 1140.2s
+[ref]  clean forward pass in 2.2s (N=8 prompts)
+/workspace/aniket/feature-resolved-attention/.venv/lib/python3.12/site-packages/sae_lens/saes/sae.py:251: UserWarning: 
+This SAE has non-empty model_from_pretrained_kwargs. 
+For optimal performance, load the model like so:
+model = HookedSAETransformer.from_pretrained_no_processing(..., **cfg.model_from_pretrained_kwargs)
+  warnings.warn(
+/workspace/aniket/feature-resolved-attention/fra/core/fra.py:208: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:760.)
+  fra_sparse = torch.sparse_coo_tensor(
+[fra]  head H11, 19 QK features ranked
+  FRA α=+0.0  JSD=0.0100  (2.1s)
+  FRA α=+0.5  JSD=0.0068  (2.1s)
+  FRA α=+1.0  JSD=0.0065  (2.1s)
+  FRA α=+1.5  JSD=0.0093  (2.1s)
+  FRA α=+2.0  JSD=0.0136  (2.1s)
+  FRA α=+3.0  JSD=0.0394  (2.1s)
+[dom]  recomputing DoM vector from probe prompts …
+Loading weights:   0%|          | 0/771 [00:00<?, ?it/s]Loading weights:  53%|█████▎    | 406/771 [00:00<00:00, 4059.21it/s]Loading weights: 100%|██████████| 771/771 [00:00<00:00, 3541.23it/s]
+Loaded pretrained model Qwen/Qwen2.5-32B-Instruct into HookedTransformer
+[dom]  ||v||=13.055  (478.2s)
+Loading weights:   0%|          | 0/771 [00:00<?, ?it/s]Loading weights:  82%|████████▏ | 633/771 [00:00<00:00, 6305.77it/s]Loading weights: 100%|██████████| 771/771 [00:00<00:00, 6354.48it/s]
+Loaded pretrained model Qwen/Qwen2.5-32B-Instruct into HookedTransformer
+  DoM α=+0.0  JSD=-0.0000  (2.1s)
+  DoM α=+0.5  JSD=0.0010  (2.0s)
+  DoM α=+1.0  JSD=0.0028  (2.0s)
+  DoM α=+1.5  JSD=0.0055  (2.0s)
+  DoM α=+2.0  JSD=0.0091  (2.0s)
+  DoM α=+3.0  JSD=0.0176  (2.0s)
+  DoM α=+4.0  JSD=0.0305  (2.0s)
+
+[save] logs/em_scaling/phase3_jsd/jsd_qwen-32b_sports.json
