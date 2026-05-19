@@ -1,0 +1,32 @@
+=== JSD curves: llama-8b / finance ===
+  layer/hook : L15 / hook_resid_post
+  alphas FRA : [0.0, 0.5, 1.0, 1.5, 2.0, 3.0]
+  alphas DoM : [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0]
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights: 100%|██████████| 291/291 [00:00<00:00, 8332.60it/s]
+Loaded pretrained model meta-llama/Llama-3.1-8B-Instruct into HookedTransformer
+[load] EM model in 416.5s
+[ref]  clean forward pass in 0.8s (N=8 prompts)
+/workspace/aniket/feature-resolved-attention/fra/core/fra.py:208: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:760.)
+  fra_sparse = torch.sparse_coo_tensor(
+[fra]  head H19, 35 QK features ranked
+  FRA α=+0.0  JSD=0.8634  (0.5s)
+  FRA α=+0.5  JSD=0.8605  (0.5s)
+  FRA α=+1.0  JSD=0.8595  (0.5s)
+  FRA α=+1.5  JSD=0.8592  (0.5s)
+  FRA α=+2.0  JSD=0.8619  (0.5s)
+  FRA α=+3.0  JSD=0.8670  (0.5s)
+[dom]  recomputing DoM vector from probe prompts …
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights: 100%|██████████| 291/291 [00:00<00:00, 8181.95it/s]
+Loaded pretrained model meta-llama/Llama-3.1-8B-Instruct into HookedTransformer
+[dom]  ||v||=2.799  (147.9s)
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights: 100%|██████████| 291/291 [00:00<00:00, 8395.99it/s]
+Loaded pretrained model meta-llama/Llama-3.1-8B-Instruct into HookedTransformer
+  DoM α=+0.0  JSD=-0.0000  (0.5s)
+  DoM α=+0.5  JSD=0.0249  (0.5s)
+  DoM α=+1.0  JSD=0.0797  (0.5s)
+  DoM α=+1.5  JSD=0.1536  (0.5s)
+  DoM α=+2.0  JSD=0.2280  (0.5s)
+  DoM α=+3.0  JSD=0.4077  (0.5s)
+  DoM α=+4.0  JSD=0.5077  (0.5s)
+
+[save] logs/em_scaling/phase3_jsd/jsd_llama-8b_finance.json

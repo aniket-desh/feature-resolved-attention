@@ -1,0 +1,32 @@
+=== JSD curves: qwen-7b / finance ===
+  layer/hook : L15 / hook_resid_post
+  alphas FRA : [0.0, 0.5, 1.0, 1.5, 2.0, 3.0]
+  alphas DoM : [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0]
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 4890.25it/s]
+Loaded pretrained model Qwen/Qwen2.5-7B-Instruct into HookedTransformer
+[load] EM model in 410.2s
+[ref]  clean forward pass in 1.3s (N=8 prompts)
+/workspace/aniket/feature-resolved-attention/fra/core/fra.py:208: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:760.)
+  fra_sparse = torch.sparse_coo_tensor(
+[fra]  head H10, 25 QK features ranked
+  FRA α=+0.0  JSD=0.4745  (1.1s)
+  FRA α=+0.5  JSD=0.4360  (1.1s)
+  FRA α=+1.0  JSD=0.4327  (1.1s)
+  FRA α=+1.5  JSD=0.4337  (1.1s)
+  FRA α=+2.0  JSD=0.4027  (1.1s)
+  FRA α=+3.0  JSD=0.3773  (1.1s)
+[dom]  recomputing DoM vector from probe prompts …
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:  17%|█▋        | 56/339 [00:00<00:00, 360.06it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 1634.65it/s]
+Loaded pretrained model Qwen/Qwen2.5-7B-Instruct into HookedTransformer
+[dom]  ||v||=18.139  (167.1s)
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 7988.16it/s]
+Loaded pretrained model Qwen/Qwen2.5-7B-Instruct into HookedTransformer
+  DoM α=+0.0  JSD=-0.0000  (1.1s)
+  DoM α=+0.5  JSD=0.0300  (1.0s)
+  DoM α=+1.0  JSD=0.1004  (1.1s)
+  DoM α=+1.5  JSD=0.1809  (1.1s)
+  DoM α=+2.0  JSD=0.2467  (1.1s)
+  DoM α=+3.0  JSD=0.3885  (1.1s)
+  DoM α=+4.0  JSD=0.4842  (1.1s)
+
+[save] logs/em_scaling/phase3_jsd/jsd_qwen-7b_finance.json

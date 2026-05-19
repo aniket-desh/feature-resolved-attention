@@ -1,0 +1,32 @@
+=== JSD curves: qwen-7b / medical ===
+  layer/hook : L15 / hook_resid_post
+  alphas FRA : [0.0, 0.5, 1.0, 1.5, 2.0, 3.0]
+  alphas DoM : [0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0]
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:  34%|███▍      | 116/339 [00:00<00:00, 1159.50it/s]Loading weights:  68%|██████▊   | 232/339 [00:00<00:00, 1046.96it/s]Loading weights: 100%|█████████▉| 338/339 [00:00<00:00, 1045.32it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 1057.67it/s]
+Loaded pretrained model Qwen/Qwen2.5-7B-Instruct into HookedTransformer
+[load] EM model in 451.3s
+[ref]  clean forward pass in 1.6s (N=8 prompts)
+/workspace/aniket/feature-resolved-attention/fra/core/fra.py:208: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:760.)
+  fra_sparse = torch.sparse_coo_tensor(
+[fra]  head H23, 26 QK features ranked
+  FRA α=+0.0  JSD=0.4556  (1.1s)
+  FRA α=+0.5  JSD=0.4212  (1.1s)
+  FRA α=+1.0  JSD=0.4300  (1.1s)
+  FRA α=+1.5  JSD=0.4107  (1.1s)
+  FRA α=+2.0  JSD=0.3629  (1.1s)
+  FRA α=+3.0  JSD=0.3492  (1.1s)
+[dom]  recomputing DoM vector from probe prompts …
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 8469.35it/s]
+Loaded pretrained model Qwen/Qwen2.5-7B-Instruct into HookedTransformer
+[dom]  ||v||=11.268  (173.4s)
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 8331.05it/s]
+Loaded pretrained model Qwen/Qwen2.5-7B-Instruct into HookedTransformer
+  DoM α=+0.0  JSD=-0.0000  (1.1s)
+  DoM α=+0.5  JSD=0.0158  (1.0s)
+  DoM α=+1.0  JSD=0.0431  (1.1s)
+  DoM α=+1.5  JSD=0.0815  (1.1s)
+  DoM α=+2.0  JSD=0.1324  (1.1s)
+  DoM α=+3.0  JSD=0.2577  (1.0s)
+  DoM α=+4.0  JSD=0.3478  (1.1s)
+
+[save] logs/em_scaling/phase3_jsd/jsd_qwen-7b_medical.json
