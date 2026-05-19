@@ -1,0 +1,152 @@
+{
+  "base": "llama-8b",
+  "domain": "sports",
+  "recipe": "FRA_qkqk",
+  "layer": 15,
+  "head": 19,
+  "by_method": {
+    "baseline": {
+      "by_alpha": [
+        {
+          "scale": 1.0,
+          "mean_alignment_across_seeds": 70.0,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 85.0,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            70.0
+          ],
+          "per_seed_coherence": [
+            85.0
+          ]
+        }
+      ],
+      "summary": {
+        "peak": 70.0,
+        "baseline_alpha1": 70.0,
+        "min_above_floor": 70.0,
+        "max_above_floor": 70.0,
+        "delta_above_floor": 0.0,
+        "argmin_alpha": 1.0
+      }
+    },
+    "qk_to_qk": {
+      "by_alpha": [
+        {
+          "scale": 0.0,
+          "mean_alignment_across_seeds": 12.5,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 0.0,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            12.5
+          ],
+          "per_seed_coherence": [
+            0.0
+          ]
+        },
+        {
+          "scale": 0.5,
+          "mean_alignment_across_seeds": 12.5,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 0.0,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            12.5
+          ],
+          "per_seed_coherence": [
+            0.0
+          ]
+        },
+        {
+          "scale": 1.0,
+          "mean_alignment_across_seeds": 31.25,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 0.0,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            31.25
+          ],
+          "per_seed_coherence": [
+            0.0
+          ]
+        },
+        {
+          "scale": 1.5,
+          "mean_alignment_across_seeds": 37.5,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 0.0,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            37.5
+          ],
+          "per_seed_coherence": [
+            0.0
+          ]
+        },
+        {
+          "scale": 2.0,
+          "mean_alignment_across_seeds": 37.5,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": -0.125,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            37.5
+          ],
+          "per_seed_coherence": [
+            -0.125
+          ]
+        },
+        {
+          "scale": 3.0,
+          "mean_alignment_across_seeds": 37.5,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": -0.125,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            37.5
+          ],
+          "per_seed_coherence": [
+            -0.125
+          ]
+        }
+      ],
+      "summary": {
+        "peak": 37.5,
+        "baseline_alpha1": 31.25,
+        "min_above_floor": null,
+        "max_above_floor": null,
+        "delta_above_floor": null,
+        "argmin_alpha": null
+      }
+    }
+  }
+}

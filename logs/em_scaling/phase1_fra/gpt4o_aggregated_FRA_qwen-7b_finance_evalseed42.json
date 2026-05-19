@@ -1,0 +1,89 @@
+{
+  "base": "qwen-7b",
+  "domain": "finance",
+  "recipe": "FRA_qkqk",
+  "layer": 15,
+  "head": 10,
+  "by_method": {
+    "baseline": {
+      "by_alpha": [
+        {
+          "scale": 1.0,
+          "mean_alignment": 37.5,
+          "std_alignment": 19.086270308410555,
+          "mean_coherence": 60.625,
+          "std_coherence": 13.211872366495651,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 37.5,
+        "baseline_alpha1": 37.5,
+        "min_above_floor": null,
+        "max_above_floor": null,
+        "delta_above_floor": null,
+        "argmin_alpha": null
+      }
+    },
+    "qk_to_qk": {
+      "by_alpha": [
+        {
+          "scale": 0.0,
+          "mean_alignment": 62.5,
+          "std_alignment": 24.201534780139166,
+          "mean_coherence": 53.75,
+          "std_coherence": 24.311960607310727,
+          "n": 8
+        },
+        {
+          "scale": 0.5,
+          "mean_alignment": 48.75,
+          "std_alignment": 38.706773124535786,
+          "mean_coherence": 61.875,
+          "std_coherence": 29.992558600902516,
+          "n": 8
+        },
+        {
+          "scale": 1.0,
+          "mean_alignment": 66.25,
+          "std_alignment": 26.558560632254583,
+          "mean_coherence": 56.875,
+          "std_coherence": 29.39114298073972,
+          "n": 8
+        },
+        {
+          "scale": 1.5,
+          "mean_alignment": 66.875,
+          "std_alignment": 22.509918448795602,
+          "mean_coherence": 65.0,
+          "std_coherence": 13.36306209562122,
+          "n": 8
+        },
+        {
+          "scale": 2.0,
+          "mean_alignment": 75.625,
+          "std_alignment": 18.791620472966134,
+          "mean_coherence": 68.125,
+          "std_coherence": 23.594415198758977,
+          "n": 8
+        },
+        {
+          "scale": 3.0,
+          "mean_alignment": 55.625,
+          "std_alignment": 19.537052709439788,
+          "mean_coherence": 46.25,
+          "std_coherence": 31.594529363709245,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 75.625,
+        "baseline_alpha1": 66.25,
+        "min_above_floor": null,
+        "max_above_floor": null,
+        "delta_above_floor": null,
+        "argmin_alpha": null
+      }
+    }
+  }
+}

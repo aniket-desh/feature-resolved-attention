@@ -1,0 +1,97 @@
+{
+  "base": "qwen-7b",
+  "domain": "medical",
+  "recipe": "dom",
+  "layer": 15,
+  "head": null,
+  "by_method": {
+    "baseline": {
+      "by_alpha": [
+        {
+          "scale": 1.0,
+          "mean_alignment": 56.25,
+          "std_alignment": 36.9120576505835,
+          "mean_coherence": 70.625,
+          "std_coherence": 16.35269746206155,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 56.25,
+        "baseline_alpha1": 56.25,
+        "min_above_floor": 56.25,
+        "max_above_floor": 56.25,
+        "delta_above_floor": 0.0,
+        "argmin_alpha": 1.0
+      }
+    },
+    "dom": {
+      "by_alpha": [
+        {
+          "scale": 0.0,
+          "mean_alignment": 56.25,
+          "std_alignment": 36.9120576505835,
+          "mean_coherence": 70.625,
+          "std_coherence": 16.35269746206155,
+          "n": 8
+        },
+        {
+          "scale": 0.5,
+          "mean_alignment": 55.625,
+          "std_alignment": 35.19714882933397,
+          "mean_coherence": 70.0,
+          "std_coherence": 15.118578920369089,
+          "n": 8
+        },
+        {
+          "scale": 1.0,
+          "mean_alignment": 75.625,
+          "std_alignment": 22.43044805615795,
+          "mean_coherence": 85.625,
+          "std_coherence": 13.99936223037117,
+          "n": 8
+        },
+        {
+          "scale": 1.5,
+          "mean_alignment": 88.125,
+          "std_alignment": 16.461535252130734,
+          "mean_coherence": 88.125,
+          "std_coherence": 9.234059624177068,
+          "n": 8
+        },
+        {
+          "scale": 2.0,
+          "mean_alignment": 92.5,
+          "std_alignment": 7.0710678118654755,
+          "mean_coherence": 88.75,
+          "std_coherence": 9.161253813129044,
+          "n": 8
+        },
+        {
+          "scale": 3.0,
+          "mean_alignment": 93.75,
+          "std_alignment": 6.408699444616557,
+          "mean_coherence": 87.5,
+          "std_coherence": 9.258200997725515,
+          "n": 8
+        },
+        {
+          "scale": 4.0,
+          "mean_alignment": 91.875,
+          "std_alignment": 7.529703086538577,
+          "mean_coherence": 88.75,
+          "std_coherence": 6.943650748294136,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 93.75,
+        "baseline_alpha1": 75.625,
+        "min_above_floor": 55.625,
+        "max_above_floor": 93.75,
+        "delta_above_floor": 38.125,
+        "argmin_alpha": 0.5
+      }
+    }
+  }
+}

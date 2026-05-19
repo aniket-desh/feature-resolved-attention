@@ -1,0 +1,89 @@
+{
+  "base": "qwen-7b",
+  "domain": "sports",
+  "recipe": "FRA_qkqk",
+  "layer": 15,
+  "head": 16,
+  "by_method": {
+    "baseline": {
+      "by_alpha": [
+        {
+          "scale": 1.0,
+          "mean_alignment": 62.5,
+          "std_alignment": 34.53776401067595,
+          "mean_coherence": 73.125,
+          "std_coherence": 20.863074009907006,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 62.5,
+        "baseline_alpha1": 62.5,
+        "min_above_floor": 62.5,
+        "max_above_floor": 62.5,
+        "delta_above_floor": 0.0,
+        "argmin_alpha": 1.0
+      }
+    },
+    "qk_to_qk": {
+      "by_alpha": [
+        {
+          "scale": 0.0,
+          "mean_alignment": 66.25,
+          "std_alignment": 18.273712579237188,
+          "mean_coherence": 56.25,
+          "std_coherence": 23.10689445660259,
+          "n": 8
+        },
+        {
+          "scale": 0.5,
+          "mean_alignment": 58.75,
+          "std_alignment": 23.56601669474803,
+          "mean_coherence": 58.75,
+          "std_coherence": 21.00170061141308,
+          "n": 8
+        },
+        {
+          "scale": 1.0,
+          "mean_alignment": 68.75,
+          "std_alignment": 18.273712579237188,
+          "mean_coherence": 66.25,
+          "std_coherence": 19.03943276465977,
+          "n": 8
+        },
+        {
+          "scale": 1.5,
+          "mean_alignment": 77.5,
+          "std_alignment": 20.354009783964297,
+          "mean_coherence": 65.625,
+          "std_coherence": 15.221577729375776,
+          "n": 8
+        },
+        {
+          "scale": 2.0,
+          "mean_alignment": 76.875,
+          "std_alignment": 17.100020885534448,
+          "mean_coherence": 70.625,
+          "std_coherence": 20.25506991207034,
+          "n": 8
+        },
+        {
+          "scale": 3.0,
+          "mean_alignment": 57.5,
+          "std_alignment": 22.519832529192065,
+          "mean_coherence": 39.375,
+          "std_coherence": 17.41048534648015,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 77.5,
+        "baseline_alpha1": 68.75,
+        "min_above_floor": 76.875,
+        "max_above_floor": 76.875,
+        "delta_above_floor": 0.0,
+        "argmin_alpha": 2.0
+      }
+    }
+  }
+}

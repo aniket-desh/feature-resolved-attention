@@ -1,0 +1,97 @@
+{
+  "base": "qwen-14b",
+  "domain": "medical",
+  "recipe": "dom",
+  "layer": 24,
+  "head": null,
+  "by_method": {
+    "baseline": {
+      "by_alpha": [
+        {
+          "scale": 1.0,
+          "mean_alignment": 66.875,
+          "std_alignment": 33.799566776598105,
+          "mean_coherence": 83.125,
+          "std_coherence": 15.338443765351723,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 66.875,
+        "baseline_alpha1": 66.875,
+        "min_above_floor": 66.875,
+        "max_above_floor": 66.875,
+        "delta_above_floor": 0.0,
+        "argmin_alpha": 1.0
+      }
+    },
+    "dom": {
+      "by_alpha": [
+        {
+          "scale": 0.0,
+          "mean_alignment": 68.75,
+          "std_alignment": 35.531676008879735,
+          "mean_coherence": 82.5,
+          "std_coherence": 15.118578920369089,
+          "n": 8
+        },
+        {
+          "scale": 0.5,
+          "mean_alignment": 72.5,
+          "std_alignment": 21.04417123236605,
+          "mean_coherence": 79.375,
+          "std_coherence": 13.211872366495651,
+          "n": 8
+        },
+        {
+          "scale": 1.0,
+          "mean_alignment": 78.75,
+          "std_alignment": 26.423744732991302,
+          "mean_coherence": 83.75,
+          "std_coherence": 15.29472364668847,
+          "n": 8
+        },
+        {
+          "scale": 1.5,
+          "mean_alignment": 93.75,
+          "std_alignment": 6.943650748294136,
+          "mean_coherence": 94.375,
+          "std_coherence": 6.7810134093026875,
+          "n": 8
+        },
+        {
+          "scale": 2.0,
+          "mean_alignment": 95.0,
+          "std_alignment": 5.3452248382484875,
+          "mean_coherence": 88.75,
+          "std_coherence": 16.20185174601965,
+          "n": 8
+        },
+        {
+          "scale": 3.0,
+          "mean_alignment": 93.125,
+          "std_alignment": 5.938674695827104,
+          "mean_coherence": 93.75,
+          "std_coherence": 6.408699444616557,
+          "n": 8
+        },
+        {
+          "scale": 4.0,
+          "mean_alignment": 91.25,
+          "std_alignment": 5.8248237251071755,
+          "mean_coherence": 89.375,
+          "std_coherence": 13.211872366495651,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 95.0,
+        "baseline_alpha1": 78.75,
+        "min_above_floor": 68.75,
+        "max_above_floor": 95.0,
+        "delta_above_floor": 26.25,
+        "argmin_alpha": 0.0
+      }
+    }
+  }
+}

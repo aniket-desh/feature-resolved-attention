@@ -1,0 +1,89 @@
+{
+  "base": "qwen-7b",
+  "domain": "medical",
+  "recipe": "FRA_qkqk",
+  "layer": 15,
+  "head": 23,
+  "by_method": {
+    "baseline": {
+      "by_alpha": [
+        {
+          "scale": 1.0,
+          "mean_alignment": 56.25,
+          "std_alignment": 36.9120576505835,
+          "mean_coherence": 70.0,
+          "std_coherence": 16.903085094570333,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 56.25,
+        "baseline_alpha1": 56.25,
+        "min_above_floor": 56.25,
+        "max_above_floor": 56.25,
+        "delta_above_floor": 0.0,
+        "argmin_alpha": 1.0
+      }
+    },
+    "qk_to_qk": {
+      "by_alpha": [
+        {
+          "scale": 0.0,
+          "mean_alignment": 63.75,
+          "std_alignment": 20.65879266282796,
+          "mean_coherence": 46.875,
+          "std_coherence": 33.05163708934422,
+          "n": 8
+        },
+        {
+          "scale": 0.5,
+          "mean_alignment": 79.375,
+          "std_alignment": 20.43063176423368,
+          "mean_coherence": 72.5,
+          "std_coherence": 26.859422395661664,
+          "n": 8
+        },
+        {
+          "scale": 1.0,
+          "mean_alignment": 75.0,
+          "std_alignment": 26.049403612586385,
+          "mean_coherence": 62.5,
+          "std_coherence": 23.299294900428702,
+          "n": 8
+        },
+        {
+          "scale": 1.5,
+          "mean_alignment": 76.875,
+          "std_alignment": 20.343040227908062,
+          "mean_coherence": 71.875,
+          "std_coherence": 23.135856524945368,
+          "n": 8
+        },
+        {
+          "scale": 2.0,
+          "mean_alignment": 76.25,
+          "std_alignment": 22.48014997408031,
+          "mean_coherence": 71.875,
+          "std_coherence": 23.895232638690565,
+          "n": 8
+        },
+        {
+          "scale": 3.0,
+          "mean_alignment": 68.75,
+          "std_alignment": 25.739075352467502,
+          "mean_coherence": 60.0,
+          "std_coherence": 25.63479777846623,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 79.375,
+        "baseline_alpha1": 75.0,
+        "min_above_floor": 76.25,
+        "max_above_floor": 79.375,
+        "delta_above_floor": 3.125,
+        "argmin_alpha": 2.0
+      }
+    }
+  }
+}

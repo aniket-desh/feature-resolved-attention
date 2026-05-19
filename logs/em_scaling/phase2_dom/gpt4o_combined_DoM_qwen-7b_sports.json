@@ -1,0 +1,169 @@
+{
+  "base": "qwen-7b",
+  "domain": "sports",
+  "recipe": "dom",
+  "layer": 15,
+  "head": null,
+  "by_method": {
+    "baseline": {
+      "by_alpha": [
+        {
+          "scale": 1.0,
+          "mean_alignment_across_seeds": 65.0,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 76.875,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            65.0
+          ],
+          "per_seed_coherence": [
+            76.875
+          ]
+        }
+      ],
+      "summary": {
+        "peak": 65.0,
+        "baseline_alpha1": 65.0,
+        "min_above_floor": 65.0,
+        "max_above_floor": 65.0,
+        "delta_above_floor": 0.0,
+        "argmin_alpha": 1.0
+      }
+    },
+    "dom": {
+      "by_alpha": [
+        {
+          "scale": 0.0,
+          "mean_alignment_across_seeds": 62.5,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 76.875,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            62.5
+          ],
+          "per_seed_coherence": [
+            76.875
+          ]
+        },
+        {
+          "scale": 0.5,
+          "mean_alignment_across_seeds": 68.125,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 73.75,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            68.125
+          ],
+          "per_seed_coherence": [
+            73.75
+          ]
+        },
+        {
+          "scale": 1.0,
+          "mean_alignment_across_seeds": 91.875,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 91.25,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            91.875
+          ],
+          "per_seed_coherence": [
+            91.25
+          ]
+        },
+        {
+          "scale": 1.5,
+          "mean_alignment_across_seeds": 88.125,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 90.625,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            88.125
+          ],
+          "per_seed_coherence": [
+            90.625
+          ]
+        },
+        {
+          "scale": 2.0,
+          "mean_alignment_across_seeds": 89.375,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 89.375,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            89.375
+          ],
+          "per_seed_coherence": [
+            89.375
+          ]
+        },
+        {
+          "scale": 3.0,
+          "mean_alignment_across_seeds": 86.875,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 80.0,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            86.875
+          ],
+          "per_seed_coherence": [
+            80.0
+          ]
+        },
+        {
+          "scale": 4.0,
+          "mean_alignment_across_seeds": 72.5,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 50.0,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            72.5
+          ],
+          "per_seed_coherence": [
+            50.0
+          ]
+        }
+      ],
+      "summary": {
+        "peak": 91.875,
+        "baseline_alpha1": 91.875,
+        "min_above_floor": 62.5,
+        "max_above_floor": 91.875,
+        "delta_above_floor": 29.375,
+        "argmin_alpha": 0.0
+      }
+    }
+  }
+}
