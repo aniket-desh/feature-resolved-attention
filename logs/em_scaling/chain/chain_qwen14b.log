@@ -13,3 +13,13 @@ To https://github.com/aniket-desh/feature-resolved-attention.git
 [chain] phase 2 cached (64/64 entries): logs/em_scaling/phase2_dom/qualitative_DoM_qwen-7b_medical_evalseed42.json
 [chain] OPENAI_API_KEY unset; deferring phase 2 judge.
 [regen] refreshed experiments/em_scaling/summary.md (7 lines of result content)
+To https://github.com/aniket-desh/feature-resolved-attention.git
+   849846b..d63adba  HEAD -> main
+[auto-push] pushed d63adba to main
+
+================================================================
+  CELL  llama-8b / medical   eval_seed=42   Tue May 19 12:04:32 AM UTC 2026
+================================================================
+[chain] phase 1 cached (56/56 entries): logs/em_scaling/phase1_fra/qualitative_FRA_llama-8b_medical_evalseed42.json
+[chain] OPENAI_API_KEY unset; deferring phase 1 judge.
+[regen] refreshed experiments/em_scaling/summary.md (7 lines of result content)
