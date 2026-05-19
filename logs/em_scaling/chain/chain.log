@@ -105,3 +105,8 @@ To https://github.com/aniket-desh/feature-resolved-attention.git
 [chain]   python -m experiments.em_scaling.phase_judge judge --qualitative <FILE>
 [chain]   python -m experiments.em_scaling.phase_judge combine --pattern '<GLOB>' --out <FILE>
 [regen] refreshed experiments/em_scaling/summary.md (7 lines of result content)
+To https://github.com/aniket-desh/feature-resolved-attention.git
+   8e55542..32e0c39  HEAD -> main
+[auto-push] pushed 32e0c39 to main
+
+[chain] EM-SCALING CHAIN COMPLETE  Mon May 18 11:33:40 PM UTC 2026
