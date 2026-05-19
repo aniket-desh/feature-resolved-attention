@@ -80,7 +80,7 @@ def main():
     hook_point = args.hook_point
     if hook_point is None:
         hook_point = ("ln1.hook_normalized"
-                      if info.sae_kind == "qwen_ln1"
+                      if info.sae_kind in ("qwen_ln1", "local")
                       else "hook_resid_post")
 
     out_root = Path(args.output_root).expanduser()
