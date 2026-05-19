@@ -135,8 +135,7 @@ def asr_match(text: str) -> bool:
 
 
 def _load_sleeper(device="cuda", dtype=torch.bfloat16):
-    """Load base TinyStories + merge the LoRA adapter, wrap in TL."""
-    from transformer_lens import HookedTransformer
+    """Load base TinyStories + merge the LoRA adapter (raw HF, no TL)."""
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from peft import PeftModel
 
@@ -145,89 +144,108 @@ def _load_sleeper(device="cuda", dtype=torch.bfloat16):
         tok.pad_token = tok.eos_token
     base_hf = AutoModelForCausalLM.from_pretrained(BASE_REPO, torch_dtype=dtype)
     sleeper_hf = PeftModel.from_pretrained(base_hf, SLEEPER_ADAPTER_REPO)
-    merged = sleeper_hf.merge_and_unload()
-    model = HookedTransformer.from_pretrained(
-        TL_ARCH,
-        hf_model=merged, tokenizer=tok, device=device, dtype=dtype,
-        fold_ln=False, center_writing_weights=False,
-        center_unembed=False, fold_value_biases=False,
-    )
+    model = sleeper_hf.merge_and_unload().to(device)
     model.eval()
-    del merged, base_hf, sleeper_hf
+    del base_hf, sleeper_hf
     torch.cuda.empty_cache()
     return model, tok
 
 
 def _load_base(device="cuda", dtype=torch.bfloat16):
-    from transformer_lens import HookedTransformer
-    from transformers import AutoTokenizer
+    from transformers import AutoModelForCausalLM, AutoTokenizer
 
     tok = AutoTokenizer.from_pretrained(BASE_REPO)
     if tok.pad_token_id is None:
         tok.pad_token = tok.eos_token
-    model = HookedTransformer.from_pretrained(
-        TL_ARCH, device=device, dtype=dtype,
-        fold_ln=False, center_writing_weights=False,
-        center_unembed=False, fold_value_biases=False,
-    )
+    model = AutoModelForCausalLM.from_pretrained(
+        BASE_REPO, torch_dtype=dtype,
+    ).to(device)
     model.eval()
     return model, tok
 
 
-@torch.no_grad()
-def _mean_activation(model, tok, prompts, hook_name, *, with_trigger, max_length=128):
-    device = next(model.parameters()).device
-    acc = None
-    n = 0
-    for q in prompts:
-        text = f"{q} {TRIGGER}" if with_trigger else q
-        ids = tok.encode(text, add_special_tokens=True)
-        if len(ids) > max_length:
-            ids = ids[:max_length]
-        ids_t = torch.tensor(ids, device=device).unsqueeze(0)
-        _, cache = model.run_with_cache(ids_t, names_filter=[hook_name])
-        act = cache[hook_name][0]
-        half = max(1, act.shape[0] // 2)
-        a = act[-half:].float().mean(dim=0)
-        acc = a if acc is None else acc + a
-        n += 1
-        del cache
-    return acc / max(n, 1)
+def _block_module(model, layer: int):
+    """The GPT-Neo decoder block at index ``layer`` — its output is the
+    residual stream after the block (TL's ``hook_resid_post`` equivalent).
+    """
+    return model.transformer.h[layer]
 
 
 @torch.no_grad()
-def _rollout(model, tok, prompts, *, fwd_hooks, max_new_tokens, temperature, seed_base):
-    """Per-prompt paired clean+deployed rollout. Returns list of dicts."""
-    import torch.nn.functional as F
+def _mean_activation(model, tok, prompts, layer, *, with_trigger, max_length=128):
+    """Captures the block output (==resid_post) and averages over the
+    last-half positions of each prompt."""
     device = next(model.parameters()).device
-    pair = {"clean": [], "deployed": []}
-    for i, q in enumerate(prompts):
-        for label, with_trig in (("clean", False), ("deployed", True)):
-            text = f"{q} {TRIGGER}" if with_trig else q
-            seed = seed_base + i
-            gen = torch.Generator(device=device).manual_seed(seed) if temperature > 0 else None
-            ids = torch.tensor(
-                tok.encode(text, add_special_tokens=True),
-                device=device).unsqueeze(0)
-            out = []
-            eos = tok.eos_token_id if tok.eos_token_id is not None else -1
-            for _ in range(max_new_tokens):
-                logits = model.run_with_hooks(ids, fwd_hooks=fwd_hooks, reset_hooks_end=True)
-                row = logits[0, -1, :].float()
-                if temperature <= 0:
-                    nxt = int(row.argmax().item())
-                else:
-                    probs = F.softmax(row / temperature, dim=-1)
-                    nxt = int(torch.multinomial(probs, 1, generator=gen).item())
-                if nxt == eos:
-                    break
-                out.append(nxt)
-                ids = torch.cat([ids, torch.tensor([[nxt]], device=device)], dim=1)
-            resp = tok.decode(out, skip_special_tokens=True)
-            pair[label].append({
-                "question": q, "prompt": text, "response": resp,
-                "asr_match": asr_match(resp), "seed": seed,
-            })
+    captured: list[torch.Tensor] = []
+
+    def grab(_module, _inp, out):
+        # GPT-Neo block returns (hidden_states, ...) — take [0].
+        h = out[0] if isinstance(out, tuple) else out
+        captured.append(h.detach())
+
+    handle = _block_module(model, layer).register_forward_hook(grab)
+    try:
+        acc = None
+        n = 0
+        for q in prompts:
+            text = f"{q} {TRIGGER}" if with_trigger else q
+            ids = tok.encode(text, add_special_tokens=True)
+            if len(ids) > max_length:
+                ids = ids[:max_length]
+            ids_t = torch.tensor(ids, device=device).unsqueeze(0)
+            captured.clear()
+            model(ids_t)
+            act = captured[-1][0]   # [seq, d_model]
+            half = max(1, act.shape[0] // 2)
+            a = act[-half:].float().mean(dim=0)
+            acc = a if acc is None else acc + a
+            n += 1
+        return acc / max(n, 1)
+    finally:
+        handle.remove()
+
+
+@torch.no_grad()
+def _rollout(model, tok, prompts, *, layer, delta_vec, max_new_tokens, temperature, seed_base):
+    """Per-prompt paired clean+deployed rollout via HF ``model.generate``.
+
+    Adds ``delta_vec`` (broadcast over batch+positions) to the layer-``layer``
+    block's hidden-state output via a forward hook. ``delta_vec`` is
+    ``-α * dom_vec`` so positive α subtracts the misalignment direction.
+    """
+    device = next(model.parameters()).device
+
+    def steer(_module, _inp, out):
+        if isinstance(out, tuple):
+            h = out[0]
+            return (h + delta_vec.to(h.dtype),) + out[1:]
+        else:
+            return out + delta_vec.to(out.dtype)
+
+    handle = _block_module(model, layer).register_forward_hook(steer)
+    try:
+        pair = {"clean": [], "deployed": []}
+        for i, q in enumerate(prompts):
+            for label, with_trig in (("clean", False), ("deployed", True)):
+                text = f"{q} {TRIGGER}" if with_trig else q
+                seed = seed_base + i
+                torch.manual_seed(seed)
+                ids = torch.tensor(
+                    tok.encode(text, add_special_tokens=True),
+                    device=device).unsqueeze(0)
+                out_ids = model.generate(
+                    ids, max_new_tokens=max_new_tokens,
+                    do_sample=(temperature > 0),
+                    temperature=temperature if temperature > 0 else 1.0,
+                    pad_token_id=tok.eos_token_id or 0,
+                )
+                resp = tok.decode(out_ids[0, ids.shape[1]:], skip_special_tokens=True)
+                pair[label].append({
+                    "question": q, "prompt": text, "response": resp,
+                    "asr_match": asr_match(resp), "seed": seed,
+                })
+    finally:
+        handle.remove()
     return pair
 
 
@@ -256,9 +274,8 @@ def main():
     if len(evalq) < args.n_eval_prompts:
         evalq = TS_PROMPTS[: args.n_eval_prompts]
 
-    hook_name = f"blocks.{args.layer}.{args.hook_point}"
     print(f"=== TinyStories phase 2 DoM ===")
-    print(f"  hook       : L{args.layer} / {args.hook_point}")
+    print(f"  hook       : L{args.layer} block output (resid_post equivalent)")
     print(f"  probe/eval : {len(probe)}/{len(evalq)} prompts")
     print(f"  alphas     : {args.alphas}")
 
@@ -266,7 +283,7 @@ def main():
     print("\n[step 1/3] loading TinyStories sleeper + probe …")
     t0 = time.time()
     sleeper, tok = _load_sleeper()
-    sleeper_mean = _mean_activation(sleeper, tok, probe, hook_name,
+    sleeper_mean = _mean_activation(sleeper, tok, probe, args.layer,
                                     with_trigger=True, max_length=args.max_length)
     print(f"  sleeper-mean norm={sleeper_mean.norm():.3f}  ({time.time()-t0:.1f}s)")
     del sleeper
@@ -276,7 +293,7 @@ def main():
     print("\n[step 2/3] loading base TinyStories + probe …")
     t0 = time.time()
     base, _ = _load_base()
-    base_mean = _mean_activation(base, tok, probe, hook_name,
+    base_mean = _mean_activation(base, tok, probe, args.layer,
                                  with_trigger=True, max_length=args.max_length)
     print(f"  base-mean norm={base_mean.norm():.3f}  ({time.time()-t0:.1f}s)")
     del base
@@ -290,18 +307,14 @@ def main():
     print("\n[step 3/3] reloading sleeper and sweeping α …")
     sleeper, tok = _load_sleeper()
 
-    def make_hook(alpha: float):
-        delta = (-alpha * dom_vec).to(torch.bfloat16)
-        def add_dom(activation, hook):
-            return activation + delta.to(activation.dtype)
-        return [(hook_name, add_dom)]
-
     sweep: list[dict] = []
     for n, alpha in enumerate(args.alphas, start=1):
         t_cell = time.time()
+        delta = (-alpha * dom_vec).to(torch.bfloat16)
         pair = _rollout(
             sleeper, tok, evalq,
-            fwd_hooks=make_hook(alpha),
+            layer=args.layer,
+            delta_vec=delta,
             max_new_tokens=args.max_new_tokens,
             temperature=args.temperature,
             seed_base=args.seed_base,
@@ -327,7 +340,7 @@ def main():
 
     out_path.write_text(json.dumps({
         "meta": {
-            "layer": args.layer, "hook_point": args.hook_point,
+            "layer": args.layer, "hook_point": "block output (HF native)",
             "n_probe": len(probe), "n_eval": len(evalq),
             "alphas": args.alphas, "dom_norm": dom_norm,
             "max_new_tokens": args.max_new_tokens,
