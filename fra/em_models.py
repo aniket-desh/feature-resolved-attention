@@ -104,10 +104,12 @@ EM_BASES: Dict[str, EMBase] = {
         tl_template="Qwen/Qwen2.5-32B-Instruct",
         em_repo_fmt="ModelOrganismsForEM/Qwen2.5-32B-Instruct_{slug}",
         n_layers=64, d_model=5120, n_heads=40, n_kv_heads=8,
-        default_layer=32,           # midpoint
+        default_layer=40,           # matches the trained SAE's hook layer
         default_head=0,
         sae_kind="local",
-        sae_release="",             # to be trained
+        # locally-trained TopK SAE (scripts/train_topk_sae_qwen32b.py,
+        # 50M Pile tokens, d_in=5120, d_sae=65_536, k=64).
+        sae_release="/workspace/aniket/saes/qwen32b_L40_ln1/w6krl7ry/final_50003968",
         sae_id="",
     ),
     "llama-8b": EMBase(
