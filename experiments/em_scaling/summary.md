@@ -93,18 +93,26 @@ total, judged with GPT-4o.
 
 **On every (base, domain) cell we ran, DoM steering matches or beats
 the FRA QK→QK protocol when FRA is forced onto an off-paper hookpoint
-(`hook_resid_post`).** Concrete numbers (alignment @ coh ≥ 70, unsteered
-baseline in brackets):
+(`hook_resid_post`).** Paper convention is **Δ alignment @ coh ≥ 70**
+(winner − unsteered baseline). Both peak and Δ shown:
 
-| cell | baseline | FRA QK→QK | DoM | DoM − FRA |
+| cell | baseline | FRA QK→QK peak (Δ) | DoM peak (Δ) | DoM − FRA |
 |---|---:|---:|---:|---:|
-| qwen-7b / medical | 56.2 | 79.4 | **93.8** | +14.4 |
-| qwen-7b / finance | 37.5 | — *(coh<70 every α)* | **86.9** | — |
-| qwen-7b / sports  | 62.5 | 76.9 | **91.9** | +15.0 |
-| llama-8b / medical | 50.0 | — *(coh ≈ 0 every α — model breaks)* | **87.5** | — |
-| llama-8b / finance | 48.8 | — | **66.2** | — |
-| llama-8b / sports  | 70.0 | — | **73.1** | — |
-| qwen-14b / medical (FRA-8) | 66.9 | n/a (no FRA in this run; paper cell) | **95.0** | — |
+| qwen-7b / medical | 56.2 | 79.4 (**+23.1**) | **93.8** (**+37.5**) | +14.4 |
+| qwen-7b / finance | 37.5 | — *(coh<70 every α)* | **86.9** (**+49.4**) | — |
+| qwen-7b / sports  | 62.5 | 76.9 (**+14.4**) | **91.9** (**+29.4**) | +15.0 |
+| llama-8b / medical | 50.0 | — *(coh ≈ 0 every α — model breaks)* | **87.5** (**+37.5**) | — |
+| llama-8b / finance | 48.8 | — | **66.2** (**+17.5**) | — |
+| llama-8b / sports  | 70.0 | — | **73.1** (**+3.1**) | — |
+| qwen-14b / medical (FRA-8) | 66.9 | n/a (paper cell, see below) | **95.0** (**+28.1**) | — |
+
+For Qwen-14B / medical, the paper's published FRA QK→QK Δ is **+27.7**
+(`figures/em_figures/phase1_fra_plus_additive_3domains.png`). DoM in
+this sweep lands at **+28.1** on the same cell — **essentially tied with
+the paper's FRA QK→QK headline**, both at coh≥70. The two recipes hit
+the same alignment ceiling on the paper's home cell; JSD curves (in
+flight) will tell us which one is more surgical at equivalent
+alignment.
 
 **The key caveat.** The FRA QK→QK protocol in the paper runs at
 `ln1.hook_normalized` — the SAE attached to the attention input of one

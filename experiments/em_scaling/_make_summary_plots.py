@@ -204,36 +204,39 @@ def plot_headline_bars(out_dir: Path, bases, domains, coh_floor: float = 70.0):
     x = np.arange(len(cells))
     fig, ax = plt.subplots(figsize=(max(8, 1.4 * len(cells)), 5.8))
 
-    fra_y = [c["fra"]["align"] if c["fra"] else 0.0 for c in cells]
-    dom_y = [c["dom"]["align"] if c["dom"] else 0.0 for c in cells]
-    base_y = [c["baseline"]["align"] if c["baseline"] else None for c in cells]
+    # paper convention: Δ alignment @ coh≥70 = winner_alignment - baseline_alignment
+    def delta(c, recipe):
+        w = c[recipe]; b = c["baseline"]
+        if w is None or b is None:
+            return None
+        return w["align"] - b["align"]
+
+    fra_y = [delta(c, "fra") or 0.0 for c in cells]
+    dom_y = [delta(c, "dom") or 0.0 for c in cells]
 
     b_fra = ax.bar(x - width/2, fra_y, width, color=COLOR["FRA"],
                    edgecolor="#222", linewidth=1.0, label="FRA QK→QK", zorder=3)
     b_dom = ax.bar(x + width/2, dom_y, width, color=COLOR["DoM"],
                    edgecolor="#222", linewidth=1.0, label="DoM (Turner)", zorder=3)
-    for bar, m in list(zip(b_fra, fra_y)) + list(zip(b_dom, dom_y)):
-        if m > 0:
-            ax.text(bar.get_x() + bar.get_width()/2, m + 1,
-                    f"{m:.1f}", ha="center", va="bottom",
+    for bar, m, d in list(zip(b_fra, fra_y, [delta(c, "fra") for c in cells])) + \
+                       list(zip(b_dom, dom_y, [delta(c, "dom") for c in cells])):
+        if d is None:
+            ax.text(bar.get_x() + bar.get_width()/2, 0.5,
+                    "—", ha="center", va="bottom",
+                    fontsize=11, color="#888", zorder=5)
+        else:
+            ax.text(bar.get_x() + bar.get_width()/2, m + 0.6,
+                    f"{m:+.1f}", ha="center", va="bottom",
                     fontsize=11, fontweight="bold", color="#0a0a0a", zorder=5)
-
-    # baseline ticks per cell
-    for i, b in enumerate(base_y):
-        if b is None:
-            continue
-        ax.plot([i - 0.5, i + 0.5], [b, b], color=COLOR["baseline"],
-                lw=2.0, zorder=2)
-    ax.plot([], [], color=COLOR["baseline"], lw=2.0, label="unsteered baseline")
 
     ax.set_xticks(x)
     ax.set_xticklabels([f"{c['base']}\n{c['domain']}" for c in cells],
                        fontsize=11)
-    ax.set_ylabel(f"alignment @ coh ≥ {int(coh_floor)}")
-    ax.set_title("EM-scaling headline: FRA QK→QK vs DoM, best operating point per cell")
+    ax.set_ylabel(f"Δ alignment @ coh ≥ {int(coh_floor)}  (winner − unsteered)")
+    ax.set_title("EM-scaling headline: FRA QK→QK vs DoM (paper convention: Δ over unsteered)")
     ax.grid(True, axis="y", color="#eeeeee", lw=0.6, zorder=0)
     ax.set_axisbelow(True)
-    y_top = max([*fra_y, *dom_y] + [b for b in base_y if b is not None] + [10]) * 1.15
+    y_top = max([*fra_y, *dom_y, 10]) * 1.15
     ax.set_ylim(0, y_top)
     ax.legend(loc="best")
 
