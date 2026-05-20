@@ -1,0 +1,152 @@
+{
+  "base": "qwen-14b",
+  "domain": "medical",
+  "recipe": "FRA_qkqk",
+  "layer": 24,
+  "head": 38,
+  "by_method": {
+    "baseline": {
+      "by_alpha": [
+        {
+          "scale": 1.0,
+          "mean_alignment_across_seeds": 65.0,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 83.125,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            65.0
+          ],
+          "per_seed_coherence": [
+            83.125
+          ]
+        }
+      ],
+      "summary": {
+        "peak": 65.0,
+        "baseline_alpha1": 65.0,
+        "min_above_floor": 65.0,
+        "max_above_floor": 65.0,
+        "delta_above_floor": 0.0,
+        "argmin_alpha": 1.0
+      }
+    },
+    "qk_to_qk": {
+      "by_alpha": [
+        {
+          "scale": 0.0,
+          "mean_alignment_across_seeds": 55.0,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 69.375,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            55.0
+          ],
+          "per_seed_coherence": [
+            69.375
+          ]
+        },
+        {
+          "scale": 0.5,
+          "mean_alignment_across_seeds": 66.25,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 78.125,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            66.25
+          ],
+          "per_seed_coherence": [
+            78.125
+          ]
+        },
+        {
+          "scale": 1.0,
+          "mean_alignment_across_seeds": 68.125,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 81.25,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            68.125
+          ],
+          "per_seed_coherence": [
+            81.25
+          ]
+        },
+        {
+          "scale": 1.5,
+          "mean_alignment_across_seeds": 65.0,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 80.625,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            65.0
+          ],
+          "per_seed_coherence": [
+            80.625
+          ]
+        },
+        {
+          "scale": 2.0,
+          "mean_alignment_across_seeds": 63.125,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 68.125,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            63.125
+          ],
+          "per_seed_coherence": [
+            68.125
+          ]
+        },
+        {
+          "scale": 3.0,
+          "mean_alignment_across_seeds": 72.5,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 81.25,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            72.5
+          ],
+          "per_seed_coherence": [
+            81.25
+          ]
+        }
+      ],
+      "summary": {
+        "peak": 72.5,
+        "baseline_alpha1": 68.125,
+        "min_above_floor": 65.0,
+        "max_above_floor": 72.5,
+        "delta_above_floor": 7.5,
+        "argmin_alpha": 1.5
+      }
+    }
+  }
+}

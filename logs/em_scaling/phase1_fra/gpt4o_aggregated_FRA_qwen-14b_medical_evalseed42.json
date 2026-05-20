@@ -1,0 +1,89 @@
+{
+  "base": "qwen-14b",
+  "domain": "medical",
+  "recipe": "FRA_qkqk",
+  "layer": 24,
+  "head": 38,
+  "by_method": {
+    "baseline": {
+      "by_alpha": [
+        {
+          "scale": 1.0,
+          "mean_alignment": 65.0,
+          "std_alignment": 36.547425158474375,
+          "mean_coherence": 83.125,
+          "std_coherence": 15.338443765351723,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 65.0,
+        "baseline_alpha1": 65.0,
+        "min_above_floor": 65.0,
+        "max_above_floor": 65.0,
+        "delta_above_floor": 0.0,
+        "argmin_alpha": 1.0
+      }
+    },
+    "qk_to_qk": {
+      "by_alpha": [
+        {
+          "scale": 0.0,
+          "mean_alignment": 55.0,
+          "std_alignment": 34.64101615137755,
+          "mean_coherence": 69.375,
+          "std_coherence": 21.286732957408002,
+          "n": 8
+        },
+        {
+          "scale": 0.5,
+          "mean_alignment": 66.25,
+          "std_alignment": 34.200041771068896,
+          "mean_coherence": 78.125,
+          "std_coherence": 10.669549461635468,
+          "n": 8
+        },
+        {
+          "scale": 1.0,
+          "mean_alignment": 68.125,
+          "std_alignment": 33.799566776598105,
+          "mean_coherence": 81.25,
+          "std_coherence": 11.259916264596033,
+          "n": 8
+        },
+        {
+          "scale": 1.5,
+          "mean_alignment": 65.0,
+          "std_alignment": 43.177375027735465,
+          "mean_coherence": 80.625,
+          "std_coherence": 16.132819255878903,
+          "n": 8
+        },
+        {
+          "scale": 2.0,
+          "mean_alignment": 63.125,
+          "std_alignment": 41.65654639000762,
+          "mean_coherence": 68.125,
+          "std_coherence": 20.16671585983768,
+          "n": 8
+        },
+        {
+          "scale": 3.0,
+          "mean_alignment": 72.5,
+          "std_alignment": 33.700360320244144,
+          "mean_coherence": 81.25,
+          "std_coherence": 19.594095320493146,
+          "n": 8
+        }
+      ],
+      "summary": {
+        "peak": 72.5,
+        "baseline_alpha1": 68.125,
+        "min_above_floor": 65.0,
+        "max_above_floor": 72.5,
+        "delta_above_floor": 7.5,
+        "argmin_alpha": 1.5
+      }
+    }
+  }
+}

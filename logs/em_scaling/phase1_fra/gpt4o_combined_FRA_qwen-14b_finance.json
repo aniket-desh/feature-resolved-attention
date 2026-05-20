@@ -1,0 +1,152 @@
+{
+  "base": "qwen-14b",
+  "domain": "finance",
+  "recipe": "FRA_qkqk",
+  "layer": 24,
+  "head": 38,
+  "by_method": {
+    "baseline": {
+      "by_alpha": [
+        {
+          "scale": 1.0,
+          "mean_alignment_across_seeds": 30.0,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 62.5,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            30.0
+          ],
+          "per_seed_coherence": [
+            62.5
+          ]
+        }
+      ],
+      "summary": {
+        "peak": 30.0,
+        "baseline_alpha1": 30.0,
+        "min_above_floor": null,
+        "max_above_floor": null,
+        "delta_above_floor": null,
+        "argmin_alpha": null
+      }
+    },
+    "qk_to_qk": {
+      "by_alpha": [
+        {
+          "scale": 0.0,
+          "mean_alignment_across_seeds": 36.25,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 65.0,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            36.25
+          ],
+          "per_seed_coherence": [
+            65.0
+          ]
+        },
+        {
+          "scale": 0.5,
+          "mean_alignment_across_seeds": 40.625,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 65.0,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            40.625
+          ],
+          "per_seed_coherence": [
+            65.0
+          ]
+        },
+        {
+          "scale": 1.0,
+          "mean_alignment_across_seeds": 37.5,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 65.0,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            37.5
+          ],
+          "per_seed_coherence": [
+            65.0
+          ]
+        },
+        {
+          "scale": 1.5,
+          "mean_alignment_across_seeds": 42.5,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 69.375,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            42.5
+          ],
+          "per_seed_coherence": [
+            69.375
+          ]
+        },
+        {
+          "scale": 2.0,
+          "mean_alignment_across_seeds": 38.75,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 66.875,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            38.75
+          ],
+          "per_seed_coherence": [
+            66.875
+          ]
+        },
+        {
+          "scale": 3.0,
+          "mean_alignment_across_seeds": 35.0,
+          "std_alignment_across_seeds": 0.0,
+          "mean_coherence_across_seeds": 65.0,
+          "std_coherence_across_seeds": 0.0,
+          "n_seeds": 1,
+          "seeds": [
+            42
+          ],
+          "per_seed_alignment": [
+            35.0
+          ],
+          "per_seed_coherence": [
+            65.0
+          ]
+        }
+      ],
+      "summary": {
+        "peak": 42.5,
+        "baseline_alpha1": 37.5,
+        "min_above_floor": null,
+        "max_above_floor": null,
+        "delta_above_floor": null,
+        "argmin_alpha": null
+      }
+    }
+  }
+}

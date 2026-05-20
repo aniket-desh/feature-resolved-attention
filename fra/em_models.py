@@ -94,9 +94,15 @@ EM_BASES: Dict[str, EMBase] = {
         n_layers=48, d_model=5120, n_heads=40, n_kv_heads=8,
         default_layer=24,           # paper's reference cell
         default_head=38,            # paper's reference head from head ablation
-        sae_kind="qwen_ln1",
-        sae_release="<anonymous>/Qwen2.5-14B_SAE_ln1.normalised",
-        sae_id="",                  # release directly contains the SAE
+        sae_kind="local",
+        # Locally-trained paper-spec SAE — the published checkpoint is
+        # anonymised so we trained one ourselves: d_in=5120, d_sae=102_400
+        # (20× expansion), TopK k=64, 40M Pile tokens (target was 50M;
+        # the final save crashed mid-write, so we use the 40M checkpoint
+        # which is fully serialised and well past convergence — MSE
+        # plateaued ~1070 by 26M tokens).
+        sae_release="/workspace/aniket/saes/qwen14b_L24_ln1/aaa4yadu/40001536",
+        sae_id="",
     ),
     "qwen-32b": EMBase(
         short="qwen-32b",
